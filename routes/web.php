@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 // Catalog
 use App\Http\Controllers\Catalog\HomeController;
+use App\Http\Controllers\Catalog\Product\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +18,4 @@ use App\Http\Controllers\Catalog\HomeController;
 */
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/product', [ProductController::class, 'index'])->name('product');
