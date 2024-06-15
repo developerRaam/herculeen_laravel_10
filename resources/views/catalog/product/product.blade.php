@@ -4,22 +4,25 @@
 
 @section('content')
 
+
+
 <section class="container-fluid py-3">
+   <div class="container">
     <div class="row">
-        <div class="col-sm-7">
-            <div class="row text-center">
-                <div class="col-sm-2">
-                    <img class="mb-3" height="100" src="{{ asset('image/product/product-item1.jpg') }}">
-                    <img class="mb-3" height="100" src="{{ asset('image/product/product-item1.jpg') }}">
-                    <img class="mb-3" height="100" src="{{ asset('image/product/product-item1.jpg') }}">
-                    <img height="100" src="{{ asset('image/product/product-item1.jpg') }}">
+        <div class="col-sm-6 mb-3">
+            <div class="row">
+                <div class="col-sm-2 text-center">
+                    <img class="mb-3 product_side_image" data-id="1" height="100" src="{{ asset('image/product/product-item1.jpg') }}">
+                    <img class="mb-3 product_side_image" data-id="2" height="100" src="{{ asset('image/product/product-item2.jpg') }}">
+                    <img class="mb-3 product_side_image" data-id="3" height="100" src="{{ asset('image/product/product-item4.jpg') }}">
+                    <img class="product_side_image" data-id="4" height="100" src="{{ asset('image/product/product-item1.jpg') }}">
                 </div>
-                <div class="col-sm-10">
-                    <img class="mb-3 w-75" src="{{ asset('image/product/product-item1.jpg') }}">
+                <div class="col-sm-10 text-center product overflow-hidden">
+                    <img class="mb-3 product_image" src="{{ asset('image/product/product-item1.jpg') }}" style="max-height: 550px">
                 </div>
             </div>
         </div>
-        <div class="col-sm-5">
+        <div class="col-sm-6">
             <div class="header">
                 <h2>Full Sleeve Cover Shirt</h2>
                 <h5>Rs.40.00</h5>
@@ -75,6 +78,18 @@
             </div>
         </div>
     </div>
+   </div>
 </section>
+
+<script>
+    const product_side_images = document.querySelectorAll('.product_side_image');
+    product_side_images.forEach(side_image => {
+        side_image.addEventListener('mouseover', () => {
+            document.querySelector('.product_image').src = side_image.src
+        });
+    });
+
+</script>
+
 
 @endsection

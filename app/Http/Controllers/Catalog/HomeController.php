@@ -9,6 +9,6 @@ use App\Models\Catalog\Contact;
 class HomeController extends Controller
 {
     public function index(){
-        return view('index');
+        return view('catalog.index');
     }
 }
