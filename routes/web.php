@@ -49,3 +49,5 @@ Route::get('/admin/storefront/product', [AdminProductController::class, 'index']
 Route::get('/admin/storefront/product-form', [AdminProductController::class, 'form'])->middleware('AdminMiddlewareLogin');
 
 Route::get('/admin/media', [AdminMediaController::class, 'index'])->name('admin-media')->middleware('AdminMiddlewareLogin');
+Route::post('/admin/media/uploadFile', [AdminMediaController::class, 'uploadFile'])->middleware('AdminMiddlewareLogin');
+Route::get('/admin/media/getFiles', [AdminMediaController::class, 'getFiles'])->middleware('AdminMiddlewareLogin');
