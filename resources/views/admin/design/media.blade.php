@@ -15,6 +15,7 @@
             </div>
             <div class="col-sm-10 p-0">
                 <div class="m-4">
+                    <!-- image manager header -->
                     <div class="admin-title d-flex justify-content-between px-2">
                         <div class="d-flex admin-title-box">
                             <h2>{{$heading_title}}</h2>
@@ -27,7 +28,13 @@
                             </div>
                         </div>
                         <div>
+                            <a class="btn btn-danger fs-5 px-3 delete_files" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete"><i class="fa-solid fa-trash"></i></a>
                             <button id="image_manager" class="btn btn-primary fs-5 px-3" type="button" data-bs-toggle="modal"data-bs-target="#imageModal"><i class="fa-solid fa-upload" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Image Upload"></i></button>
+                        </div>
+                    </div>
+                    <!-- Show all images  -->
+                    <div class="col-sm-12">
+                        <div class="row g-4 mt-3" id="show_all_images">
                         </div>
                     </div>
                 </div>
@@ -47,8 +54,8 @@
                                             <button class="btn btn-outline-primary px-3" id="refresh" href="#" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Refresh"><i class="fa-solid fa-rotate"></i></button>
                                             <button class="btn btn-primary px-3" id="button-upload" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Image Upload"><i class="fa-solid fa-upload"></i></button>
                                             <input type="file" id="file-input" style="display: none;" multiple>
-                                            <a class="btn btn-outline-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="New Folder"><i class="fa-solid fa-folder"></i></a>
-                                            <a class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete"><i class="fa-solid fa-trash"></i></a>
+                                            <a class="btn btn-outline-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="New Folder" onclick="openFolderBox()"><i class="fa-solid fa-folder"></i></a>
+                                            <a class="btn btn-danger delete_files" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete"><i class="fa-solid fa-trash"></i></a>
                                         </div>
                                     </div>
                                     <div class="col-6">
@@ -58,6 +65,15 @@
                                         </div>
                                     </div>
                                 </div><hr>
+                                <!-- Craete folder -->
+                                <div class="mb-3" id="create_folder" style="display: none">
+                                    <div class="col-12">
+                                        <div class="input-group">
+                                            <input type="text" name="new_folder_box" value="" placeholder="Create New Folder" id="new_folder_box" class="form-control">
+                                            <button type="button" id="new_folder_btn" data-bs-toggle="tooltip" title="Create New Folder" class="btn btn-primary px-3"><i class="fa-solid fa-plus"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="row g-4" id="getAllUploads"></div>                                
                             </div>
                         </div>
@@ -68,8 +84,18 @@
     </section>
     <script>
 
+        // show all files and folders
+        document.addEventListener('DOMContentLoaded', function() {
+            showAllImages();
+        }, false);
+
+        // show all files and folders on the modal
         document.getElementById('image_manager').addEventListener('click', function() {
             getFiles();
+        });
+
+        document.getElementById('file-input').addEventListener('change', function() {
+            uploadFiles(this.files)
         });
 
         document.getElementById('refresh').addEventListener('click', function() {
@@ -80,10 +106,6 @@
             document.getElementById('file-input').click();
         });
 
-        document.getElementById('file-input').addEventListener('change', function() {
-            uploadFiles(this.files)
-            getFiles();
-        });
 
         function uploadFiles(files) {
             let formData = new FormData();
@@ -102,6 +124,7 @@
                 processData: false, // Don't process data
                 success: function (response) {
                     alert('Files uploaded successfully')
+                    getFiles()
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     // console.error(textStatus, errorThrown); // Handle errors
@@ -117,17 +140,35 @@
                 type: "get",
                 success: function (response) {
                     getAllUploads.innerHTML = '';
-                    response.forEach(element => {
-                    let html = '';
-                        html += '<div class="col-sm-3 col-md-2">';
-                        html += '<div class="card p-2" style="min-height:150px;display: flex;justify-content: center;">';
-                        html += '<a href="'+element+'">';
-                        html += '<img src="'+element+'" alt="'+element+'" class="card-img-top" style="vertical-align: middle;">';
-                        html += '</a>';              
-                        html += '</div>';
-                        html += '</div>';
-                    getAllUploads.innerHTML += html;
-                   });
+                    if(response.folders){
+                        let files = response.folders;
+                        files.forEach(element => {
+                            let html = '';
+                                html += '<div class="col-sm-4 col-md-3">';
+                                html += '<div class="p-2" style="min-height:150px;display: flex;justify-content: center;overflow:hidden">';
+                                html += '<a class="text-decoration-none" href="'+element.href+'"><i class="fa-solid fa-folder" style="font-size:8rem"></i>';
+                                html += '<p class="mb-0 text-dark d-flex mt-2"><input class="me-2 form-check-input media_checkbox" type="checkbox" data-name="'+ element.text +'">'+ element.text +'</p>';
+                                html += '</a>';              
+                                html += '</div>';
+                                html += '</div>';
+                            getAllUploads.innerHTML += html;
+                       });
+                    }
+                    if(response.files){
+                        let files = response.files;
+                        files.forEach(element => {
+                            let html = '';
+                                html += '<div class="col-sm-4 col-md-3">';
+                                html += '<div class="card p-2" style="min-height:150px;display: flex;justify-content: center;overflow:hidden">';
+                                html += '<a class="text-decoration-none" href="'+element.href+'">';
+                                html += '<img src="'+element.href+'" alt="'+element.text+'" class="card-img-top" style="vertical-align: middle;">';
+                                html += '<p class="mb-0 text-dark d-flex mt-2"><input class="me-2 form-check-input media_checkbox" type="checkbox" data-name="'+ element.text +'">'+ element.text +'</p>';
+                                html += '</a>';              
+                                html += '</div>';
+                                html += '</div>';
+                            getAllUploads.innerHTML += html;
+                       });
+                    }
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.error(textStatus, errorThrown); // Handle errors
@@ -135,5 +176,114 @@
             });
         }
 
+        function showAllImages(){
+            let show_all_images = document.getElementById('show_all_images');
+            $.ajax({
+                url: "/admin/media/getFiles",
+                type: "get",
+                success: function (response) {
+                    show_all_images.innerHTML = '';
+                    if(response.folders){
+                        let files = response.folders;
+                        files.forEach(element => {
+                            let html = '';
+                                html += '<div class="col-sm-3 col-md-2">';
+                                html += '<div class="p-2" style="min-height:150px;display: flex;justify-content: center;overflow:hidden">';
+                                html += '<a class="text-decoration-none" href="'+element.href+'"><i class="fa-solid fa-folder" style="font-size:8rem"></i>';
+                                html += '<p class="mb-0 text-dark d-flex mt-2"><input class="me-2 form-check-input media_checkbox" type="checkbox" data-name="'+ element.text +'">'+ element.text +'</p>';
+                                html += '</a>';              
+                                html += '</div>';
+                                html += '</div>';
+                            show_all_images.innerHTML += html;
+                       });
+                    }
+                    if(response.files){
+                        let files = response.files;
+                        files.forEach(element => {
+                            let html = '';
+                                html += '<div class="col-sm-3 col-md-2">';
+                                html += '<div class="card p-2" style="min-height:150px;display: flex;justify-content: center;overflow:hidden">';
+                                html += '<a class="text-decoration-none" href="'+element.href+'">';
+                                html += '<img src="'+element.href+'" alt="'+element.text+'" class="card-img-top" style="vertical-align: middle;">';
+                                html += '<p class="mb-0 text-dark d-flex mt-2"><input class="me-2 form-check-input media_checkbox" type="checkbox" data-name="'+ element.text +'">'+ element.text +'</p>';
+                                html += '</a>';              
+                                html += '</div>';
+                                html += '</div>';
+                            show_all_images.innerHTML += html;
+                       });
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error(textStatus, errorThrown); // Handle errors
+                }
+            });
+        }
+
+        function openFolderBox(){
+            let openFolderBox = document.getElementById('create_folder');
+            if(openFolderBox.style.display == 'none'){
+                openFolderBox.style.display = 'block';
+            }else{
+                openFolderBox.style.display = 'none';
+            }
+        }
+
+        document.getElementById('new_folder_btn').addEventListener('click', () =>{
+            let formData = new FormData();
+            let new_folder_box = document.getElementById('new_folder_box').value;
+            formData.append('folder_name', new_folder_box);
+            formData.append('_token', '{{ csrf_token() }}');
+            
+            $.ajax({
+                url: "/admin/media/createFolder",
+                type: "post",
+                data: formData,
+                processData: false, // Prevent jQuery from processing the data
+                contentType: false, // Prevent jQuery from setting the Content-Type header
+                success: function (response) {
+                    alert(response.message) // Handle success
+                    document.getElementById('new_folder_box').value = '';
+                    getFiles();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error(textStatus, errorThrown); // Handle errors
+                }
+            });
+        })
+
+        // delete files and folder
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.delete_files').forEach(deleteButton => {
+                deleteButton.addEventListener("click", () => {
+                const mediaCheckbox = document.querySelectorAll('.media_checkbox');
+                let selectedFiles = [];
+                mediaCheckbox.forEach(element => {
+                    if(element.checked){
+                        selectedFiles.push(element.getAttribute('data-name'))
+                    }
+                });
+
+                let formData = new FormData();
+                formData.append('files[]', selectedFiles);
+                formData.append('_token', '{{ csrf_token() }}');
+                $.ajax({
+                    url: "/admin/media/delete",
+                    type: "post",
+                    data: formData,
+                    processData: false, // Prevent jQuery from processing the data
+                    contentType: false, // Prevent jQuery from setting the Content-Type header
+                    success: function (response) {
+                        alert(response.message) // Handle success
+                        document.getElementById('new_folder_box').value = '';
+                        showAllImages();
+                        getFiles();
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.error(textStatus, errorThrown); // Handle errors
+                    }
+                });
+            });
+        })
+    })
     </script>
 @endsection

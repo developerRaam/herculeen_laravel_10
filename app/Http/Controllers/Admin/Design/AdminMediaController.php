@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Design;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\URL;
 
 class AdminMediaController extends Controller
@@ -63,16 +64,80 @@ class AdminMediaController extends Controller
             return response()->json(['error' => 'Directory does not exist'], 404);
         }
 
-        $files = scandir($folderPath);
-        $files = array_diff($files, array('.', '..'));
+        $directory = scandir($folderPath);
+        $directory = array_diff($directory, array('.', '..'));
 
-        $fileArray = [];
+        $folders = [];
+        $files = [];
 
-        foreach ($files as $file) {
-            $file = URL::to('image/uploads/'.$file);
-            array_push( $fileArray,$file);
+        foreach ($directory as $file) {
+            if(is_file($folderPath .'/'. $file)){
+                $filename = URL::to('image/uploads/'.$file);
+                $arr1 = [
+                    'href' => $filename,
+                    'text' => $file
+                ];
+                array_push( $files, $arr1);
+            }
+            if(is_dir($folderPath .'/'. $file)){
+                $foldername = URL::to('image/uploads/'.$file);
+                $arr2 = [
+                    'href' =>  $foldername,
+                    'text' => $file
+                ];
+                array_push( $folders, $arr2);
+            }
         }
 
-        return response()->json(($fileArray));
+        $array = [
+            'folders' => $folders,
+            'files' => $files,
+        ];
+
+        return response()->json(($array));
+    }
+
+    public function createFolder(Request $request){
+        $folderName = $request->request->get('folder_name');
+        $folderPath = public_path('image/uploads');
+        $new_folder = $folderPath .'/'. $folderName;
+
+        if (!file_exists($folderPath)) {
+            mkdir($folderPath, 0777, true);
+        }
+
+        if (!file_exists($folderPath .'/'.$new_folder)) {
+            mkdir($new_folder, 0777, true);
+        }
+
+        $array = [
+            'error' => 0,
+            'message' => 'Folder created successfully'
+        ];
+        return response()->json(($array));
+    }
+
+    // delete files
+    public function delete(Request $request){
+        $folderPath = public_path('image/uploads');
+        $files = $request->input('files', []);
+        if (!empty($files)) {
+            $fileUrls = explode(',', $files[0]);
+            foreach ($fileUrls as $fileUrl) {
+                if(is_file($folderPath .'/'.$fileUrl)){
+                    unlink($folderPath .'/'.$fileUrl);
+                }
+                if(is_dir($folderPath .'/'.$fileUrl)){
+                    rmdir($folderPath .'/'.$fileUrl);
+                }
+            }
+        } else {
+            return response()->json(['error' => 'No files provided'], 400);
+        }
+        $array = [
+            'error' => 0,
+            'message' => 'Folder deleted successfully'
+        ];
+        return response()->json(($array));
     }
 }

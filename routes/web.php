@@ -51,3 +51,5 @@ Route::get('/admin/storefront/product-form', [AdminProductController::class, 'fo
 Route::get('/admin/media', [AdminMediaController::class, 'index'])->name('admin-media')->middleware('AdminMiddlewareLogin');
 Route::post('/admin/media/uploadFile', [AdminMediaController::class, 'uploadFile'])->middleware('AdminMiddlewareLogin');
 Route::get('/admin/media/getFiles', [AdminMediaController::class, 'getFiles'])->middleware('AdminMiddlewareLogin');
+Route::post('/admin/media/createFolder', [AdminMediaController::class, 'createFolder'])->middleware('AdminMiddlewareLogin');
+Route::post('/admin/media/delete', [AdminMediaController::class, 'delete'])->middleware('AdminMiddlewareLogin');
