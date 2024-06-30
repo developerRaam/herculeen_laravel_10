@@ -91,7 +91,7 @@ table th,td{
     line-height: 2rem;
     border-bottom: 1px solid #ddd; 
 }
-.left-sidebar ul li a,button,strong{
+.left-sidebar ul li a,strong{
     padding-left: 2rem !important; 
 }
 .left-sidebar a {
@@ -129,6 +129,9 @@ table th,td{
     display: none;
     background-color: #3a444e;
     transition: 0.3s ease-out;
+}
+.left-side-btn{
+    padding-left: 2rem !important; 
 }
 
 /*=== End left sidebar */

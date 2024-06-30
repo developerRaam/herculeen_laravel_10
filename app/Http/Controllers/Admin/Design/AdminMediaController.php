@@ -140,4 +140,8 @@ class AdminMediaController extends Controller
         ];
         return response()->json(($array));
     }
+
+    public function openFolder(){
+        
+    }
 }

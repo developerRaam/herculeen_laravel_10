@@ -45,8 +45,11 @@ Route::get('/admin/banner/delete/{banner_id}', [BannerController::class, 'delete
 
 Route::get('/admin/admin-demo-data-table', [AdminDemoDataTableController::class, 'index'])->name('admin-demo-data-table')->middleware('AdminMiddlewareLogin');
 
-Route::get('/admin/storefront/product', [AdminProductController::class, 'index'])->name('admin-storefront-product')->middleware('AdminMiddlewareLogin');
-Route::get('/admin/storefront/product-form', [AdminProductController::class, 'form'])->middleware('AdminMiddlewareLogin');
+Route::middleware(['AdminMiddlewareLogin'])->prefix('admin/storefront')->group(function () {
+    Route::get('product', [AdminProductController::class, 'index'])->name('admin-storefront-product');
+    Route::get('product-form', [AdminProductController::class, 'form']);
+    Route::post('product-save', [AdminProductController::class, 'save'])->name('admin-product-save');
+});
 
 Route::get('/admin/media', [AdminMediaController::class, 'index'])->name('admin-media')->middleware('AdminMiddlewareLogin');
 Route::post('/admin/media/uploadFile', [AdminMediaController::class, 'uploadFile'])->middleware('AdminMiddlewareLogin');

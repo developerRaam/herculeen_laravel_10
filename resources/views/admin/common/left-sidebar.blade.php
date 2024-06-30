@@ -4,13 +4,13 @@
             <li class="py-2"><strong class="text-white"><i class="fa-solid fa-bars"></i> Navigation</strong></li>
             <li><a class="text-decoration-none text-white d-block" href="{{ route('admin-dashboard') }}"><i class="fa-solid fa-house"></i> Dashboard</a></li>
             <li>
-                <button class="dropdown-btn" data-dropdown="column_left-1"><span><i class="fa-solid fa-store"></i> Storefront</span> <i class="fa fa-caret-down"></i></button>
+                <button class="dropdown-btn left-side-btn" data-dropdown="column_left-1"><span><i class="fa-solid fa-store"></i> Storefront</span> <i class="fa fa-caret-down"></i></button>
                 <div class="dropdown-container" id="dropdown-column_left-1">
                     <a class="text-decoration-none text-white d-block" style="padding-left:3rem !important" href="{{ route('admin-storefront-product') }}"><i class="fa-solid fa-angles-right"></i> Products</a>
                 </div>
             </li>
             <li>
-                <button class="dropdown-btn" data-dropdown="column_left-2"><span><i class="fas fa-desktop"></i> Design</span> <i class="fa fa-caret-down"></i></button>
+                <button class="dropdown-btn left-side-btn" data-dropdown="column_left-2"><span><i class="fas fa-desktop"></i> Design</span> <i class="fa fa-caret-down"></i></button>
                 <div class="dropdown-container" id="dropdown-column_left-2">
                     <a class="text-decoration-none text-white d-block" style="padding-left:3rem !important" href="{{ route('admin-banner') }}"><i class="fa-solid fa-angles-right"></i> Banner</a>
                     <a class="text-decoration-none text-white d-block" style="padding-left:3rem !important" href="{{ route('admin-media') }}"><i class="fa-solid fa-angles-right"></i> Media</a>

@@ -28,7 +28,7 @@
                         </div>
                     </div>
                     <div>
-                        <a class="btn btn-primary fs-4 px-3" href="#" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Save"><i class="fa-solid fa-floppy-disk"></i></a>
+                        <a class="btn btn-primary fs-4 px-3" href="#" data-bs-toggle="tooltip" id="submitButton" data-bs-placement="top" data-bs-title="Save"><i class="fa-solid fa-floppy-disk"></i></a>
                         <a class="btn btn-primary fs-4 px-3" href="{{$back}}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Back"><i class="fa-solid fa-reply"></i></a>
                     </div>
                 </div>
@@ -76,7 +76,7 @@
                             </li>
                         </ul>
                         <!-- Tab content -->
-                        <form action="{{ route('admin-setting') }}" id="myForm" method="post" enctype="multipart/form-data">
+                        <form action="{{ route('admin-product-save') }}" id="saveForm" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="tab-content" id="myTabContent">
                                 <!-- General -->
@@ -87,7 +87,14 @@
                                                 <label for="product_name">Product Name</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="text" id="product_name" name="product_name" class="form-control p-2" value="{{ $social->instagram ?? '' }}" placeholder="Product Name">
+                                                <input type="text" id="product_name" name="product_name" class="form-control p-2" value="{{ old('product_name') }}" placeholder="Product Name">
+                                            </div>
+                                            <div class="errors">
+                                                <span class="text-danger">
+                                                    @error('product_name')
+                                                        {{$message}}
+                                                    @enderror
+                                                </span>
                                             </div>
                                         </div>
                                         <div class="row mb-4">
@@ -95,7 +102,7 @@
                                                 <label for="product_name">Product description</label>
                                             </div>
                                             <div class="col-10">
-                                                <textarea id="summernote" name="description"></textarea>
+                                                <textarea id="summernote" name="description" value="{{ old('description') }}"></textarea>
                                             </div>
                                         </div>
                                         <div class="row mb-4">
@@ -103,7 +110,7 @@
                                                 <label for="meta_tag_title">Meta Tag Title</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="text" id="meta_tag_title" name="meta_tag_title" class="form-control p-2" value="{{ $social->instagram ?? '' }}" placeholder="Meta Tag Title">
+                                                <input type="text" id="meta_tag_title" name="meta_tag_title" class="form-control p-2" value="{{ old('meta_tag_title') }}" placeholder="Meta Tag Title">
                                             </div>
                                         </div>
                                         <div class="row mb-4">
@@ -111,7 +118,7 @@
                                                 <label for="meta_tag_keyword">Meta Tag Keywords</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="text" id="meta_tag_keyword" name="meta_tag_keyword" class="form-control p-2" value="{{ $social->instagram ?? '' }}" placeholder="Meta Tag Keyword">
+                                                <input type="text" id="meta_tag_keyword" name="meta_tag_keyword" class="form-control p-2" value="{{ old('meta_tag_keyword') }}" placeholder="Meta Tag Keyword">
                                             </div>
                                         </div>
                                         <div class="row mb-4">
@@ -119,7 +126,7 @@
                                                 <label for="product_tag">Product Tags</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="text" id="product_tag" name="product_tag" class="form-control p-2" value="{{ $social->instagram ?? '' }}" placeholder="Product Tags">
+                                                <input type="text" id="product_tag" name="product_tag" class="form-control p-2" value="{{ old('product_tag') }}" placeholder="Product Tags">
                                             </div>
                                         </div>
                                     </div>
@@ -135,7 +142,14 @@
                                                 <label for="model">Model</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="text" id="model" name="model" class="form-control p-2" value="{{ $social->instagram ?? '' }}" placeholder="Model">
+                                                <input type="text" id="model" name="model" class="form-control p-2" value="{{ old('model') }}" placeholder="Model">
+                                            </div>
+                                            <div class="errors">
+                                                <span class="text-danger">
+                                                    @error('model')
+                                                        {{$message}}
+                                                    @enderror
+                                                </span>
                                             </div>
                                         </div>
                                         <div class="row mb-4">
@@ -143,8 +157,15 @@
                                                 <label for="sku">SKU</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="text" id="sku" name="sku" class="form-control p-2" value="{{ $social->instagram ?? '' }}" placeholder="SKU">
+                                                <input type="text" id="sku" name="sku" class="form-control p-2" value="{{ old('sku') }}" placeholder="SKU">
                                                 <span class="form-text">Stock Keeping Unit</span>
+                                            </div>
+                                            <div class="errors">
+                                                <span class="text-danger">
+                                                    @error('sku')
+                                                        {{$message}}
+                                                    @enderror
+                                                </span>
                                             </div>
                                         </div>
                                         <div class="row mb-4">
@@ -152,7 +173,7 @@
                                                 <label for="upc">UPC</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="text" id="upc" name="upc" class="form-control p-2" value="{{ $social->instagram ?? '' }}" placeholder="UPC">
+                                                <input type="text" id="upc" name="upc" class="form-control p-2" value="{{ old('upc') }}" placeholder="UPC">
                                                 <span class="form-text">Universal Product Code</span>
                                             </div>
                                         </div>
@@ -161,7 +182,7 @@
                                                 <label for="ean">EAN</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="text" id="ean" name="ean" class="form-control p-2" value="{{ $social->instagram ?? '' }}" placeholder="EAN">
+                                                <input type="text" id="ean" name="ean" class="form-control p-2" value="{{ old('ean') }}" placeholder="EAN">
                                                 <span class="form-text">European Article Number</span>
                                             </div>
                                         </div>
@@ -170,7 +191,7 @@
                                                 <label for="jan">JAN</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="text" id="jan" name="jan" class="form-control p-2" value="{{ $social->instagram ?? '' }}" placeholder="JAN">
+                                                <input type="text" id="jan" name="jan" class="form-control p-2" value="{{ old('jan') }}" placeholder="JAN">
                                                 <span class="form-text">Japanese Article Number</span>
                                             </div>
                                         </div>
@@ -179,7 +200,7 @@
                                                 <label for="isbn">ISBN</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="text" id="isbn" name="isbn" class="form-control p-2" value="{{ $social->instagram ?? '' }}" placeholder="ISBN">
+                                                <input type="text" id="isbn" name="isbn" class="form-control p-2" value="{{ old('isbn') }}" placeholder="ISBN">
                                                 <span class="form-text">International Standard Book Number</span>
                                             </div>
                                         </div>
@@ -188,7 +209,7 @@
                                                 <label for="mpn">MPN</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="text" id="mpn" name="mpn" class="form-control p-2" value="{{ $social->instagram ?? '' }}" placeholder="mpn">
+                                                <input type="text" id="mpn" name="mpn" class="form-control p-2" value="{{ old('mpn') }}" placeholder="mpn">
                                                 <span class="form-text">Manufacturer Part Number</span>
                                             </div>
                                         </div>
@@ -198,10 +219,17 @@
                                         <h4>Stock</h4><hr>
                                         <div class="row mb-4">
                                             <div class="col-2 text-end">
-                                                <label for="stock_quantity">stock_Quantity</label>
+                                                <label for="stock_quantity">Quantity</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="text" id="stock_quantity" name="stock_quantity" class="form-control p-2" value="{{ $social->instagram ?? '' }}" placeholder="Quantity">
+                                                <input type="text" id="stock_quantity" name="quantity" class="form-control p-2" value="{{ old('quantity') }}" placeholder="Quantity">
+                                            </div>
+                                            <div class="errors">
+                                                <span class="text-danger">
+                                                    @error('quantity')
+                                                        {{$message}}
+                                                    @enderror
+                                                </span>
                                             </div>
                                         </div>
                                         <div class="row mb-4">
@@ -209,7 +237,7 @@
                                                 <label for="minimum_quantity">Minimum Quantity</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="text" id="minimum_quantity" name="minimum_quantity" class="form-control p-2" value="{{ $social->instagram ?? '' }}" placeholder="Minimum Quantity">
+                                                <input type="text" id="minimum_quantity" name="minimum_quantity" class="form-control p-2" value="{{ old('minimum_quantity') }}" placeholder="Minimum Quantity">
                                             </div>
                                         </div>
                                         <div class="row mb-4">
@@ -238,7 +266,7 @@
                                                 <label for="date_available">Date Available</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="date" id="date_available" name="date_available" class="w-25 p-2" value="{{ $social->instagram ?? '' }}">
+                                                <input type="date" id="date_available" name="date_available" class="w-25 p-2" value="{{ old('date_available') }}">
                                             </div>
                                         </div>
                                     </section>
@@ -258,9 +286,9 @@
                                                 <label>Dimensions (L x W x H)</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="text" name="length" class="col p-2" value="{{ $social->instagram ?? '0.0000' }}">
-                                                <input type="text" name="width" class="col p-2" value="{{ $social->instagram ?? '0.0000' }}">
-                                                <input type="text" name="height" class="col p-2" value="{{ $social->instagram ?? '0.0000' }}">
+                                                <input type="text" name="length" class="col p-2" value="{{ old('length') ?? '0.0000' }}">
+                                                <input type="text" name="width" class="col p-2" value="{{ old('width') ?? '0.0000' }}">
+                                                <input type="text" name="height" class="col p-2" value="{{ old('height') ?? '0.0000' }}">
                                             </div>
                                         </div>
                                         <div class="row mb-4">
@@ -280,7 +308,7 @@
                                                 <label for="weight">Weight</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="text" name="weight" id="weight" class="form-control col p-2" value="{{ $social->instagram ?? '0.0000' }}">
+                                                <input type="text" name="weight" id="weight" class="form-control col p-2" value="{{ old('weight') ?? '0.0000' }}">
                                             </div>
                                         </div>
                                         <div class="row mb-4">
@@ -309,7 +337,7 @@
                                                 <label for="sort_order">Sort Order</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="text" name="sort_order" id="sort_order" class="form-control col p-2" value="{{ $social->instagram ?? '' }}" placeholder="Sort order">
+                                                <input type="text" name="sort_order" id="sort_order" class="form-control col p-2" value="{{ old('sort_order') }}" placeholder="Sort order">
                                             </div>
                                         </div>
                                     </section>
@@ -322,7 +350,7 @@
                                             <label for="list_price">List Price</label>
                                         </div>
                                         <div class="col-10">
-                                            <input type="text" id="list_price" name="list_price" class="form-control p-2" value="{{ $social->instagram ?? '' }}" placeholder="List Price">
+                                            <input type="text" id="list_price" name="list_price" class="form-control p-2" value="{{ old('list_price') }}" placeholder="List Price">
                                         </div>
                                     </div>
                                     <div class="row mb-4">
@@ -330,7 +358,7 @@
                                             <label for="mrp">MRP</label>
                                         </div>
                                         <div class="col-10">
-                                            <input type="text" id="mrp" name="mrp" class="form-control p-2" value="{{ $social->instagram ?? '' }}" placeholder="MRP">
+                                            <input type="text" id="mrp" name="mrp" class="form-control p-2" value="{{ old('mrp') }}" placeholder="MRP">
                                         </div>
                                     </div>
                                 </div>
@@ -342,7 +370,7 @@
                                             <label for="manufacturer">Manufacturer</label>
                                         </div>
                                         <div class="col-10">
-                                            <input type="text" id="manufacturer" name="manufacturer" class="form-control p-2" value="{{ $social->instagram ?? '' }}" placeholder="Manufacturer">
+                                            <input type="text" id="manufacturer" name="manufacturer" class="form-control p-2" value="{{ old('manufacturer') }}" placeholder="Manufacturer">
                                         </div>
                                     </div>
                                     <div class="row mb-4">
@@ -350,8 +378,8 @@
                                             <label>Product set as a New</label>
                                         </div>
                                         <div class="col-10">
-                                            Start Date <input type="date" name="start_date" class="w-25 me-5 p-2" value="{{ $social->instagram ?? '' }}">
-                                            CLose Date <input type="date" name="close_date" class="w-25 p-2" value="{{ $social->instagram ?? '' }}">
+                                            Start Date <input type="date" name="start_date" class="w-25 me-5 p-2" value="{{ old('start_date') }}">
+                                            CLose Date <input type="date" name="close_date" class="w-25 p-2" value="{{ old('close_date') }}">
                                         </div>
                                     </div>
                                     <div class="row mb-4">
@@ -359,7 +387,7 @@
                                             <label for="categories">Categories</label>
                                         </div>
                                         <div class="col-10">
-                                            <input type="text" id="categories" name="categories" class="form-control p-2" value="{{ $social->instagram ?? '' }}" placeholder="Categories">
+                                            <input type="text" id="categories" name="categories" class="form-control p-2" value="{{ old('categories') }}" placeholder="Categories">
                                             <div class="form-control mt-1" style="height: 150px; overflow: auto;">
                                                 
                                             </div>
@@ -370,7 +398,7 @@
                                             <label for="filter">Filters</label>
                                         </div>
                                         <div class="col-10">
-                                            <input type="text" id="filter" name="filter" class="form-control p-2" value="{{ $social->instagram ?? '' }}" placeholder="filter">
+                                            <input type="text" id="filter" name="filter" class="form-control p-2" value="{{ old('filter') }}" placeholder="filter">
                                             <div class="form-control mt-1" style="height: 150px; overflow: auto;">
                                                 
                                             </div>
@@ -381,7 +409,7 @@
                                             <label for="download">Downloads</label>
                                         </div>
                                         <div class="col-10">
-                                            <input type="text" id="download" name="download" class="form-control p-2" value="{{ $social->instagram ?? '' }}" placeholder="Downloads">
+                                            <input type="text" id="download" name="download" class="form-control p-2" value="{{ old('download') }}" placeholder="Downloads">
                                             <div class="form-control mt-1" style="height: 150px; overflow: auto;">
                                                 
                                             </div>
@@ -392,7 +420,7 @@
                                             <label for="related_product">Related Products</label>
                                         </div>
                                         <div class="col-10">
-                                            <input type="text" id="related_product" name="related_product" class="form-control p-2" value="{{ $social->instagram ?? '' }}" placeholder="Related Products">
+                                            <input type="text" id="related_product" name="related_product" class="form-control p-2" value="{{ old('related_product') }}" placeholder="Related Products">
                                             <div class="form-control mt-1" style="height: 150px; overflow: auto;">
                                                 
                                             </div>
@@ -411,24 +439,13 @@
                                                     <th></th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>
-                                                        <input type="text" name="attribute_name[]" class="form-control" placeholder="Attribue Name">
-                                                    </td>
-                                                    <td>
-                                                        <textarea name="attribute_text[]" class="form-control" id="" rows="3" placeholder="Text"></textarea>
-                                                    </td>
-                                                    <td class="text-end">
-                                                        <a href="#" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Remove"><i class="fa-solid fa-minus"></i></a>
-                                                    </td>
-                                                </tr>
+                                            <tbody id="product_attributes">
                                             </tbody>
                                             <tfoot>
                                                 <tr>
                                                     <td colspan="2"></td>
                                                     <td class="text-end">
-                                                        <a href="#" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add"><i class="fa-solid fa-plus"></i></a>
+                                                        <button type="button" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add" onclick="addAttributesRow()"><i class="fa-solid fa-plus"></i></button>
                                                     </td>
                                                 </tr>
                                             </tfoot>
@@ -451,39 +468,13 @@
                                                     <th></th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>
-                                                        <select name="product_discount[0][customer_group_id]" class="form-select">    
-                                                            <option value="1">Default</option>  
-                                                        </select>
-                                                        <input type="hidden" class="form-control" name="product_discount[0][product_discount_id]" value="">
-                                                    </td>
-                                                    <td>
-                                                        <input type="text" class="form-control" name="discount_quantity" id="discount_quantity" placeholder="Quantity">
-                                                    </td>
-                                                    <td>
-                                                        <input type="text" class="form-control" name="discount_priority" id="discount_priority" placeholder="Priority">
-                                                    </td>
-                                                    <td>
-                                                        <input type="text" class="form-control" name="discount_price" id="discount_price" placeholder="Price">
-                                                    </td>
-                                                    <td>
-                                                        <input type="date" class="form-control" name="discount_start_date" id="discount_start_date">
-                                                    </td>
-                                                    <td>
-                                                        <input type="date" class="form-control" name="discount_close_date" id="discount_close_date">
-                                                    </td>
-                                                    <td class="text-end">
-                                                        <a href="#" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Remove"><i class="fa-solid fa-minus"></i></a>
-                                                    </td>
-                                                </tr>
+                                            <tbody id="product_discount">
                                             </tbody>
                                             <tfoot>
                                                 <tr>
                                                     <td colspan="6"></td>
                                                     <td class="text-end">
-                                                        <a href="#" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add"><i class="fa-solid fa-plus"></i></a>
+                                                        <button type="button" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add" onclick="addDiscountRow()"><i class="fa-solid fa-plus"></i></button>
                                                     </td>
                                                 </tr>
                                             </tfoot>
@@ -505,36 +496,13 @@
                                                     <th></th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>
-                                                        <select name="product_discount[0][customer_group_id]" class="form-select">    
-                                                            <option value="1">Default</option>  
-                                                        </select>
-                                                        <input type="hidden" class="form-control" name="special_discount[0][product_discount_id]" value="">
-                                                    </td>
-                                                    <td>
-                                                        <input type="text" class="form-control" name="special_priority" id="special_priority" placeholder="Priority">
-                                                    </td>
-                                                    <td>
-                                                        <input type="text" class="form-control" name="special_price" id="special_price" placeholder="Price">
-                                                    </td>
-                                                    <td>
-                                                        <input type="date" class="form-control" name="special_start_date" id="special_start_date">
-                                                    </td>
-                                                    <td>
-                                                        <input type="date" class="form-control" name="special_close_date" id="special_close_date">
-                                                    </td>
-                                                    <td class="text-end">
-                                                        <a href="#" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Remove"><i class="fa-solid fa-minus"></i></a>
-                                                    </td>
-                                                </tr>
+                                            <tbody id="product_special">
                                             </tbody>
                                             <tfoot>
                                                 <tr>
                                                     <td colspan="5"></td>
                                                     <td class="text-end">
-                                                        <a href="#" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add"><i class="fa-solid fa-plus"></i></a>
+                                                        <button type="button" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add" onclick="addSpecialtRow()"><i class="fa-solid fa-plus"></i></button>
                                                     </td>
                                                 </tr>
                                             </tfoot>
@@ -549,7 +517,7 @@
                                             <label for="reward_point">Reward Points</label>
                                         </div>
                                         <div class="col-10">
-                                            <input type="text" id="reward_point" name="reward_point" class="form-control p-2" value="{{ $social->instagram ?? '' }}" placeholder="Reward Points">
+                                            <input type="text" id="reward_point" name="reward_point" class="form-control p-2" value="{{ old('reward_point') }}" placeholder="Reward Points">
                                         </div>
                                     </div>
                                 </div>
@@ -578,33 +546,13 @@
                                                     <th></th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>
-                                                        <div class="col-sm-4 col-md-3">
-                                                            <div class="card p-2" style="width: 12rem">
-                                                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgPbd2MBbw3o5_yzYC_pPjoVNKUx7WCrMN3g&s" alt="" class="card-img-top">
-                                                                <input type="hidden" name="image" value="catalog/black/IMG_6739.jpg" id="input-image">
-                                                                <div class="card-body text-center mt-2"> 
-                                                                    <button class="btn btn-primary fs-5 px-3" href="#" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit"><i class="fa-solid fa-pencil"></i></button>
-                                                                    <button class="btn btn-warning text-white fs-5 px-3" href="{{$back}}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Clear"><i class="fa-regular fa-trash-can"></i></button>                                               
-                                                                </div>
-                                                            </div>
-                                                        </div> 
-                                                    </td>
-                                                    <td>
-                                                        <input type="text" id="image_sort_order" name="image_sort_order" class="form-control p-2" value="{{ $social->instagram ?? '' }}" placeholder="Sort Order">
-                                                    </td>
-                                                    <td class="text-end">
-                                                        <a href="#" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Remove"><i class="fa-solid fa-minus"></i></a>
-                                                    </td>
-                                                </tr>
+                                            <tbody id="product_images">
                                             </tbody>
                                             <tfoot>
                                                 <tr>
                                                     <td colspan="2"></td>
                                                     <td class="text-end">
-                                                        <a href="#" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add"><i class="fa-solid fa-plus"></i></a>
+                                                        <button type="button" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add" onclick="addImageRow()"><i class="fa-solid fa-plus"></i></button>
                                                     </td>
                                                 </tr>
                                             </tfoot>
@@ -620,7 +568,7 @@
                                             <label for="amazon_link">Amazon</label>
                                         </div>
                                         <div class="col-8">
-                                            <input type="text" id="amazon_link" name="amazon_link" class="form-control p-2" value="{{ $social->instagram ?? '' }}" placeholder="Amazon">
+                                            <input type="text" id="amazon_link" name="amazon_link" class="form-control p-2" value="{{ old('amazon_link') }}" placeholder="Amazon">
                                         </div>
                                         <div class="col-2 form-check form-switch">
                                             <input class="form-check-input fs-3 ms-3" name="amazon_link_status" type="checkbox" role="switch">
@@ -631,7 +579,7 @@
                                             <label for="flipkart_url">Flipkart</label>
                                         </div>
                                         <div class="col-8">
-                                            <input type="text" id="flipkart_url" name="flipkart_url" class="form-control p-2" value="{{ $social->instagram ?? '' }}" placeholder="Flipkart">
+                                            <input type="text" id="flipkart_url" name="flipkart_url" class="form-control p-2" value="{{ old('flipkart_url') }}" placeholder="Flipkart">
                                         </div>
                                         <div class="col-2 form-check form-switch">
                                             <input class="form-check-input fs-3 ms-3" name="flipkart_url_status" type="checkbox" role="switch">
@@ -642,7 +590,7 @@
                                             <label for="myntra_url">Myntra</label>
                                         </div>
                                         <div class="col-8">
-                                            <input type="text" id="myntra_url" name="myntra_url" class="form-control p-2" value="{{ $social->instagram ?? '' }}" placeholder="Myntra">
+                                            <input type="text" id="myntra_url" name="myntra_url" class="form-control p-2" value="{{ old('myntra_url') }}" placeholder="Myntra">
                                         </div>
                                         <div class="col-2 form-check form-switch">
                                             <input class="form-check-input fs-3 ms-3" name="myntra_url_status" type="checkbox" role="switch">
@@ -653,7 +601,7 @@
                                             <label for="ajio_url">Ajio</label>
                                         </div>
                                         <div class="col-8">
-                                            <input type="text" id="ajio_url" name="ajio_url" class="form-control p-2" value="{{ $social->instagram ?? '' }}" placeholder="Ajio">
+                                            <input type="text" id="ajio_url" name="ajio_url" class="form-control p-2" value="{{ old('ajio_url') }}" placeholder="Ajio">
                                         </div>
                                         <div class="col-2 form-check form-switch">
                                             <input class="form-check-input fs-3 ms-3" name="ajio_url_status" type="checkbox" role="switch">
@@ -664,7 +612,7 @@
                                             <label for="meesho_url">Meesho</label>
                                         </div>
                                         <div class="col-8">
-                                            <input type="text" id="meesho_url" name="meesho_url" class="form-control p-2" value="{{ $social->instagram ?? '' }}" placeholder="Meesho">
+                                            <input type="text" id="meesho_url" name="meesho_url" class="form-control p-2" value="{{ old('meesho_url') }}" placeholder="Meesho">
                                         </div>
                                         <div class="col-2 form-check form-switch">
                                             <input class="form-check-input fs-3 ms-3" name="meesho_url_status" type="checkbox" role="switch">
@@ -679,4 +627,156 @@
         </div>
     </div>
 </section>
+
+<script>
+
+    // Form save 
+    document.addEventListener("DOMContentLoaded", function() {
+        let submitButton = document.getElementById("submitButton");
+        let form = document.getElementById("saveForm");
+
+        submitButton.addEventListener("click", function() {
+            form.submit(); // This will submit the form when the button is clicked
+        });
+    });
+
+    // Product attributes
+    function addAttributesRow() {
+        const table = document.getElementById('product_attributes');
+        const rowCount = table.rows.length;
+        const row = table.insertRow(rowCount);
+
+        row.innerHTML = `
+            <tr>
+                <td>
+                    <input type="text" name="product_attribute[${rowCount}][name]" class="form-control" placeholder="Attribue Name">
+                </td>
+                <td>
+                    <textarea name="product_attribute[${rowCount}][text]" class="form-control" id="" rows="3" placeholder="Text"></textarea>
+                </td>
+                <td class="text-end">
+                    <button type="button" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Remove" onclick="removeAttributeRow(this)"><i class="fa-solid fa-minus"></i></button>
+                </td>
+            </tr>
+        `;
+    }
+
+    function removeAttributeRow(button) {
+        const row = button.closest('tr');
+        row.remove();
+    }
+
+    // Product discount
+    function addDiscountRow() {
+        const table = document.getElementById('product_discount');
+        const rowCount = table.rows.length;
+        const row = table.insertRow(rowCount);
+
+        row.innerHTML = `
+            <td>
+                <select name="product_discount[${rowCount}][customer_group_id]" class="form-select">
+                    <option value="0">Default</option>
+                </select>
+                <input type="hidden" class="form-control" name="product_discount[${rowCount}][product_discount_id]" value="">
+            </td>
+            <td>
+                <input type="text" class="form-control" name="product_discount[${rowCount}][discount_quantity]" id="discount_quantity" placeholder="Quantity">
+            </td>
+            <td>
+                <input type="text" class="form-control" name="product_discount[${rowCount}][priority]" placeholder="Priority">
+            </td>
+            <td>
+                <input type="text" class="form-control" name="product_discount[${rowCount}][price]" placeholder="Price">
+            </td>
+            <td>
+                <input type="date" class="form-control" name="product_discount[${rowCount}][start_date]">
+            </td>
+            <td>
+                <input type="date" class="form-control" name="product_discount[${rowCount}][close_date]">
+            </td>
+            <td class="text-end">
+                <button type="button" class="btn btn-danger" onclick="removeDiscountRow(this)" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Remove"><i class="fa-solid fa-minus"></i></button>
+            </td>
+        `;
+    }
+
+    function removeDiscountRow(button) {
+        const row = button.closest('tr');
+        row.remove();
+    }
+
+    // Product Special
+    function addSpecialtRow() {
+        const table = document.getElementById('product_special');
+        const rowCount = table.rows.length;
+        const row = table.insertRow(rowCount);
+
+        row.innerHTML = `
+            <tr>
+                <td>
+                    <select name="product_special[${rowCount}][customer_group_id]" class="form-select">    
+                        <option value="0">Default</option>  
+                    </select>
+                    <input type="hidden" class="form-control" name="product_special[${rowCount}][special_id]" value="">
+                </td>
+                <td>
+                    <input type="text" class="form-control" name="product_special[${rowCount}][priority]" id="special_priority" placeholder="Priority">
+                </td>
+                <td>
+                    <input type="text" class="form-control" name="product_special[${rowCount}][price]" id="special_price" placeholder="Price">
+                </td>
+                <td>
+                    <input type="date" class="form-control" name="product_special[${rowCount}][start_date]" id="special_start_date">
+                </td>
+                <td>
+                    <input type="date" class="form-control" name="product_special[${rowCount}][close_date]" id="special_close_date">
+                </td>
+                <td class="text-end">
+                    <button type="button" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Remove" onclick="removeSpecialRow(this)"><i class="fa-solid fa-minus"></i></button>
+                </td>
+            </tr>
+        `;
+    }
+
+    function removeSpecialRow(button) {
+        const row = button.closest('tr');
+        row.remove();
+    }
+
+
+    // Product images
+    function addImageRow() {
+        const table = document.getElementById('product_images');
+        const rowCount = table.rows.length;
+        const row = table.insertRow(rowCount);
+
+        row.innerHTML = `
+           <tr>
+                <td>
+                    <div class="col-sm-4 col-md-3">
+                        <div class="card p-2" style="width: 12rem">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgPbd2MBbw3o5_yzYC_pPjoVNKUx7WCrMN3g&s" alt="" class="card-img-top">
+                            <input type="hidden" name="product_image[${rowCount}][image]" value="catalog/black/IMG_6739.jpg" id="input-image">
+                            <div class="card-body text-center mt-2"> 
+                                <button class="btn btn-primary fs-5 px-3" href="#" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit"><i class="fa-solid fa-pencil"></i></button>
+                                <button class="btn btn-warning text-white fs-5 px-3" href="{{$back}}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Clear"><i class="fa-regular fa-trash-can"></i></button>                                               
+                            </div>
+                        </div>
+                    </div> 
+                </td>
+                <td>
+                    <input type="text" id="image_sort_order" name="image_sort_order" class="form-control p-2" value="{{ old('description') }}" placeholder="Sort Order">
+                </td>
+                <td class="text-end">
+                    <button type="button" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Remove" onclick="removeImageRow(this)"><i class="fa-solid fa-minus"></i></button>
+                </td>
+            </tr>
+        `;
+    }
+
+    function removeImageRow(button) {
+        const row = button.closest('tr');
+        row.remove();
+    }
+</script>
 @endsection

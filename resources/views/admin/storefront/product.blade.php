@@ -53,42 +53,20 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td class="text-center"><input type="checkbox" class="form-check-input" name="" id=""></td>
-                                    <td><img width="50" height="50" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREoRGyXmHy_6aIgXYqWHdOT3KjfmnuSyxypw&s" alt=""></td>
-                                    <td>T-Shirt</td>
-                                    <td>GHHGDD</td>
-                                    <td>Rs.788</td>
-                                    <td>100</td>
-                                    <td>
-                                        <a class="btn btn-primary" href="#" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit"><i class="fa-solid fa-pencil"></i></a>
-                                        <a class="btn btn-danger" href="#" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete"><i class="fa-solid fa-trash"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-center"><input type="checkbox" class="form-check-input" name="" id=""></td>
-                                    <td><img width="50" height="50" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREoRGyXmHy_6aIgXYqWHdOT3KjfmnuSyxypw&s" alt=""></td>
-                                    <td>T-Shirt</td>
-                                    <td>GHHGDD</td>
-                                    <td>Rs.788</td>
-                                    <td>100</td>
-                                    <td>
-                                        <a class="btn btn-primary" href="#" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit"><i class="fa-solid fa-pencil"></i></a>
-                                        <a class="btn btn-danger" href="#" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete"><i class="fa-solid fa-trash"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-center"><input type="checkbox" class="form-check-input" name="" id=""></td>
-                                    <td><img width="50" height="50" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREoRGyXmHy_6aIgXYqWHdOT3KjfmnuSyxypw&s" alt=""></td>
-                                    <td>T-Shirt</td>
-                                    <td>GHHGDD</td>
-                                    <td>Rs.788</td>
-                                    <td>100</td>
-                                    <td>
-                                        <a class="btn btn-primary" href="#" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit"><i class="fa-solid fa-pencil"></i></a>
-                                        <a class="btn btn-danger" href="#" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete"><i class="fa-solid fa-trash"></i></a>
-                                    </td>
-                                </tr>
+                                @foreach ($products as $product)
+                                    <tr>
+                                        <td class="text-center"><input type="checkbox" class="form-check-input" name="" id=""></td>
+                                        <td><img width="50" height="50" src="{{$product->image}}" alt="{{$product->product_name}}"></td>
+                                        <td>{{$product->product_name}}</td>
+                                        <td>{{$product->model}}</td>
+                                        <td>{{$product->list_price }}</td>
+                                        <td>{{$product->quantity}}</td>
+                                        <td>
+                                            <a class="btn btn-primary" href="#" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit"><i class="fa-solid fa-pencil"></i></a>
+                                            <a class="btn btn-danger" href="#" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete"><i class="fa-solid fa-trash"></i></a>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
 

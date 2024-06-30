@@ -51,8 +51,8 @@
                                     <div class="col-6">
                                         <div>
                                             <a class="btn btn-outline-primary" href="#" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Parent"><i class="fa-solid fa-level-up-alt"></i></a>
-                                            <button class="btn btn-outline-primary px-3" id="refresh" href="#" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Refresh"><i class="fa-solid fa-rotate"></i></button>
-                                            <button class="btn btn-primary px-3" id="button-upload" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Image Upload"><i class="fa-solid fa-upload"></i></button>
+                                            <button class="btn btn-outline-primary" id="refresh" href="#" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Refresh"><i class="fa-solid fa-rotate"></i></button>
+                                            <button class="btn btn-primary" id="button-upload" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Image Upload"><i class="fa-solid fa-upload"></i></button>
                                             <input type="file" id="file-input" style="display: none;" multiple>
                                             <a class="btn btn-outline-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="New Folder" onclick="openFolderBox()"><i class="fa-solid fa-folder"></i></a>
                                             <a class="btn btn-danger delete_files" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete"><i class="fa-solid fa-trash"></i></a>
@@ -189,7 +189,7 @@
                             let html = '';
                                 html += '<div class="col-sm-3 col-md-2">';
                                 html += '<div class="p-2" style="min-height:150px;display: flex;justify-content: center;overflow:hidden">';
-                                html += '<a class="text-decoration-none" href="'+element.href+'"><i class="fa-solid fa-folder" style="font-size:8rem"></i>';
+                                html += '<a class="text-decoration-none open_folder" href="'+element.href+'" data-text="'+element.text+'"><i class="fa-solid fa-folder" style="font-size:8rem"></i>';
                                 html += '<p class="mb-0 text-dark d-flex mt-2"><input class="me-2 form-check-input media_checkbox" type="checkbox" data-name="'+ element.text +'">'+ element.text +'</p>';
                                 html += '</a>';              
                                 html += '</div>';
@@ -255,35 +255,43 @@
         document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.delete_files').forEach(deleteButton => {
                 deleteButton.addEventListener("click", () => {
-                const mediaCheckbox = document.querySelectorAll('.media_checkbox');
-                let selectedFiles = [];
-                mediaCheckbox.forEach(element => {
-                    if(element.checked){
-                        selectedFiles.push(element.getAttribute('data-name'))
-                    }
-                });
+                    const mediaCheckbox = document.querySelectorAll('.media_checkbox');
+                    let selectedFiles = [];
+                    mediaCheckbox.forEach(element => {
+                        if(element.checked){
+                            selectedFiles.push(element.getAttribute('data-name'))
+                        }
+                    });
 
-                let formData = new FormData();
-                formData.append('files[]', selectedFiles);
-                formData.append('_token', '{{ csrf_token() }}');
-                $.ajax({
-                    url: "/admin/media/delete",
-                    type: "post",
-                    data: formData,
-                    processData: false, // Prevent jQuery from processing the data
-                    contentType: false, // Prevent jQuery from setting the Content-Type header
-                    success: function (response) {
-                        alert(response.message) // Handle success
-                        document.getElementById('new_folder_box').value = '';
-                        showAllImages();
-                        getFiles();
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        console.error(textStatus, errorThrown); // Handle errors
-                    }
+                    let formData = new FormData();
+                    formData.append('files[]', selectedFiles);
+                    formData.append('_token', '{{ csrf_token() }}');
+                    $.ajax({
+                        url: "/admin/media/delete",
+                        type: "post",
+                        data: formData,
+                        processData: false, // Prevent jQuery from processing the data
+                        contentType: false, // Prevent jQuery from setting the Content-Type header
+                        success: function (response) {
+                            alert(response.message) // Handle success
+                            document.getElementById('new_folder_box').value = '';
+                            showAllImages();
+                            getFiles();
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            console.error(textStatus, errorThrown); // Handle errors
+                        }
+                    });
                 });
-            });
+            })
         })
-    })
+
+        // open folder
+        document.querySelectorAll('.open_folder').forEach(openFolder => {
+            openFolder.addEventListener('click', () =>{
+                let folder_data = openFolder.getAttribute('data-text');
+                
+            })
+        })
     </script>
 @endsection
