@@ -28,7 +28,7 @@
                         </div>
                     </div>
                     <div>
-                        <a class="btn btn-primary fs-4 px-3" href="#" data-bs-toggle="tooltip" id="submitButton" data-bs-placement="top" data-bs-title="Save"><i class="fa-solid fa-floppy-disk"></i></a>
+                        <button class="btn btn-primary fs-4 px-3" data-bs-toggle="tooltip" id="submitButton" data-bs-placement="top" data-bs-title="Save"><i class="fa-solid fa-floppy-disk"></i></button>
                         <a class="btn btn-primary fs-4 px-3" href="{{$back}}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Back"><i class="fa-solid fa-reply"></i></a>
                     </div>
                 </div>
@@ -76,7 +76,7 @@
                             </li>
                         </ul>
                         <!-- Tab content -->
-                        <form action="{{ route('admin-product-save') }}" id="saveForm" method="post" enctype="multipart/form-data">
+                        <form action="{{ $action }}" id="saveForm" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="tab-content" id="myTabContent">
                                 <!-- General -->
@@ -87,7 +87,7 @@
                                                 <label for="product_name">Product Name</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="text" id="product_name" name="product_name" class="form-control p-2" value="{{ old('product_name') }}" placeholder="Product Name">
+                                                <input type="text" id="product_name" name="product_name" class="form-control p-2" value="{{ isset($product) ? $product->product_name : old('product_name') }}" placeholder="Product Name">
                                             </div>
                                             <div class="errors">
                                                 <span class="text-danger">
@@ -102,7 +102,7 @@
                                                 <label for="product_name">Product description</label>
                                             </div>
                                             <div class="col-10">
-                                                <textarea id="summernote" name="description" value="{{ old('description') }}"></textarea>
+                                                <textarea id="summernote" name="description">{{ isset($product) ? $product->product_description : old('description')  }}</textarea>
                                             </div>
                                         </div>
                                         <div class="row mb-4">
@@ -110,7 +110,7 @@
                                                 <label for="meta_tag_title">Meta Tag Title</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="text" id="meta_tag_title" name="meta_tag_title" class="form-control p-2" value="{{ old('meta_tag_title') }}" placeholder="Meta Tag Title">
+                                                <input type="text" id="meta_tag_title" name="meta_tag_title" class="form-control p-2" value="{{ isset($product) ? $product->tag : old('meta_tag_title') }}" placeholder="Meta Tag Title">
                                             </div>
                                         </div>
                                         <div class="row mb-4">
@@ -118,7 +118,7 @@
                                                 <label for="meta_tag_keyword">Meta Tag Keywords</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="text" id="meta_tag_keyword" name="meta_tag_keyword" class="form-control p-2" value="{{ old('meta_tag_keyword') }}" placeholder="Meta Tag Keyword">
+                                                <input type="text" id="meta_tag_keyword" name="meta_tag_keyword" class="form-control p-2" value="{{ isset($product) ? $product->meta_keyword : old('meta_tag_keyword') }}" placeholder="Meta Tag Keyword">
                                             </div>
                                         </div>
                                         <div class="row mb-4">
@@ -126,7 +126,7 @@
                                                 <label for="product_tag">Product Tags</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="text" id="product_tag" name="product_tag" class="form-control p-2" value="{{ old('product_tag') }}" placeholder="Product Tags">
+                                                <input type="text" id="product_tag" name="product_tag" class="form-control p-2" value="{{  old('product_tag') }}" placeholder="Product Tags">
                                             </div>
                                         </div>
                                     </div>
@@ -142,7 +142,7 @@
                                                 <label for="model">Model</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="text" id="model" name="model" class="form-control p-2" value="{{ old('model') }}" placeholder="Model">
+                                                <input type="text" id="model" name="model" class="form-control p-2" value="{{ isset($product) ? $product->model : old('model') }}" placeholder="Model">
                                             </div>
                                             <div class="errors">
                                                 <span class="text-danger">
@@ -157,7 +157,7 @@
                                                 <label for="sku">SKU</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="text" id="sku" name="sku" class="form-control p-2" value="{{ old('sku') }}" placeholder="SKU">
+                                                <input type="text" id="sku" name="sku" class="form-control p-2" value="{{ isset($product) ? $product->sku : old('sku') }}" placeholder="SKU">
                                                 <span class="form-text">Stock Keeping Unit</span>
                                             </div>
                                             <div class="errors">
@@ -173,7 +173,7 @@
                                                 <label for="upc">UPC</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="text" id="upc" name="upc" class="form-control p-2" value="{{ old('upc') }}" placeholder="UPC">
+                                                <input type="text" id="upc" name="upc" class="form-control p-2" value="{{ isset($product) ? $product->upc : old('upc') }}" placeholder="UPC">
                                                 <span class="form-text">Universal Product Code</span>
                                             </div>
                                         </div>
@@ -182,7 +182,7 @@
                                                 <label for="ean">EAN</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="text" id="ean" name="ean" class="form-control p-2" value="{{ old('ean') }}" placeholder="EAN">
+                                                <input type="text" id="ean" name="ean" class="form-control p-2" value="{{ isset($product) ? $product->ean : old('ean') }}" placeholder="EAN">
                                                 <span class="form-text">European Article Number</span>
                                             </div>
                                         </div>
@@ -191,7 +191,7 @@
                                                 <label for="jan">JAN</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="text" id="jan" name="jan" class="form-control p-2" value="{{ old('jan') }}" placeholder="JAN">
+                                                <input type="text" id="jan" name="jan" class="form-control p-2" value="{{ isset($product) ? $product->jan : old('jan') }}" placeholder="JAN">
                                                 <span class="form-text">Japanese Article Number</span>
                                             </div>
                                         </div>
@@ -200,7 +200,7 @@
                                                 <label for="isbn">ISBN</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="text" id="isbn" name="isbn" class="form-control p-2" value="{{ old('isbn') }}" placeholder="ISBN">
+                                                <input type="text" id="isbn" name="isbn" class="form-control p-2" value="{{ isset($product) ? $product->isbn : old('isbn') }}" placeholder="ISBN">
                                                 <span class="form-text">International Standard Book Number</span>
                                             </div>
                                         </div>
@@ -209,7 +209,7 @@
                                                 <label for="mpn">MPN</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="text" id="mpn" name="mpn" class="form-control p-2" value="{{ old('mpn') }}" placeholder="mpn">
+                                                <input type="text" id="mpn" name="mpn" class="form-control p-2" value="{{ isset($product) ? $product->mpn : old('mpn') }}" placeholder="mpn">
                                                 <span class="form-text">Manufacturer Part Number</span>
                                             </div>
                                         </div>
@@ -222,7 +222,7 @@
                                                 <label for="stock_quantity">Quantity</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="text" id="stock_quantity" name="quantity" class="form-control p-2" value="{{ old('quantity') }}" placeholder="Quantity">
+                                                <input type="text" id="stock_quantity" name="quantity" class="form-control p-2" value="{{ isset($product) ? $product->quantity : old('quantity') }}" placeholder="Quantity">
                                             </div>
                                             <div class="errors">
                                                 <span class="text-danger">
@@ -237,7 +237,7 @@
                                                 <label for="minimum_quantity">Minimum Quantity</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="text" id="minimum_quantity" name="minimum_quantity" class="form-control p-2" value="{{ old('minimum_quantity') }}" placeholder="Minimum Quantity">
+                                                <input type="text" id="minimum_quantity" name="minimum_quantity" class="form-control p-2" value="{{ isset($product) ? $product->minimum : old('minimum_quantity') }}" placeholder="Minimum Quantity">
                                             </div>
                                         </div>
                                         <div class="row mb-4">
@@ -266,7 +266,7 @@
                                                 <label for="date_available">Date Available</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="date" id="date_available" name="date_available" class="w-25 p-2" value="{{ old('date_available') }}">
+                                                <input type="date" id="date_available" name="date_available" class="w-25 p-2" value="{{ isset($product) ? $product->date_available : old('date_available') }}">
                                             </div>
                                         </div>
                                     </section>

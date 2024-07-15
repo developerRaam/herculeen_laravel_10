@@ -62,8 +62,8 @@
                                         <td>{{$product->list_price }}</td>
                                         <td>{{$product->quantity}}</td>
                                         <td>
-                                            <a class="btn btn-primary" href="#" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit"><i class="fa-solid fa-pencil"></i></a>
-                                            <a class="btn btn-danger" href="#" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete"><i class="fa-solid fa-trash"></i></a>
+                                            <a class="btn btn-primary" href="{{ route('admin-product-edit', ['product_id' => $product->product_id]) }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit"><i class="fa-solid fa-pencil"></i></a>
+                                            <a class="btn btn-danger" href="{{ route('admin-product-delete', ['product_id' => $product->product_id]) }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete"><i class="fa-solid fa-trash"></i></a>
                                         </td>
                                     </tr>
                                 @endforeach
