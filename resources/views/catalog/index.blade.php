@@ -1,6 +1,6 @@
 @extends('catalog.common.base')
 
-@push('setTitle') Herculeen Activewear @endpush
+@push('setTitle') Demo @endpush
 
 @section('content')
 

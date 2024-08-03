@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\Design\BannerController;
 use App\Http\Controllers\admin\AdminDemoDataTableController;
 use App\Http\Controllers\Admin\Design\AdminMediaController;
 use App\Http\Controllers\Admin\Storefront\AdminProductController;
+use App\Http\Controllers\Admin\Storefront\AdminCategoryController;
 
 
 // Catalog
@@ -52,6 +53,8 @@ Route::middleware(['AdminMiddlewareLogin'])->prefix('admin/storefront')->group(f
     Route::get('product-edit/product_id={product_id}', [AdminProductController::class, 'editProduct'])->name("admin-product-edit");
     Route::post('product-update/product_id={product_id}', [AdminProductController::class, 'updateProduct'])->name("admin-product-update");
     Route::get('product-delete/product_id={product_id}', [AdminProductController::class, 'delete'])->name('admin-product-delete');
+    
+    Route::get('category/', [AdminCategoryController::class, 'index'])->name('category');
 });
 
 Route::get('/admin/media', [AdminMediaController::class, 'index'])->name('admin-media')->middleware('AdminMiddlewareLogin');

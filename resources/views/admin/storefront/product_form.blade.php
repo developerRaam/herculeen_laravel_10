@@ -524,19 +524,6 @@
                                 <!-- Image -->
                                 <div class="tab-pane fade show" id="image" role="tabpanel" aria-labelledby="image-tab">
                                     <div class="mt-4"></div>
-                                    <div class="mb-4">
-                                        <h4>Featured Image</h4><hr>
-                                        <div class="col-sm-4 col-md-3">
-                                            <div class="card p-2" style="width: 12rem">
-                                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgPbd2MBbw3o5_yzYC_pPjoVNKUx7WCrMN3g&s" alt="" class="card-img-top">
-                                                <input type="hidden" name="image" value="catalog/black/IMG_6739.jpg" id="input-image">
-                                                <div class="card-body text-center mt-2"> 
-                                                    <button class="btn btn-primary fs-5 px-3" href="#" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit"><i class="fa-solid fa-pencil"></i></button>
-                                                    <button class="btn btn-warning text-white fs-5 px-3" href="{{$back}}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Clear"><i class="fa-regular fa-trash-can"></i></button>                                               
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <div class="col-sm-12 mb-4">
                                         <table class="table table-bordered table-hover center-align-table">
                                             <thead>
@@ -746,37 +733,57 @@
 
     // Product images
     function addImageRow() {
-        const table = document.getElementById('product_images');
-        const rowCount = table.rows.length;
-        const row = table.insertRow(rowCount);
+    const table = document.getElementById('product_images');
+    const rowCount = table.rows.length;
+    const row = table.insertRow(rowCount);
 
-        row.innerHTML = `
-           <tr>
-                <td>
-                    <div class="col-sm-4 col-md-3">
-                        <div class="card p-2" style="width: 12rem">
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgPbd2MBbw3o5_yzYC_pPjoVNKUx7WCrMN3g&s" alt="" class="card-img-top">
-                            <input type="hidden" name="product_image[${rowCount}][image]" value="catalog/black/IMG_6739.jpg" id="input-image">
-                            <div class="card-body text-center mt-2"> 
-                                <button class="btn btn-primary fs-5 px-3" href="#" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit"><i class="fa-solid fa-pencil"></i></button>
-                                <button class="btn btn-warning text-white fs-5 px-3" href="{{$back}}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Clear"><i class="fa-regular fa-trash-can"></i></button>                                               
-                            </div>
+    row.innerHTML = `
+        <tr>
+            <td>
+                <div class="col-sm-4 col-md-3">
+                    <div class="card p-2" style="width: 12rem">
+                        <img src="{{ asset('image/not-image-available.png')}}" alt="Product Image" class="card-img-top" id="imagePreview_${rowCount}">
+                        <input type="file" name="product_image[${rowCount}][image]" id="imageUpload_${rowCount}" accept="image/*" style="display: none;" onchange="previewImage(event, ${rowCount})">
+                        <div class="card-body text-center mt-2"> 
+                            <button type="button" class="btn btn-primary fs-5 px-3" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit" onclick="triggerFileUpload(${rowCount})"><i class="fa-solid fa-pencil"></i></button>
                         </div>
-                    </div> 
-                </td>
-                <td>
-                    <input type="text" id="image_sort_order" name="image_sort_order" class="form-control p-2" value="{{ old('description') }}" placeholder="Sort Order">
-                </td>
-                <td class="text-end">
-                    <button type="button" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Remove" onclick="removeImageRow(this)"><i class="fa-solid fa-minus"></i></button>
-                </td>
-            </tr>
-        `;
-    }
+                    </div>
+                </div> 
+            </td>
+            <td>
+                <input type="text" name="product_image_sort[${rowCount}][sort]" class="form-control p-2" placeholder="Sort Order">
+            </td>
+            <td class="text-end">
+                <button type="button" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Remove" onclick="removeImageRow(this)"><i class="fa-solid fa-minus"></i></button>
+            </td>
+        </tr>
+    `;
 
-    function removeImageRow(button) {
-        const row = button.closest('tr');
-        row.remove();
+    // Reinitialize tooltips for the new row
+    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => new bootstrap.Tooltip(el));
+}
+
+function previewImage(event, index) {
+    const input = event.target;
+    const file = input.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = document.getElementById(`imagePreview_${index}`);
+            img.src = e.target.result;
+        }
+        reader.readAsDataURL(file);
     }
+}
+
+function triggerFileUpload(index) {
+    document.getElementById(`imageUpload_${index}`).click();
+}
+
+
+function removeImageRow(button) {
+    const row = button.closest('tr');
+    row.remove();
+}
 </script>
 @endsection

@@ -15,13 +15,14 @@ use App\Models\Admin\Storefront\Product\ProductReward;
 use App\Models\Admin\Storefront\Product\ProductSpecial;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Validator;
 
 class AdminProductController extends Controller
 {
-    public function index(){
+    public function index(Request $request)
+    {
 
         $data['heading_title'] = "Products";
 
@@ -31,33 +32,53 @@ class AdminProductController extends Controller
             'href' => URL::to('/admin/dashboard')
         ];
         $data['breadcrumbs'][] = [
-			'text' => 'Products',
-			'href' => URL::to('/admin/storefront/product')
-		];
+            'text' => 'Products',
+            'href' => URL::to('/admin/storefront/product')
+        ];
 
         $data['add'] = URL::to('/admin/storefront/product-form');
 
-        $data['products'] = DB::select('
-                            SELECT 
-                                p.id as product_id,
-                                pi.image,
-                                p.product_name,
-                                p.model,
-                                pp.list_price,
-                                pp.mrp,
-                                p.quantity 
-                            FROM 
-                                products p 
-                            LEFT JOIN 
-                                product_images pi ON p.id = pi.product_id 
-                            LEFT JOIN 
-                                product_prices pp ON pp.product_id = p.id
-                        ');
+        $query = 'SELECT p.id as product_id,pi.image, p.product_name, p.model, pp.list_price, pp.mrp, p.quantity FROM  products p LEFT JOIN product_images pi ON p.id = pi.product_id LEFT JOIN  product_prices pp ON pp.product_id = p.id  WHERE 1=1';
 
-        return view('admin.storefront.product',$data);
+        // Filter
+        if (null !== $request->query('product_name')) {
+            $query .= ' AND p.product_name=' . "'" . $request->query('product_name') . "'";
+        }
+        if (null !== $request->query('model')) {
+            $query .= ' AND p.model=' . "'" . $request->query('model') . "'";
+        }
+        if (null !== $request->query('price')) {
+            $query .= ' AND pp.list_price=' . "'" . $request->query('price') . "'";
+        }
+        if (null !== $request->query('quantity')) {
+            $query .= ' AND  p.quantity=' . "'" . $request->query('quantity') . "'";
+        }
+        if (null !== $request->query('product_name')) {
+            $query .= ' AND status=' . "'" . $request->query('status') . "'";
+        }
+
+        // Pagination
+        $perPage = 20;
+        $currentPage = request()->query('page', 1);
+        $results = DB::select($query);
+        $products = collect($results);
+        $totalCount = $products->count();
+        $paginator = new LengthAwarePaginator(
+            $products->forPage($currentPage, $perPage),
+            $totalCount,
+            $perPage,
+            $currentPage,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
+
+        $data['products'] = $paginator;
+        $data['pagination'] = $paginator;
+
+        return view('admin.storefront.product', $data);
     }
-    
-    public function form(){ 
+
+    public function form()
+    {
 
         $data['heading_title'] = "Products";
 
@@ -67,22 +88,23 @@ class AdminProductController extends Controller
             'href' => URL::to('/admin/dashboard')
         ];
         $data['breadcrumbs'][] = [
-			'text' => 'Products',
-			'href' => URL::to('/admin/storefront/product')
-		];
+            'text' => 'Products',
+            'href' => URL::to('/admin/storefront/product')
+        ];
         $data['breadcrumbs'][] = [
-			'text' => 'Add Product',
-			'href' => URL::to('/admin/storefront/product-form')
-		];
+            'text' => 'Add Product',
+            'href' => URL::to('/admin/storefront/product-form')
+        ];
 
         $data['action'] = route('admin-product-save');
         $data['back'] = URL::to('/admin/storefront/product');
         $data['save'] = URL::to('/admin/storefront/product-save');
 
-        return view('admin.storefront.product_form',$data);
+        return view('admin.storefront.product_form', $data);
     }
 
-    public function save(Request $request){
+    public function save(Request $request)
+    {
         $data = $request->request;
 
         $validatedData = $request->validate([
@@ -117,9 +139,9 @@ class AdminProductController extends Controller
             'mrp' => 'nullable|numeric'
         ]);
 
-        try{
+        try {
             // Inserting a new product using the save method
-            if(null !== $data->get('product_name') || null !== $data->get('model')){
+            if (null !== $data->get('product_name') || null !== $data->get('model')) {
                 $product = new Product();
                 $product->product_name = $data->get('product_name') ?? '';
                 $product->product_description = $data->get('description') ?? '';
@@ -150,19 +172,19 @@ class AdminProductController extends Controller
                 $product->sort_order = (int)$data->get('sort_order') ?? '';
                 $product->save();
             }
- 
-             // last product id
-             $product_id = $product->id;
- 
-            if(isset($product_id)){
+
+            // last product id
+            $product_id = $product->id;
+
+            if (isset($product_id)) {
                 // product to category
-                if(null !== $data->get('category_id') || null !== $data->get('category_id')){
+                if (null !== $data->get('category_id') || null !== $data->get('category_id')) {
                     $category = new ProductCategory();
                     $category->product_id = (int)$product_id;
                     $category->category_id = 1;
                     $category->save();
                 }
-                
+
                 // product price 
                 if (!empty($validatedData['list_price']) && !empty($validatedData['mrp'])) {
                     $price = new ProductPrice();
@@ -171,9 +193,9 @@ class AdminProductController extends Controller
                     $price->mrp = null;
                     $price->save();
                 }
-    
+
                 // product discount
-                if(null !== $data->get('discount_price') || null !== $data->get('discount_price')){
+                if (null !== $data->get('discount_price') || null !== $data->get('discount_price')) {
                     $discount = new ProductDiscount();
                     $discount->product_id = $product_id;
                     $discount->customer_group_id = null;
@@ -184,9 +206,9 @@ class AdminProductController extends Controller
                     $discount->close_date = null;
                     $discount->save();
                 }
-    
+
                 // product special
-                if(null !== $data->get('special_price') || null !== $data->get('special_price')){
+                if (null !== $data->get('special_price') || null !== $data->get('special_price')) {
                     $special = new ProductSpecial();
                     $special->product_id = $product_id;
                     $special->customer_group_id = null;
@@ -196,42 +218,60 @@ class AdminProductController extends Controller
                     $special->close_date = null;
                     $special->save();
                 }
-    
+
                 // product downloads
-                if(null !== $data->get('download_id') || null !== $data->get('download_id')){
+                if (null !== $data->get('download_id') || null !== $data->get('download_id')) {
                     $download = new ProductDownload();
                     $download->product_id = $product_id;
                     $download->download_id = 0;
                     $download->save();
                 }
-    
+
                 // Product Reward
-                if(null !== $data->get('point') || null !== $data->get('point')){
+                if (null !== $data->get('point') || null !== $data->get('point')) {
                     $reward = new ProductReward();
                     $reward->product_id = $product_id;
                     $reward->point = 0;
                     $reward->save();
                 }
-    
+
                 // Product Reward
-                if(null !== $data->get('filter_id') || null !== $data->get('filter_id')){
+                if (null !== $data->get('filter_id') || null !== $data->get('filter_id')) {
                     $filter = new ProductFilter();
                     $filter->product_id = $product_id;
                     $filter->filter_id = 0;
                     $filter->save();
                 }
-    
+
                 // Product Image
-                if(null !== $data->get('image') || null !== $data->get('image')){
-                    $image = new ProductImage();
-                    $image->product_id = $product_id;
-                    $image->image = null;
-                    $image->sort = null;
-                    $image->save();
+                if ($request->file('product_image') != null) {
+
+                    $folderPath = public_path('image/uploads');
+                    if (!file_exists($folderPath)) {
+                        mkdir($folderPath, 0777, true);
+                    }
+
+                    $files = $request->file('product_image'); // get files
+                    foreach ($files as $key => $file) {
+                        $imageName = time() . '_' . $file['image']->getClientOriginalName();
+                        $imagePath = public_path('image/uploads/') . $imageName;
+                        // sort
+                        $sort = $request->input('product_image_sort')[$key]['sort'];
+                        // dd($sort);
+                        if (!file_exists($imagePath)) {
+                            $file['image']->move(public_path('image/uploads/'), $imageName);
+                            $image = new ProductImage();
+                            $image->product_id = $product_id;
+                            $image->image = $imageName;
+                            $image->sort = $sort;
+                            $image->save();
+                        }
+                    }
                 }
-    
+
+
                 // Product other links
-                if($data->get('amazon') != '' || $data->get('flipkart') != '' || $data->get('myntra') != '' || $data->get('ajio') != '' || $data->get('meesho') != ''){
+                if ($data->get('amazon') != '' || $data->get('flipkart') != '' || $data->get('myntra') != '' || $data->get('ajio') != '' || $data->get('meesho') != '') {
                     $otherLink = new ProductOtherLink();
                     $otherLink->product_id = $product_id;;
                     $otherLink->amazon = null;
@@ -242,15 +282,15 @@ class AdminProductController extends Controller
                     $otherLink->status = false;
                     $otherLink->save();
                 }
-            }            
-             return redirect('admin/storefront/product')->with('success', 'Product created successfully.');
- 
-        }catch(Exception $e){
+            }
+            return redirect('admin/storefront/product')->with('success', 'Product created successfully.');
+        } catch (Exception $e) {
             dd($e->getMessage());
         }
     }
 
-    public function editProduct(Request $request, $product_id){
+    public function editProduct(Request $request, $product_id)
+    {
         $data['heading_title'] = "Edit Product";
 
         $data['breadcrumbs'] = [];
@@ -259,26 +299,26 @@ class AdminProductController extends Controller
             'href' => URL::to('/admin/dashboard')
         ];
         $data['breadcrumbs'][] = [
-			'text' => 'Products',
-			'href' => URL::to('/admin/storefront/product')
-		];
+            'text' => 'Products',
+            'href' => URL::to('/admin/storefront/product')
+        ];
         $data['breadcrumbs'][] = [
-			'text' => 'Edit Product',
-			'href' => URL::to('/admin/storefront/product-form')
-		];
+            'text' => 'Edit Product',
+            'href' => URL::to('/admin/storefront/product-form')
+        ];
 
-        $data['action'] = route('admin-product-update', ['product_id'=>$product_id]);
+        $data['action'] = route('admin-product-update', ['product_id' => $product_id]);
         $data['back'] = URL::to('/admin/storefront/product');
         $data['save'] = URL::to('/admin/storefront/product-save');
 
         $query = " SELECT
                         p.*,
-                        GROUP_CONCAT(DISTINCT pc.category_id ORDER BY pc.category_id ASC SEPARATOR ',') AS category_ids,
-                        GROUP_CONCAT(DISTINCT pd.customer_group_id ORDER BY pd.customer_group_id ASC SEPARATOR ',') AS discount_customer_group_ids,
-                        GROUP_CONCAT(DISTINCT pi.image ORDER BY pi.sort ASC SEPARATOR ',') AS images,
-                        GROUP_CONCAT(DISTINCT pol.amazon ORDER BY pol.status ASC SEPARATOR ',') AS other_links_amazon,
-                        GROUP_CONCAT(DISTINCT pp.list_price ORDER BY pp.list_price ASC SEPARATOR ',') AS prices_list,
-                        GROUP_CONCAT(DISTINCT ps.customer_group_id ORDER BY ps.priority ASC SEPARATOR ',') AS special_customer_group_ids
+                        GROUP_CONCAT(pc.category_id ORDER BY pc.category_id ASC SEPARATOR ',') AS category_ids,
+                        GROUP_CONCAT(pd.customer_group_id ORDER BY pd.customer_group_id ASC SEPARATOR ',') AS discount_customer_group_ids,
+                        GROUP_CONCAT(pi.image, pi.sort ORDER BY pi.sort ASC SEPARATOR ',') AS images,
+                        GROUP_CONCAT(pol.amazon ORDER BY pol.status ASC SEPARATOR ',') AS other_links_amazon,
+                        GROUP_CONCAT(pp.list_price ORDER BY pp.list_price ASC SEPARATOR ',') AS prices_list,
+                        GROUP_CONCAT(ps.customer_group_id ORDER BY ps.priority ASC SEPARATOR ',') AS special_customer_group_ids
                     FROM
                         products p
                     LEFT JOIN
@@ -298,13 +338,14 @@ class AdminProductController extends Controller
                     GROUP BY
                         p.id limit 1
                 ";
-        
-        $data['product'] = DB::select($query, ['product_id' => $product_id])[0] ?? null;  
 
-        return view('admin/storefront/product_form',$data);
+        $data['product'] = DB::select($query, ['product_id' => $product_id])[0] ?? null;
+
+        return view('admin/storefront/product_form', $data);
     }
 
-    public function updateProduct(Request $request, $product_id){
+    public function updateProduct(Request $request, $product_id)
+    {
         $data = $request->request;
         // dd($data);
 
@@ -340,9 +381,9 @@ class AdminProductController extends Controller
             'mrp' => 'nullable|numeric'
         ]);
 
-        try{
+        try {
             if (!empty($product_id)) {
-                if(null !== $data->get('product_name') || null !== $data->get('model')){
+                if (null !== $data->get('product_name') || null !== $data->get('model')) {
                     $product = Product::find($product_id);
                     $product->product_name = $data->get('product_name') ?? '';
                     $product->product_description = $data->get('description') ?? '';
@@ -375,13 +416,13 @@ class AdminProductController extends Controller
                 }
 
                 // product to category
-                if(null !== $data->get('category_id') || null !== $data->get('category_id')){
+                if (null !== $data->get('category_id') || null !== $data->get('category_id')) {
                     $category = ProductCategory::find($product_id);
                     $category->product_id = (int)$product_id;
                     $category->category_id = 1;
                     $category->update();
                 }
-                
+
                 // product price 
                 if (!empty($validatedData['list_price']) && !empty($validatedData['mrp'])) {
                     $price = ProductPrice::find($product_id);
@@ -390,9 +431,9 @@ class AdminProductController extends Controller
                     $price->mrp = null;
                     $price->update();
                 }
-    
+
                 // product discount
-                if(null !== $data->get('discount_price') || null !== $data->get('discount_price')){
+                if (null !== $data->get('discount_price') || null !== $data->get('discount_price')) {
                     $discount = ProductDiscount::find($product_id);
                     $discount->product_id = $product_id;
                     $discount->customer_group_id = null;
@@ -403,9 +444,9 @@ class AdminProductController extends Controller
                     $discount->close_date = null;
                     $discount->update();
                 }
-    
+
                 // product special
-                if(null !== $data->get('special_price') || null !== $data->get('special_price')){
+                if (null !== $data->get('special_price') || null !== $data->get('special_price')) {
                     $special = ProductSpecial::find($product_id);
                     $special->product_id = $product_id;
                     $special->customer_group_id = null;
@@ -415,42 +456,67 @@ class AdminProductController extends Controller
                     $special->close_date = null;
                     $special->update();
                 }
-    
+
                 // product downloads
-                if(null !== $data->get('download_id') || null !== $data->get('download_id')){
+                if (null !== $data->get('download_id') || null !== $data->get('download_id')) {
                     $download = ProductDownload::find($product_id);
                     $download->product_id = $product_id;
                     $download->download_id = 0;
                     $download->update();
                 }
-    
+
                 // Product Reward
-                if(null !== $data->get('point') || null !== $data->get('point')){
+                if (null !== $data->get('point') || null !== $data->get('point')) {
                     $reward = ProductReward::find($product_id);
                     $reward->product_id = $product_id;
                     $reward->point = 0;
                     $reward->update();
                 }
-    
+
                 // Product Reward
-                if(null !== $data->get('filter_id') || null !== $data->get('filter_id')){
+                if (null !== $data->get('filter_id') || null !== $data->get('filter_id')) {
                     $filter = ProductFilter::find($product_id);
                     $filter->product_id = $product_id;
                     $filter->filter_id = 0;
                     $filter->update();
                 }
-    
+
                 // Product Image
-                if(null !== $data->get('image') || null !== $data->get('image')){
-                    $image = ProductImage::find($product_id);
-                    $image->product_id = $product_id;
-                    $image->image = null;
-                    $image->sort = null;
-                    $image->update();
+                if ($request->file('product_image') != null) {
+
+                    $folderPath = public_path('image/uploads');
+                    if (!file_exists($folderPath)) {
+                        mkdir($folderPath, 0777, true);
+                    }
+
+                    $files = $request->file('product_image'); // get files
+                    foreach ($files as $key => $file) {
+                        $imageName = time() . '_' . $file['image']->getClientOriginalName();
+                        $imagePath = public_path('image/uploads/') . $imageName;
+                        // sort
+                        $sort = $request->input('product_image_sort')[$key]['sort'];
+                        // dd($sort);
+                        if (!file_exists($imagePath)) {
+                            $file['image']->move(public_path('image/uploads/'), $imageName);
+                            $image = ProductImage::find($product_id);
+                            if ($image) {
+                                $image->product_id = $product_id;
+                                $image->image = $imageName;
+                                $image->sort = $sort;
+                                $image->update();
+                            } else {
+                                $image = new ProductImage();
+                                $image->product_id = $product_id;
+                                $image->image = $imageName;
+                                $image->sort = $sort;
+                                $image->save();
+                            }
+                        }
+                    }
                 }
-    
+
                 // Product other links
-                if($data->get('amazon') != '' || $data->get('flipkart') != '' || $data->get('myntra') != '' || $data->get('ajio') != '' || $data->get('meesho') != ''){
+                if ($data->get('amazon') != '' || $data->get('flipkart') != '' || $data->get('myntra') != '' || $data->get('ajio') != '' || $data->get('meesho') != '') {
                     $otherLink = ProductOtherLink::find($product_id);
                     $otherLink->product_id = $product_id;;
                     $otherLink->amazon = null;
@@ -460,18 +526,18 @@ class AdminProductController extends Controller
                     $otherLink->meesho = null;
                     $otherLink->status = false;
                     $otherLink->update();
-                }           
+                }
                 return redirect('admin/storefront/product')->with('success', 'Product updated successfully.');
             }
- 
-        }catch(Exception $e){
+        } catch (Exception $e) {
             dd($e->getMessage());
         }
     }
 
-    public function delete($product_id){
-        try{
-            Product::where('id',$product_id)->delete();
+    public function delete($product_id)
+    {
+        try {
+            Product::where('id', $product_id)->delete();
             ProductCategory::where('product_id', $product_id)->delete();
             ProductPrice::where('product_id', $product_id)->delete();
             ProductDiscount::where('product_id', $product_id)->delete();
@@ -482,7 +548,7 @@ class AdminProductController extends Controller
             ProductImage::where('product_id', $product_id)->delete();
             ProductOtherLink::where('product_id', $product_id)->delete();
             return redirect('admin/storefront/product')->with('success', 'Product deleted successfully.');
-        }catch(Exception $e){
+        } catch (Exception $e) {
             DB::rollBack();
             dd($e->getMessage());
         }

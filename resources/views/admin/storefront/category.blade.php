@@ -27,7 +27,7 @@
                         </div>
                     </div>
                     <div>
-                        <a class="btn btn-primary fs-4 px-3" href="{{$add}}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add Product"><i class="fa-solid fa-plus"></i></a>
+                        <a class="btn btn-primary fs-4 px-3" href="{{$add}}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add Category"><i class="fa-solid fa-plus"></i></a>
                     </div>
                 </div>
             </div>
@@ -37,7 +37,7 @@
                     @include('admin.common.alert')
 
                     <div class="px-3 py-2 title-list">
-                        <p class="mb-0"><i class="fa-solid fa-list"></i> Product List</p>
+                        <p class="mb-0"><i class="fa-solid fa-list"></i> Category List</p>
                     </div>
                     <div class="card rounded-0 p-3">
                         <table class="table table-bordered table-striped">
@@ -53,7 +53,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($products as $product)
+                                {{-- @foreach ($products as $product)
                                     <tr>
                                         <td class="text-center"><input type="checkbox" class="form-check-input" name="" id=""></td>
                                         <td><img width="50" height="50" src="{{$product->image}}" alt="{{$product->product_name}}"></td>
@@ -67,7 +67,7 @@
                                         </td>
                                     </tr>
                                     @endforeach
-                                </tbody>
+                                </tbody> --}}
                         </table>
 
                         <!-- Pagination -->
@@ -115,28 +115,4 @@
         </div>
     </div>
 </section>
-<script>
-    // JavaScript to handle form submission
-    document.getElementById('product-filter-form').addEventListener('submit', function(event) {
-        event.preventDefault();
-
-        // Collect form data
-        const form = event.target;
-        const formData = new FormData(form);
-
-        const queryParams = [];
-        formData.forEach((value, key) => {
-            if (value.trim() !== '') { // Check if value is not empty or only whitespace
-                queryParams.push(`${key}=${encodeURIComponent(value)}`);
-            }
-        });
-
-        // Construct URL with query parameters
-        const actionUrl = form.getAttribute('action');
-        const urlWithParams = actionUrl + '?' + queryParams.join('&');
-
-        // Redirect to the constructed URL
-        window.location.href = urlWithParams;
-    });
-</script>
 @endsection

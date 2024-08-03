@@ -161,7 +161,7 @@
                                 html += '<div class="col-sm-4 col-md-3">';
                                 html += '<div class="card p-2" style="min-height:150px;display: flex;justify-content: center;overflow:hidden">';
                                 html += '<a class="text-decoration-none" href="'+element.href+'">';
-                                html += '<img src="'+element.href+'" alt="'+element.text+'" class="card-img-top" style="vertical-align: middle;">';
+                                html += '<img src="'+element.href+'" alt="'+element.text+'" class="card-img-top" style="height:150px;vertical-align: middle;">';
                                 html += '<p class="mb-0 text-dark d-flex mt-2"><input class="me-2 form-check-input media_checkbox" type="checkbox" data-name="'+ element.text +'">'+ element.text +'</p>';
                                 html += '</a>';              
                                 html += '</div>';
@@ -204,8 +204,8 @@
                                 html += '<div class="col-sm-3 col-md-2">';
                                 html += '<div class="card p-2" style="min-height:150px;display: flex;justify-content: center;overflow:hidden">';
                                 html += '<a class="text-decoration-none" href="'+element.href+'">';
-                                html += '<img src="'+element.href+'" alt="'+element.text+'" class="card-img-top" style="vertical-align: middle;">';
-                                html += '<p class="mb-0 text-dark d-flex mt-2"><input class="me-2 form-check-input media_checkbox" type="checkbox" data-name="'+ element.text +'">'+ element.text +'</p>';
+                                html += '<img src="'+element.href+'" alt="'+element.text+'" class="card-img-top" style="height:150px;vertical-align: middle;">';
+                                html += '<p class="mb-0 text-dark d-flex mt-2" style=""><input class="me-2 form-check-input media_checkbox" type="checkbox" data-name="'+ element.text +'">'+ element.text +'</p>';
                                 html += '</a>';              
                                 html += '</div>';
                                 html += '</div>';
