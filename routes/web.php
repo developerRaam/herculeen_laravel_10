@@ -55,6 +55,11 @@ Route::middleware(['AdminMiddlewareLogin'])->prefix('admin/storefront')->group(f
     Route::get('product-delete/product_id={product_id}', [AdminProductController::class, 'delete'])->name('admin-product-delete');
     
     Route::get('category/', [AdminCategoryController::class, 'index'])->name('category');
+    Route::get('category-form/', [AdminCategoryController::class, 'form']);
+    Route::post('category-save/', [AdminCategoryController::class, 'save'])->name('save-category');
+    Route::get('category-edit/category_id={category_id}', [AdminCategoryController::class, 'edit'])->name('edit-category');
+    Route::post('category-update/category_id={category_id}', [AdminCategoryController::class, 'update'])->name('update-category');
+    Route::get('category-delete/category_id={category_id}', [AdminCategoryController::class, 'delete'])->name('delete-category');
 });
 
 Route::get('/admin/media', [AdminMediaController::class, 'index'])->name('admin-media')->middleware('AdminMiddlewareLogin');

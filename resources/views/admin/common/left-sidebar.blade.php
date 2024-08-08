@@ -6,7 +6,7 @@
             <li>
                 <button class="dropdown-btn left-side-btn" data-dropdown="column_left-1"><span><i class="fa-solid fa-store"></i> Storefront</span> <i class="fa fa-caret-down"></i></button>
                 <div class="dropdown-container" id="dropdown-column_left-1">
-                    <a class="text-decoration-none text-white d-block" style="padding-left:3rem !important" href="{{ route('category') }}"><i class="fa-solid fa-angles-right"></i> Categoris</a>
+                    <a class="text-decoration-none text-white d-block" style="padding-left:3rem !important" href="{{ route('category') }}"><i class="fa-solid fa-angles-right"></i> Categoreis</a>
                     <a class="text-decoration-none text-white d-block" style="padding-left:3rem !important" href="{{ route('admin-storefront-product') }}"><i class="fa-solid fa-angles-right"></i> Products</a>
                 </div>
             </li>

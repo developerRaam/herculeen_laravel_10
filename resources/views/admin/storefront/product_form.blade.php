@@ -760,7 +760,7 @@
     `;
 
     // Reinitialize tooltips for the new row
-    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => new bootstrap.Tooltip(el));
+    // document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => new bootstrap.Tooltip(el));
 }
 
 function previewImage(event, index) {

@@ -28,6 +28,9 @@
     <!-- summernote -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs5.min.css" rel="stylesheet">
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs5.min.js"></script>
+    <!-- Select Multilevel -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/css/selectize.default.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/js/standalone/selectize.min.js"></script>   
 </head>
 <body>
     @yield('content')
@@ -61,8 +64,6 @@
                 fontNamesIgnoreCheck: ['Helvetica Neue', 'Helvetica', 'Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Impact', 'Lucida Grande', 'Tahoma', 'Times New Roman', 'Verdana'],
                 callbacks: {
                     onImageUpload: function(files) {
-                        // Custom image upload handler
-                        // Implement your own logic for image uploading here
                         console.log('Image upload:', files);
                     }
                 }

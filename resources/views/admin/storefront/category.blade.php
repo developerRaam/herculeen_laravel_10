@@ -43,31 +43,29 @@
                         <table class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th class="text-center"><input type="checkbox" class="form-check-input" name="" id=""></th>
-                                    <th>Image</th>
-                                    <th>Product Name</th>
-                                    <th>Model</th>
-                                    <th>Price</th>
-                                    <th>Quantity</th>
-                                    <th>Action</th>
+                                    <th width="5%" class="text-center"><input type="checkbox" class="form-check-input" name="" id=""></th>
+                                    <th width="20%" height="50">Image</th>
+                                    <th width="40%">Category Name</th>
+                                    <th width="7%">Sort</th>
+                                    <th width="7%">Status</th>
+                                    <th width="15%">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {{-- @foreach ($products as $product)
+                                @foreach ($categories as $category)
                                     <tr>
                                         <td class="text-center"><input type="checkbox" class="form-check-input" name="" id=""></td>
-                                        <td><img width="50" height="50" src="{{$product->image}}" alt="{{$product->product_name}}"></td>
-                                        <td>{{$product->product_name}}</td>
-                                        <td>{{$product->model}}</td>
-                                        <td>{{$product->list_price }}</td>
-                                        <td>{{$product->quantity}}</td>
+                                        <td><img width="50" height="50" src="{{ ($category->image) ? asset("image/uploads/category").'/'.($category->image) : asset('image/not-image-available.png')}}" alt="{{$category->category_name}}"></td>
+                                        <td>{{$category->full_path}}</td>
+                                        <td>{{$category->sort_order }}</td>
+                                        <td>{{$category->status}}</td>
                                         <td>
-                                            <a class="btn btn-primary" href="{{ route('admin-product-edit', ['product_id' => $product->product_id]) }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit"><i class="fa-solid fa-pencil"></i></a>
-                                            <a class="btn btn-danger" href="{{ route('admin-product-delete', ['product_id' => $product->product_id]) }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete"><i class="fa-solid fa-trash"></i></a>
+                                            <a class="btn btn-primary" href="{{ route('edit-category', ['category_id' => $category->id]) }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit"><i class="fa-solid fa-pencil"></i></a>
+                                            <a class="btn btn-danger" href="{{ route('delete-category', ['category_id' => $category->id]) }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete"><i class="fa-solid fa-trash"></i></a>
                                         </td>
                                     </tr>
                                     @endforeach
-                                </tbody> --}}
+                                </tbody>
                         </table>
 
                         <!-- Pagination -->
@@ -81,7 +79,7 @@
                     </div>
                     <div class="card rounded-0 p-3">
                         <form id="product-filter-form" action="{{route('admin-storefront-product')}}" method="get">
-                            {{-- @csrf --}}
+                            @csrf
                             <div class="mb-3">
                                 <label for="product_name" class="form-label fw-bold">Product Name</label>
                                 <input type="text" class="form-control" name="product_name" value="{{old('product_name')}}" id="product_name" placeholder="Product Name">
