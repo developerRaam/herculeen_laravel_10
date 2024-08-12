@@ -6,22 +6,6 @@
 
 @section('content')
 
-<style>
-    /* Basic styling */
-    #category-dropdown {
-        width: 300px;
-    }
-    #search-box {
-        margin-bottom: 10px;
-    }
-    .category-option {
-        display: flex;
-        align-items: center;
-    }
-    .category-option input {
-        margin-right: 10px;
-    }
-</style>
 <section class="container-fluid px-0">
     <div class="row">
         <div class="col-sm-12">
@@ -181,21 +165,6 @@
     </div>
     <script>
 
-        // Select Multilevel 
-        $(document).ready(function(){
-            $("#category-dropdown").selectize({
-                plugins: ['remove_button'],
-                delimiter: ',',
-                persist: false,
-                create: function(input){
-                    return{
-                        value: input,
-                        text: input
-                    };
-                }
-            });
-        });
-
         // Form save 
         document.addEventListener("DOMContentLoaded", function() {
             let submitButton = document.getElementById("submitButton");
@@ -228,21 +197,6 @@
             document.getElementById(`imagePreview`).src = "{{ asset('image/not-image-available.png')}}";
         }
 
-        // JavaScript to handle search functionality
-        let searchBox = document.getElementById('search-box');
-        if(searchBox){
-            searchBox.addEventListener('input', function() {
-                var searchTerm = this.value.toLowerCase();
-                var dropdown = document.getElementById('category-dropdown');
-                var options = dropdown.getElementsByTagName('option');
-    
-                for (var i = 1; i < options.length; i++) { // Start from 1 to skip the first "Select a category" option
-                    var option = options[i];
-                    var text = option.textContent || option.innerText;
-                    option.style.display = text.toLowerCase().indexOf(searchTerm) > -1 ? '' : 'none';
-                }
-            });
-        }
     </script>
 </section>
 @endsection

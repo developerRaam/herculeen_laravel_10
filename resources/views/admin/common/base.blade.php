@@ -69,6 +69,21 @@
                 }
             });
         });
+
+       // Select Multilevel 
+       $(document).ready(function(){
+            $("#category-dropdown").selectize({
+                plugins: ['remove_button'],
+                delimiter: ',',
+                persist: false,
+                create: function(input){
+                    return{
+                        value: input,
+                        text: input
+                    };
+                }
+            });
+        });
     </script>
 </body>
 </html>

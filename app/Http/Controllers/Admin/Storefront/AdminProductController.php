@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Storefront;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin\Storefront\Category\Category;
 use App\Models\Admin\Storefront\Product\Product;
 use App\Models\Admin\Storefront\Product\ProductCategory;
 use App\Models\Admin\Storefront\Product\ProductDiscount;
@@ -60,7 +61,7 @@ class AdminProductController extends Controller
         // Pagination
         $perPage = 20;
         $currentPage = request()->query('page', 1);
-        $results = DB::select($query);
+        $results = Product::getProducts($request);
         $products = collect($results);
         $totalCount = $products->count();
         $paginator = new LengthAwarePaginator(
@@ -95,6 +96,8 @@ class AdminProductController extends Controller
             'text' => 'Add Product',
             'href' => URL::to('/admin/storefront/product-form')
         ];
+
+        $data['categories'] = Category::getCategory();
 
         $data['action'] = route('admin-product-save');
         $data['back'] = URL::to('/admin/storefront/product');
@@ -178,11 +181,13 @@ class AdminProductController extends Controller
 
             if (isset($product_id)) {
                 // product to category
-                if (null !== $data->get('category_id') || null !== $data->get('category_id')) {
-                    $category = new ProductCategory();
-                    $category->product_id = (int)$product_id;
-                    $category->category_id = 1;
-                    $category->save();
+                if (null !== $request->input('category_ids')) {
+                    foreach($request->input('category_ids', []) as $category_id) {
+                        $category = new ProductCategory();
+                        $category->product_id = (int)$product_id;
+                        $category->category_id = (int)$category_id;
+                        $category->save();
+                    }
                 }
 
                 // product price 
@@ -309,37 +314,11 @@ class AdminProductController extends Controller
 
         $data['action'] = route('admin-product-update', ['product_id' => $product_id]);
         $data['back'] = URL::to('/admin/storefront/product');
-        $data['save'] = URL::to('/admin/storefront/product-save');
+        $data['save'] = URL::to('/admin/storefront/product-save');       
 
-        $query = " SELECT
-                        p.*,
-                        GROUP_CONCAT(pc.category_id ORDER BY pc.category_id ASC SEPARATOR ',') AS category_ids,
-                        GROUP_CONCAT(pd.customer_group_id ORDER BY pd.customer_group_id ASC SEPARATOR ',') AS discount_customer_group_ids,
-                        GROUP_CONCAT(pi.image, pi.sort ORDER BY pi.sort ASC SEPARATOR ',') AS images,
-                        GROUP_CONCAT(pol.amazon ORDER BY pol.status ASC SEPARATOR ',') AS other_links_amazon,
-                        GROUP_CONCAT(pp.list_price ORDER BY pp.list_price ASC SEPARATOR ',') AS prices_list,
-                        GROUP_CONCAT(ps.customer_group_id ORDER BY ps.priority ASC SEPARATOR ',') AS special_customer_group_ids
-                    FROM
-                        products p
-                    LEFT JOIN
-                        product_categories pc ON p.id = pc.product_id
-                    LEFT JOIN
-                        product_discounts pd ON p.id = pd.product_id
-                    LEFT JOIN
-                        product_images pi ON p.id = pi.product_id
-                    LEFT JOIN
-                        product_other_links pol ON p.id = pol.product_id
-                    LEFT JOIN
-                        product_prices pp ON p.id = pp.product_id
-                    LEFT JOIN
-                        product_specials ps ON p.id = ps.product_id
-                    WHERE
-                        p.id = :product_id
-                    GROUP BY
-                        p.id limit 1
-                ";
+        $data['product'] = Product::getProduct($product_id);
 
-        $data['product'] = DB::select($query, ['product_id' => $product_id])[0] ?? null;
+        $data['categories'] = Category::getCategory(); 
 
         return view('admin/storefront/product_form', $data);
     }
@@ -537,16 +516,7 @@ class AdminProductController extends Controller
     public function delete($product_id)
     {
         try {
-            Product::where('id', $product_id)->delete();
-            ProductCategory::where('product_id', $product_id)->delete();
-            ProductPrice::where('product_id', $product_id)->delete();
-            ProductDiscount::where('product_id', $product_id)->delete();
-            ProductSpecial::where('product_id', $product_id)->delete();
-            ProductDownload::where('product_id', $product_id)->delete();
-            ProductReward::where('product_id', $product_id)->delete();
-            ProductFilter::where('product_id', $product_id)->delete();
-            ProductImage::where('product_id', $product_id)->delete();
-            ProductOtherLink::where('product_id', $product_id)->delete();
+            Product::deleteProduct($product_id);
             return redirect('admin/storefront/product')->with('success', 'Product deleted successfully.');
         } catch (Exception $e) {
             DB::rollBack();

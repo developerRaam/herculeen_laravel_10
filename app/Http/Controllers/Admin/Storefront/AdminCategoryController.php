@@ -28,27 +28,10 @@ class AdminCategoryController extends Controller
 
         $data['add'] = URL::to('/admin/storefront/category-form');
 
-        $query = "WITH RECURSIVE CategoryHierarchy AS (
-                SELECT 
-                id, category_name, image, sort_order, status, parent_id, category_name AS full_path, 1 AS level 
-                FROM category
-                WHERE parent_id IS NULL  -- Assuming root categories have no parent
-                UNION ALL
-                -- Recursive member: Join child categories
-                SELECT 
-                    c.id, c.category_name, c.image, c.sort_order, c.status, c.parent_id, CONCAT(ch.full_path, ' > ', c.category_name) AS full_path, 
-                    ch.level + 1 AS level
-                FROM category c
-                INNER JOIN CategoryHierarchy ch ON c.parent_id = ch.id)
-                -- Select all columns from the recursive CTE
-                SELECT * FROM CategoryHierarchy
-                ORDER BY full_path ASC ;  -- Optionally order by level and sort_order
-                ";
-
         // Pagination
         $perPage = 50;
         $currentPage = request()->query('page', 1);
-        $results = DB::select($query);
+        $results = Category::getCategory();
         $products = collect($results);
         $totalCount = $products->count();
         $paginator = new LengthAwarePaginator(
@@ -58,7 +41,6 @@ class AdminCategoryController extends Controller
             $currentPage,
             ['path' => request()->url(), 'query' => request()->query()]
         );
-
         $data['categories'] = $paginator;
 
         $data['pagination'] = $paginator;
@@ -86,18 +68,7 @@ class AdminCategoryController extends Controller
         $data['action'] = Route('save-category');
         $data['back'] = URL::to('/admin/storefront/category');
 
-        $query = "WITH RECURSIVE CategoryHierarchy AS (
-            SELECT id, category_name, description, image, sort_order, status, parent_id, category_name AS full_path, 1 AS level 
-            FROM category
-            WHERE parent_id IS NULL
-            UNION ALL
-            SELECT c.id, c.category_name, c.description, c.image, c.sort_order, c.status, c.parent_id, CONCAT(ch.full_path, ' > ', c.category_name) AS full_path, ch.level + 1 AS level
-            FROM category c
-            INNER JOIN CategoryHierarchy ch ON c.parent_id = ch.id) 
-            SELECT * FROM CategoryHierarchy 
-            ORDER BY full_path ASC";
-
-        $data['categories'] = DB::select($query);        
+        $data['categories'] = Category::getCategory();       
 
         return view('admin.storefront.category_form', $data);
     }
@@ -176,18 +147,9 @@ class AdminCategoryController extends Controller
         $data['action'] = route('update-category', ['category_id' => $category_id]);
         $data['back'] = URL::to('/admin/storefront/category');
 
-        $query = "WITH RECURSIVE CategoryHierarchy AS (
-            SELECT id, category_name, description, image, sort_order, status, parent_id, category_name AS full_path, 1 AS level 
-            FROM category
-            WHERE parent_id IS NULL
-            UNION ALL
-            SELECT c.id, c.category_name, c.description, c.image, c.sort_order, c.status, c.parent_id, CONCAT(ch.full_path, ' > ', c.category_name) AS full_path, ch.level + 1 AS level
-            FROM category c
-            INNER JOIN CategoryHierarchy ch ON c.parent_id = ch.id) 
-            SELECT * FROM CategoryHierarchy ";
 
-        $data['categories'] = DB::select($query. 'ORDER BY full_path ASC');
-        $data['category'] = DB::select($query.' WHERE id ="'.$category_id.'"')[0];
+        $data['categories'] = Category::getCategory(); 
+        $data['category'] = Category::getCategory($category_id);
     
         return view('admin/storefront/category_form', $data);
     }

@@ -384,13 +384,19 @@
                                     </div>
                                     <div class="row mb-4">
                                         <div class="col-2 text-end">
-                                            <label for="categories">Categories</label>
+                                            <label for="category-dropdown">Categories</label>
                                         </div>
                                         <div class="col-10">
-                                            <input type="text" id="categories" name="categories" class="form-control p-2" value="{{ old('categories') }}" placeholder="Categories">
-                                            <div class="form-control mt-1" style="height: 150px; overflow: auto;">
-                                                
-                                            </div>
+                                            <select id="category-dropdown" name="category_ids[]" class="multiple-select" multiple>
+                                                <option value="">Select Category</option>
+                                                @foreach($categories as $cat)
+                                                    @if(isset($category) && (null !== $cat->category_id) && (null !== $category->category_id) && ($cat->category_id == $category->category_id))
+                                                        <option value="{{ $category->category_id }}" selected  >{{ $cat->full_path}}</option>
+                                                    @else
+                                                        <option value="{{ $cat->id }}">{{ $cat->full_path}}</option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="row mb-4">
