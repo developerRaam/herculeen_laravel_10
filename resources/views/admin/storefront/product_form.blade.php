@@ -87,7 +87,7 @@
                                                 <label for="product_name">Product Name</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="text" id="product_name" name="product_name" class="form-control p-2" value="{{ isset($product) ? $product->product_name : old('product_name') }}" placeholder="Product Name">
+                                                <input type="text" id="product_name" name="product_name" class="form-control p-2" value="{{ isset($product) ? $product['product']->product_name : old('product_name') }}" placeholder="Product Name">
                                             </div>
                                             <div class="errors">
                                                 <span class="text-danger">
@@ -102,7 +102,7 @@
                                                 <label for="product_name">Product description</label>
                                             </div>
                                             <div class="col-10">
-                                                <textarea id="summernote" name="description">{{ isset($product) ? $product->product_description : old('description')  }}</textarea>
+                                                <textarea id="summernote" name="description">{{ isset($product) ? $product['product']->product_description : old('description')  }}</textarea>
                                             </div>
                                         </div>
                                         <div class="row mb-4">
@@ -110,7 +110,7 @@
                                                 <label for="meta_tag_title">Meta Tag Title</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="text" id="meta_tag_title" name="meta_tag_title" class="form-control p-2" value="{{ isset($product) ? $product->tag : old('meta_tag_title') }}" placeholder="Meta Tag Title">
+                                                <input type="text" id="meta_tag_title" name="meta_tag_title" class="form-control p-2" value="{{ isset($product) ? $product['product']->tag : old('meta_tag_title') }}" placeholder="Meta Tag Title">
                                             </div>
                                         </div>
                                         <div class="row mb-4">
@@ -118,7 +118,7 @@
                                                 <label for="meta_tag_keyword">Meta Tag Keywords</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="text" id="meta_tag_keyword" name="meta_tag_keyword" class="form-control p-2" value="{{ isset($product) ? $product->meta_keyword : old('meta_tag_keyword') }}" placeholder="Meta Tag Keyword">
+                                                <input type="text" id="meta_tag_keyword" name="meta_tag_keyword" class="form-control p-2" value="{{ isset($product) ? $product['product']->meta_keyword : old('meta_tag_keyword') }}" placeholder="Meta Tag Keyword">
                                             </div>
                                         </div>
                                         <div class="row mb-4">
@@ -142,7 +142,7 @@
                                                 <label for="model">Model</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="text" id="model" name="model" class="form-control p-2" value="{{ isset($product) ? $product->model : old('model') }}" placeholder="Model">
+                                                <input type="text" id="model" name="model" class="form-control p-2" value="{{ isset($product) ? $product['product']->model : old('model') }}" placeholder="Model">
                                             </div>
                                             <div class="errors">
                                                 <span class="text-danger">
@@ -157,7 +157,7 @@
                                                 <label for="sku">SKU</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="text" id="sku" name="sku" class="form-control p-2" value="{{ isset($product) ? $product->sku : old('sku') }}" placeholder="SKU">
+                                                <input type="text" id="sku" name="sku" class="form-control p-2" value="{{ isset($product) ? $product['product']->sku : old('sku') }}" placeholder="SKU">
                                                 <span class="form-text">Stock Keeping Unit</span>
                                             </div>
                                             <div class="errors">
@@ -173,7 +173,7 @@
                                                 <label for="upc">UPC</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="text" id="upc" name="upc" class="form-control p-2" value="{{ isset($product) ? $product->upc : old('upc') }}" placeholder="UPC">
+                                                <input type="text" id="upc" name="upc" class="form-control p-2" value="{{ isset($product) ? $product['product']->upc : old('upc') }}" placeholder="UPC">
                                                 <span class="form-text">Universal Product Code</span>
                                             </div>
                                         </div>
@@ -182,7 +182,7 @@
                                                 <label for="ean">EAN</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="text" id="ean" name="ean" class="form-control p-2" value="{{ isset($product) ? $product->ean : old('ean') }}" placeholder="EAN">
+                                                <input type="text" id="ean" name="ean" class="form-control p-2" value="{{ isset($product) ? $product['product']->ean : old('ean') }}" placeholder="EAN">
                                                 <span class="form-text">European Article Number</span>
                                             </div>
                                         </div>
@@ -191,7 +191,7 @@
                                                 <label for="jan">JAN</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="text" id="jan" name="jan" class="form-control p-2" value="{{ isset($product) ? $product->jan : old('jan') }}" placeholder="JAN">
+                                                <input type="text" id="jan" name="jan" class="form-control p-2" value="{{ isset($product) ? $product['product']->jan : old('jan') }}" placeholder="JAN">
                                                 <span class="form-text">Japanese Article Number</span>
                                             </div>
                                         </div>
@@ -200,7 +200,7 @@
                                                 <label for="isbn">ISBN</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="text" id="isbn" name="isbn" class="form-control p-2" value="{{ isset($product) ? $product->isbn : old('isbn') }}" placeholder="ISBN">
+                                                <input type="text" id="isbn" name="isbn" class="form-control p-2" value="{{ isset($product) ? $product['product']->isbn : old('isbn') }}" placeholder="ISBN">
                                                 <span class="form-text">International Standard Book Number</span>
                                             </div>
                                         </div>
@@ -209,7 +209,7 @@
                                                 <label for="mpn">MPN</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="text" id="mpn" name="mpn" class="form-control p-2" value="{{ isset($product) ? $product->mpn : old('mpn') }}" placeholder="mpn">
+                                                <input type="text" id="mpn" name="mpn" class="form-control p-2" value="{{ isset($product) ? $product['product']->mpn : old('mpn') }}" placeholder="mpn">
                                                 <span class="form-text">Manufacturer Part Number</span>
                                             </div>
                                         </div>
@@ -222,7 +222,7 @@
                                                 <label for="stock_quantity">Quantity</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="text" id="stock_quantity" name="quantity" class="form-control p-2" value="{{ isset($product) ? $product->quantity : old('quantity') }}" placeholder="Quantity">
+                                                <input type="text" id="stock_quantity" name="quantity" class="form-control p-2" value="{{ isset($product) ? $product['product']->quantity : old('quantity') }}" placeholder="Quantity">
                                             </div>
                                             <div class="errors">
                                                 <span class="text-danger">
@@ -237,7 +237,7 @@
                                                 <label for="minimum_quantity">Minimum Quantity</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="text" id="minimum_quantity" name="minimum_quantity" class="form-control p-2" value="{{ isset($product) ? $product->minimum : old('minimum_quantity') }}" placeholder="Minimum Quantity">
+                                                <input type="text" id="minimum_quantity" name="minimum_quantity" class="form-control p-2" value="{{ isset($product) ? $product['product']->minimum : old('minimum_quantity') }}" placeholder="Minimum Quantity">
                                             </div>
                                         </div>
                                         <div class="row mb-4">
@@ -266,7 +266,7 @@
                                                 <label for="date_available">Date Available</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="date" id="date_available" name="date_available" class="w-25 p-2" value="{{ isset($product) ? $product->date_available : old('date_available') }}">
+                                                <input type="date" id="date_available" name="date_available" class="w-25 p-2" value="{{ isset($product) ? $product['product']->date_available : old('date_available') }}">
                                             </div>
                                         </div>
                                     </section>
@@ -350,7 +350,14 @@
                                             <label for="list_price">List Price</label>
                                         </div>
                                         <div class="col-10">
-                                            <input type="text" id="list_price" name="list_price" class="form-control p-2" value="{{ old('list_price') }}" placeholder="List Price">
+                                            <input type="text" id="list_price" name="list_price" class="form-control p-2" value="{{ isset($product) ? $product['product']->list_price :  old('list_price') }}" placeholder="List Price">
+                                        </div>
+                                        <div class="errors">
+                                            <span class="text-danger">
+                                                @error('list_price')
+                                                    {{$message}}
+                                                @enderror
+                                            </span>
                                         </div>
                                     </div>
                                     <div class="row mb-4">
@@ -358,7 +365,14 @@
                                             <label for="mrp">MRP</label>
                                         </div>
                                         <div class="col-10">
-                                            <input type="text" id="mrp" name="mrp" class="form-control p-2" value="{{ old('mrp') }}" placeholder="MRP">
+                                            <input type="text" id="mrp" name="mrp" class="form-control p-2" value="{{ isset($product) ? $product['product']->mrp :  old('mrp') }}" placeholder="MRP">
+                                        </div>
+                                        <div class="errors">
+                                            <span class="text-danger">
+                                                @error('mrp')
+                                                    {{$message}}
+                                                @enderror
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -389,14 +403,26 @@
                                         <div class="col-10">
                                             <select id="category-dropdown" name="category_ids[]" class="multiple-select" multiple>
                                                 <option value="">Select Category</option>
-                                                @foreach($categories as $cat)
-                                                    @if(isset($category) && (null !== $cat->category_id) && (null !== $category->category_id) && ($cat->category_id == $category->category_id))
-                                                        <option value="{{ $category->category_id }}" selected  >{{ $cat->full_path}}</option>
-                                                    @else
-                                                        <option value="{{ $cat->id }}">{{ $cat->full_path}}</option>
+                                                @foreach($categories as $category)
+                                                    @php
+                                                        $isSelected = false;
+                                                    @endphp
+
+                                                    @if(isset($getProductCategory))
+                                                    @foreach($getProductCategory as $productCategory)
+                                                        @if($category->id == $productCategory->category_id)
+                                                            @php
+                                                                $isSelected = true;
+                                                                break;
+                                                            @endphp
+                                                        @endif
+                                                    @endforeach
                                                     @endif
+                                                    <option value="{{ $category->id }}" {{ $isSelected ? 'selected' : '' }}>
+                                                        {{ $category->full_path }}
+                                                    </option>
                                                 @endforeach
-                                            </select>
+                                            </select>                                            
                                         </div>
                                     </div>
                                     <div class="row mb-4">
@@ -531,6 +557,22 @@
                                 <div class="tab-pane fade show" id="image" role="tabpanel" aria-labelledby="image-tab">
                                     <div class="mt-4"></div>
                                     <div class="col-sm-12 mb-4">
+                                        <h5>Product Image</h5>
+                                        <div class="d-flex justify-content-between align-items-center mb-4">
+                                            <div class="col-sm-4 col-md-3">
+                                                <div class="card p-2" style="width: 12rem">
+                                                    <img src="{{ isset($product['product']->image) ? asset("image/uploads").'/'.($product['product']->image) : asset('image/not-image-available.png')}}" alt="Product Image" class="card-img-top" id="productReviewImage">
+                                                    <input type="file" name="image" id="productImageUpload" accept="image/*" style="display: none;" onchange="productPreviewImage(event)">
+                                                    <div class="card-body text-center mt-2"> 
+                                                        <button type="button" class="btn btn-primary fs-5 px-3" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit" onclick="productTriggerFileUpload()"><i class="fa-solid fa-pencil"></i></button>
+                                                    </div>
+                                                </div>
+                                            </div> 
+                                            <div class="text-end">
+                                                <button type="button" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Remove" onclick="productRemoveImageRow(this)"><i class="fa-solid fa-minus"></i></button>
+                                            </div>
+                                        </div>
+                                        <h5>Additional Images</h5>
                                         <table class="table table-bordered table-hover center-align-table">
                                             <thead>
                                                 <tr>
@@ -540,6 +582,31 @@
                                                 </tr>
                                             </thead>
                                             <tbody id="product_images">
+                                                @if (isset($product['images']))
+                                                    @php $i = 0; @endphp
+                                                    @foreach ($product['images'] as $image)
+                                                        <tr>
+                                                            <td>
+                                                                <div class="col-sm-4 col-md-3">
+                                                                    <div class="card p-2" style="width: 12rem">
+                                                                        <img src="{{ isset($image->image) ? asset("image/uploads").'/'.($image->image) : asset('image/not-image-available.png')}}" alt="Product Image" class="card-img-top" id="imagePreview_{{$i}}">
+                                                                        <input type="file" class="product_images" name="product_image[{{$i}}][image]" id="imageUpload_{{$i}}" accept="image/*" style="display: none;" onchange="previewImage(event, {{$i}})">
+                                                                        <div class="card-body text-center mt-2"> 
+                                                                            <button type="button" class="btn btn-primary fs-5 px-3" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit" onclick="triggerFileUpload({{$i}})"><i class="fa-solid fa-pencil"></i></button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div> 
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" name="product_image_sort[{{$i}}][sort]" class="form-control p-2" placeholder="Sort Order" value="{{$image->sort}}">
+                                                            </td>
+                                                            <td class="text-end">
+                                                                <button type="button" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Remove" onclick="removeImageRow(this)"><i class="fa-solid fa-minus"></i></button>
+                                                            </td>
+                                                        </tr>
+                                                        @php $i++; @endphp
+                                                    @endforeach
+                                                @endif
                                             </tbody>
                                             <tfoot>
                                                 <tr>
@@ -737,7 +804,7 @@
     }
 
 
-    // Product images
+    // Additional images
     function addImageRow() {
     const table = document.getElementById('product_images');
     const rowCount = table.rows.length;
@@ -791,5 +858,30 @@ function removeImageRow(button) {
     const row = button.closest('tr');
     row.remove();
 }
+
+// Product Image
+function productPreviewImage(event) {
+    const input = event.target;
+    const file = input.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = document.getElementById('productReviewImage');
+            img.src = e.target.result;
+        }
+        reader.readAsDataURL(file);
+    }
+}
+
+function productTriggerFileUpload(index) {
+    document.getElementById('productImageUpload').click();
+}
+
+function productRemoveImageRow(button) {
+    document.getElementById('productImageUpload').value = '';
+    document.getElementById(`productReviewImage`).src = "{{ asset('image/not-image-available.png')}}";
+}
+// end product image
+
 </script>
 @endsection

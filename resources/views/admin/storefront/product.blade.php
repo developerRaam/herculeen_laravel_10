@@ -56,10 +56,10 @@
                                 @foreach ($products as $product)
                                     <tr>
                                         <td class="text-center"><input type="checkbox" class="form-check-input" name="" id=""></td>
-                                        <td><img width="50" height="50" src="{{$product->image}}" alt="{{$product->product_name}}"></td>
+                                        <td><img width="50" height="50" src="{{ ($product->image) ? asset("image/uploads").'/'.($product->image) : asset('image/not-image-available.png')}}" alt="{{$product->product_name}}"></td>
                                         <td>{{$product->product_name}}</td>
                                         <td>{{$product->model}}</td>
-                                        <td>{{$product->list_price }}</td>
+                                        <td>Rs.{{ number_format($product->list_price,2) }}</td>
                                         <td>{{$product->quantity}}</td>
                                         <td>
                                             <a class="btn btn-primary" href="{{ route('admin-product-edit', ['product_id' => $product->product_id]) }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit"><i class="fa-solid fa-pencil"></i></a>

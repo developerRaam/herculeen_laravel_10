@@ -138,13 +138,28 @@ class AdminProductController extends Controller
             'weight_class_id' => 'nullable|integer',
             'status' => 'nullable|boolean',
             'sort_order' => 'nullable|integer',
-            'list_price' => 'nullable|numeric',
-            'mrp' => 'nullable|numeric'
+            'list_price' => 'required|nullable|numeric',
+            'mrp' => 'required|nullable|numeric'
         ]);
 
         try {
             // Inserting a new product using the save method
             if (null !== $data->get('product_name') || null !== $data->get('model')) {
+
+                // Upload product image
+                $file = $request->file('image'); // get files
+                if(null !== $file){
+                    $folderPath = public_path('image/uploads');
+                    if (!file_exists($folderPath)) {
+                        mkdir($folderPath, 0777, true);
+                    }
+                    $imageName = time() . '_' . $file->getClientOriginalName();
+                    $imagePath = public_path('image/uploads/') . $imageName;
+                    if (!file_exists($imagePath)) {
+                        $file->move(public_path('image/uploads/'), $imageName);
+                    }
+                }
+
                 $product = new Product();
                 $product->product_name = $data->get('product_name') ?? '';
                 $product->product_description = $data->get('description') ?? '';
@@ -171,6 +186,7 @@ class AdminProductController extends Controller
                 $product->length_class_id = $data->get('length_class_id') ?? null;
                 $product->weight = $data->get('weight') ?? '';
                 $product->weight_class_id = $data->get('weight_class_id') ?? null;
+                $product->image = $imageName ?? null;
                 $product->status = true;
                 $product->sort_order = (int)$data->get('sort_order') ?? '';
                 $product->save();
@@ -194,8 +210,8 @@ class AdminProductController extends Controller
                 if (!empty($validatedData['list_price']) && !empty($validatedData['mrp'])) {
                     $price = new ProductPrice();
                     $price->product_id = $product_id;
-                    $price->list_price = null;
-                    $price->mrp = null;
+                    $price->list_price = $data->get('list_price') ?? '';;
+                    $price->mrp = $data->get('mrp') ?? '';;
                     $price->save();
                 }
 
@@ -248,7 +264,7 @@ class AdminProductController extends Controller
                     $filter->save();
                 }
 
-                // Product Image
+                // Product additional Image
                 if ($request->file('product_image') != null) {
 
                     $folderPath = public_path('image/uploads');
@@ -262,7 +278,6 @@ class AdminProductController extends Controller
                         $imagePath = public_path('image/uploads/') . $imageName;
                         // sort
                         $sort = $request->input('product_image_sort')[$key]['sort'];
-                        // dd($sort);
                         if (!file_exists($imagePath)) {
                             $file['image']->move(public_path('image/uploads/'), $imageName);
                             $image = new ProductImage();
@@ -273,7 +288,6 @@ class AdminProductController extends Controller
                         }
                     }
                 }
-
 
                 // Product other links
                 if ($data->get('amazon') != '' || $data->get('flipkart') != '' || $data->get('myntra') != '' || $data->get('ajio') != '' || $data->get('meesho') != '') {
@@ -316,9 +330,13 @@ class AdminProductController extends Controller
         $data['back'] = URL::to('/admin/storefront/product');
         $data['save'] = URL::to('/admin/storefront/product-save');       
 
-        $data['product'] = Product::getProduct($product_id);
+        $data['product'] = Product::getProduct($product_id);   
 
         $data['categories'] = Category::getCategory(); 
+
+        $data['getProductCategory'] = ProductCategory::getProductCategory($product_id);
+
+        // dd($data['categories']);
 
         return view('admin/storefront/product_form', $data);
     }
@@ -356,14 +374,29 @@ class AdminProductController extends Controller
             'weight_class_id' => 'nullable|integer',
             'status' => 'nullable|boolean',
             'sort_order' => 'nullable|integer',
-            'list_price' => 'nullable|numeric',
-            'mrp' => 'nullable|numeric'
+            'list_price' => 'required|nullable|numeric',
+            'mrp' => 'required|nullable|numeric'
         ]);
 
         try {
             if (!empty($product_id)) {
                 if (null !== $data->get('product_name') || null !== $data->get('model')) {
-                    $product = Product::find($product_id);
+
+                    // Upload product image
+                    $file = $request->file('image'); // get files
+                    if(null !== $file){
+                        $folderPath = public_path('image/uploads');
+                        if (!file_exists($folderPath)) {
+                            mkdir($folderPath, 0777, true);
+                        }
+                        $imageName = time() . '_' . $file->getClientOriginalName();
+                        $imagePath = public_path('image/uploads/') . $imageName;
+                        if (!file_exists($imagePath)) {
+                            $file->move(public_path('image/uploads/'), $imageName);
+                        }
+                    }
+
+                    $product = Product::where('id', $product_id)->first();
                     $product->product_name = $data->get('product_name') ?? '';
                     $product->product_description = $data->get('description') ?? '';
                     $product->tag = $data->get('product_tag') ?? '';
@@ -389,6 +422,7 @@ class AdminProductController extends Controller
                     $product->length_class_id = $data->get('length_class_id') ?? null;
                     $product->weight = $data->get('weight') ?? '';
                     $product->weight_class_id = $data->get('weight_class_id') ?? null;
+                    isset($imageName) ? $product->image = $imageName : null;
                     $product->status = true;
                     $product->sort_order = (int)$data->get('sort_order') ?? '';
                     $product->update();
@@ -396,24 +430,40 @@ class AdminProductController extends Controller
 
                 // product to category
                 if (null !== $data->get('category_id') || null !== $data->get('category_id')) {
-                    $category = ProductCategory::find($product_id);
-                    $category->product_id = (int)$product_id;
-                    $category->category_id = 1;
-                    $category->update();
+                   
                 }
 
-                // product price 
+                // product to category
+                if (null !== $request->input('category_ids')) {
+                    foreach($request->input('category_ids', []) as $category_id) {
+                        $category = ProductCategory::where('product_id', $product_id)->where('category_id', $category_id)->first();
+                        if($category){
+                            $category->category_id = (int)$category_id;
+                            $category->update();
+                        }else{
+                            $category = new ProductCategory();
+                            $category->product_id = (int)$product_id;
+                            $category->category_id = (int)$category_id;
+                            $category->save();
+                        }
+
+                    }
+                }
+
+                // Product price
                 if (!empty($validatedData['list_price']) && !empty($validatedData['mrp'])) {
-                    $price = ProductPrice::find($product_id);
-                    $price->product_id = $product_id;
-                    $price->list_price = null;
-                    $price->mrp = null;
-                    $price->update();
+                    $price = ProductPrice::where('product_id', $product_id)->first();
+                    if ($price) {
+                        $price->product_id = (int) $product_id;
+                        $price->list_price = $data->get('list_price') ?? '';;
+                        $price->mrp = $data->get('mrp') ?? '';;
+                        $price->update();
+                    }
                 }
 
                 // product discount
                 if (null !== $data->get('discount_price') || null !== $data->get('discount_price')) {
-                    $discount = ProductDiscount::find($product_id);
+                    $discount = ProductDiscount::where('product_id', $product_id)->first();
                     $discount->product_id = $product_id;
                     $discount->customer_group_id = null;
                     $discount->quantity = null;
@@ -426,7 +476,7 @@ class AdminProductController extends Controller
 
                 // product special
                 if (null !== $data->get('special_price') || null !== $data->get('special_price')) {
-                    $special = ProductSpecial::find($product_id);
+                    $special = ProductSpecial::where('product_id', $product_id)->first();
                     $special->product_id = $product_id;
                     $special->customer_group_id = null;
                     $special->priority = null;
@@ -438,7 +488,7 @@ class AdminProductController extends Controller
 
                 // product downloads
                 if (null !== $data->get('download_id') || null !== $data->get('download_id')) {
-                    $download = ProductDownload::find($product_id);
+                    $download = ProductDownload::where('product_id', $product_id)->first();
                     $download->product_id = $product_id;
                     $download->download_id = 0;
                     $download->update();
@@ -446,7 +496,7 @@ class AdminProductController extends Controller
 
                 // Product Reward
                 if (null !== $data->get('point') || null !== $data->get('point')) {
-                    $reward = ProductReward::find($product_id);
+                    $reward = ProductReward::where('product_id', $product_id)->first();
                     $reward->product_id = $product_id;
                     $reward->point = 0;
                     $reward->update();
@@ -454,7 +504,7 @@ class AdminProductController extends Controller
 
                 // Product Reward
                 if (null !== $data->get('filter_id') || null !== $data->get('filter_id')) {
-                    $filter = ProductFilter::find($product_id);
+                    $filter = ProductFilter::where('product_id', $product_id)->first();
                     $filter->product_id = $product_id;
                     $filter->filter_id = 0;
                     $filter->update();
@@ -474,29 +524,28 @@ class AdminProductController extends Controller
                         $imagePath = public_path('image/uploads/') . $imageName;
                         // sort
                         $sort = $request->input('product_image_sort')[$key]['sort'];
-                        // dd($sort);
-                        if (!file_exists($imagePath)) {
-                            $file['image']->move(public_path('image/uploads/'), $imageName);
-                            $image = ProductImage::find($product_id);
-                            if ($image) {
-                                $image->product_id = $product_id;
-                                $image->image = $imageName;
-                                $image->sort = $sort;
-                                $image->update();
-                            } else {
-                                $image = new ProductImage();
-                                $image->product_id = $product_id;
-                                $image->image = $imageName;
-                                $image->sort = $sort;
-                                $image->save();
-                            }
+
+                        $file['image']->move(public_path('image/uploads/'), $imageName);
+
+                        $image = ProductImage::where('product_id', $product_id)->first();
+                       
+                        if ($image) {
+                            $image->image = $imageName;
+                            $image->sort = $sort;
+                            $image->update();
+                        } else {
+                            $image = new ProductImage();
+                            $image->product_id = $product_id;
+                            $image->image = $imageName;
+                            $image->sort = $sort;
+                            $image->save();
                         }
                     }
                 }
 
                 // Product other links
                 if ($data->get('amazon') != '' || $data->get('flipkart') != '' || $data->get('myntra') != '' || $data->get('ajio') != '' || $data->get('meesho') != '') {
-                    $otherLink = ProductOtherLink::find($product_id);
+                    $otherLink = ProductOtherLink::where('product_id', $product_id)->first();
                     $otherLink->product_id = $product_id;;
                     $otherLink->amazon = null;
                     $otherLink->flipkart = null;

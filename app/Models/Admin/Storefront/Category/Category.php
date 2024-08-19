@@ -39,7 +39,7 @@ class Category extends Model
         if(empty($category_id)){
             return DB::select($query. 'ORDER BY full_path ASC');
         }else{
-            DB::select($query.' WHERE id ="'.$category_id.'"')[0];
+            return DB::select($query.' WHERE id ="'.$category_id.'"')[0];
         }
     }
 }

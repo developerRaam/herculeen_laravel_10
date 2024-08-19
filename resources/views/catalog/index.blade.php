@@ -17,7 +17,8 @@
                         <a href="shop.html" class="d-flex align-items-center text-dark">View all products <i class="fa-solid fa-arrow-right ms-2"></i></a>
                     </div>            
                 </div>
-                @include('catalog.product.thumb')
+                <!-- All products -->
+                {!! $product_thumb !!}
             </div>
         </div>
     </section>

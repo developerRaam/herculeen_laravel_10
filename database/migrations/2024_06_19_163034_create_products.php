@@ -38,6 +38,7 @@ return new class extends Migration
             $table->integer('length_class_id')->nullable();
             $table->decimal('weight', 15, 4)->nullable();
             $table->integer('weight_class_id')->nullable();
+            $table->string('image', 255)->nullable();
             $table->boolean('status')->default(0);
             $table->integer('sort_order')->nullable();
             $table->timestamps();

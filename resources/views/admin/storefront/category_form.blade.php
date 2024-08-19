@@ -67,14 +67,15 @@
                                 <div class="col-10">
                                     <select id="category-dropdown" name="parent_id" class="multiple-select">
                                         <option value="">Select Parent Category</option>
-                                        @foreach($categories as $cat)
-                                            @if(isset($category) && (null !== $cat->parent_id) && (null !== $category->parent_id) && ($cat->parent_id == $category->parent_id))
-                                                <option value="{{ $category->parent_id }}" selected  >{{ $cat->full_path}}</option>
-                                            @else
-                                                <option value="{{ $cat->id }}">{{ $cat->full_path}}</option>
-                                            @endif
+                                        @foreach($categories as $category)
+                                            @php
+                                                $isSelected = isset($categoryPath) && $category->id == $categoryPath->path_id;
+                                            @endphp
+                                            <option value="{{ $category->id }}" {{ $isSelected ? 'selected' : '' }}>
+                                                {{ $category->full_path }}
+                                            </option>
                                         @endforeach
-                                    </select>
+                                    </select> 
                                 </div>
                                 <div class="errors">
                                     <span class="text-danger">

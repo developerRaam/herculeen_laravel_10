@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -12,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('settings', function (Blueprint $table) {
+        Schema::create('category_path', function (Blueprint $table) {
             $table->id();
-            $table->string('code',255)->nullable();
-            $table->string('key',255)->nullable();
-            $table->text('value')->nullable();
+            $table->integer('category_id')->nullable();
+            $table->integer('path_id')->nullable();
+            $table->integer('level')->nullable();
         });
     }
 
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('settings');
+        Schema::dropIfExists('category_path');
     }
 };

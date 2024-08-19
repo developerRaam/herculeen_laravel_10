@@ -4,6 +4,7 @@ namespace App\Models\Admin\Storefront\Product;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class ProductCategory extends Model
 {
@@ -17,4 +18,9 @@ class ProductCategory extends Model
         'product_id',
         'category_id'
     ];
+
+    public static function getProductCategory($product_id){
+        $data = DB::table('product_categories')->where('product_id', $product_id)->get();
+        return $data ?: null;
+    }
 }

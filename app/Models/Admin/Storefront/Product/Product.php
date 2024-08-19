@@ -44,41 +44,25 @@ class Product extends Model
     ];
 
     public static function getProduct($product_id){
-        $query = " SELECT
-                p.*,
-                GROUP_CONCAT(pc.category_id ORDER BY pc.category_id ASC SEPARATOR ',') AS category_ids,
-                GROUP_CONCAT(pd.customer_group_id ORDER BY pd.customer_group_id ASC SEPARATOR ',') AS discount_customer_group_ids,
-                GROUP_CONCAT(pi.image, pi.sort ORDER BY pi.sort ASC SEPARATOR ',') AS images,
-                GROUP_CONCAT(pol.amazon ORDER BY pol.status ASC SEPARATOR ',') AS other_links_amazon,
-                GROUP_CONCAT(pp.list_price ORDER BY pp.list_price ASC SEPARATOR ',') AS prices_list,
-                GROUP_CONCAT(ps.customer_group_id ORDER BY ps.priority ASC SEPARATOR ',') AS special_customer_group_ids
-            FROM
-                products p
-            LEFT JOIN
-                product_categories pc ON p.id = pc.product_id
-            LEFT JOIN
-                product_discounts pd ON p.id = pd.product_id
-            LEFT JOIN
-                product_images pi ON p.id = pi.product_id
-            LEFT JOIN
-                product_other_links pol ON p.id = pol.product_id
-            LEFT JOIN
-                product_prices pp ON p.id = pp.product_id
-            LEFT JOIN
-                product_specials ps ON p.id = ps.product_id
-            WHERE
-                p.id = :product_id
-            GROUP BY
-                p.id limit 1
-        ";
 
-        return DB::select($query, ['product_id' => $product_id])[0] ?? null;
+        // products
+        $product = DB::table('products')
+                    ->leftJoin('product_prices', 'products.id', '=', 'product_prices.product_id')
+                    ->where('products.id', $product_id)->first();
+
+        $images = DB::table('product_images')->where('product_id', $product->id)->get();
+
+        $data['product'] = $product;
+        $data['images'] = $images;
+
+        return $data ?? null;
     }
 
     public static function getProducts($request = null){
-        $query = 'SELECT p.id as product_id,pi.image, p.product_name, p.model, pp.list_price, pp.mrp, p.quantity FROM  products p LEFT JOIN product_images pi ON p.id = pi.product_id LEFT JOIN  product_prices pp ON pp.product_id = p.id  WHERE 1=1';
+        $query = 'SELECT p.id as product_id, p.image, p.product_name, p.model, pp.list_price, pp.mrp, p.quantity FROM  products p LEFT JOIN  product_prices pp ON pp.product_id = p.id  WHERE 1=1';
 
         // Filter
+       if($request){
         if (null !== $request->query('product_name')) {
             $query .= ' AND p.product_name=' . "'" . $request->query('product_name') . "'";
         }
@@ -94,6 +78,7 @@ class Product extends Model
         if (null !== $request->query('product_name')) {
             $query .= ' AND status=' . "'" . $request->query('status') . "'";
         }
+       }
 
         return DB::select($query);
     }
@@ -107,8 +92,20 @@ class Product extends Model
         ProductDownload::where('product_id', $product_id)->delete();
         ProductReward::where('product_id', $product_id)->delete();
         ProductFilter::where('product_id', $product_id)->delete();
-        ProductImage::where('product_id', $product_id)->delete();
         ProductOtherLink::where('product_id', $product_id)->delete();
+
+        $images = ProductImage::where('product_id', $product_id)->get();
+        foreach ($images as $image) {
+            if($image){
+                $imageName = $image->image;
+                $imagePath = public_path('image/uploads/') . $imageName;
+                if (file_exists($imagePath)) {
+                    unlink($imagePath);
+                }
+                $image->delete();
+            }
+        }
+
         return true;
     }
 }

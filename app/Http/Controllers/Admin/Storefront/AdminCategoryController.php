@@ -9,11 +9,15 @@ use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use App\Models\Admin\Storefront\Category\Category;
+use App\Models\Admin\Storefront\Category\CategoryPath;
 use Exception;
+
+use App\Providers\SettingProvider;
 
 class AdminCategoryController extends Controller
 {
     public function index(){
+
         $data['heading_title'] = "Category";
 
         $data['breadcrumbs'] = [];
@@ -107,6 +111,7 @@ class AdminCategoryController extends Controller
                     }
                 }
 
+                // added new category
                 $category = new Category();
                 $category->category_name = $data->get('category_name');
                 $category->parent_id = $data->get('parent_id') ?? null;
@@ -114,10 +119,21 @@ class AdminCategoryController extends Controller
                 $category->meta_tag = $data->get('meta_tag') ?? '';
                 $category->image = $imageName ?? null;
                 $category->sort_order = $data->get('sort_order') ?? 0;
+                $category->level = 0;
                 $category->status = ($data->get('status')) ? 1 : 0 ;
                 $category->created_at = NOW();
                 $category->updated_at = NOW();
                 $category->save();
+
+                // add category path
+                if(null !== $data->get('parent_id') && $category->id){
+                    $category_path = new CategoryPath();
+                    $category_path->category_id = $category->id;
+                    $category_path->path_id = $data->get('parent_id') ?? null;
+                    $category_path->level = 0;
+                    $category_path->save();
+                }
+
                 return redirect('admin/storefront/category')->with('success', 'Category created successfully.');
             }else{
                 return redirect('admin/storefront/category')->with('success', 'Category not created successfully.');
@@ -148,16 +164,18 @@ class AdminCategoryController extends Controller
         $data['back'] = URL::to('/admin/storefront/category');
 
 
+        $data['category'] = Category::getCategory($category_id); 
+        // dd($data['category']);
         $data['categories'] = Category::getCategory(); 
-        $data['category'] = Category::getCategory($category_id);
+        $data['categoryPath'] = CategoryPath::categoryPath($category_id);
     
         return view('admin/storefront/category_form', $data);
     }
 
     public function update(Request $request, $category_id){
 
-        // dd($category_id);
         $data = $request->request;
+        // dd($data);
 
         $request->validate([
             'category_name' => 'required|string|max:255',
@@ -191,11 +209,28 @@ class AdminCategoryController extends Controller
                     $category->parent_id = $data->get('parent_id') ?? null;
                     $category->description = $data->get('description') ?? '';
                     $category->meta_tag = $data->get('meta_tag') ?? '';
-                    $category->image = $imageName ?? null;
+                    isset($imageName) ? $category->image = $imageName : null;
                     $category->sort_order = $data->get('sort_order') ?? 0;
                     $category->status = ($data->get('status')) ? 1 : 0;
+                    $category->level = 0;
                     $category->updated_at = NOW();
                     $category->update();
+
+                // update category path
+                if(null !== $data->get('parent_id') && $category->id){
+                    $category_path = CategoryPath::where('category_id',$category->id)->where('path_id', $data->get('parent_id'))->first();
+                    if($category_path){
+                        $category_path->path_id = $data->get('parent_id') ?? null;
+                        $category_path->level = 0;
+                        $category_path->update();
+                    }else{
+                        $category_path = new CategoryPath();
+                        $category_path->category_id = $category->id;
+                        $category_path->path_id = $data->get('parent_id') ?? null;
+                        $category_path->level = 0;
+                        $category_path->save();
+                    }
+                }
 
                     return redirect('admin/storefront/category')->with('success', 'Category updated successfully.');
                 } else {

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->string('meta_tag',255); 
             $table->integer('sort_order')->nullable();
+            $table->integer('level')->nullable();
             $table->boolean('status')->default(1);
             $table->timestamps();
         });
