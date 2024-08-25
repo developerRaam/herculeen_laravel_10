@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Str;
 
 class AdminProductController extends Controller
 {
@@ -187,6 +188,7 @@ class AdminProductController extends Controller
                 $product->weight = $data->get('weight') ?? '';
                 $product->weight_class_id = $data->get('weight_class_id') ?? null;
                 $product->image = $imageName ?? null;
+                $product->slug = Str::slug($data->get('product_name'));
                 $product->status = true;
                 $product->sort_order = (int)$data->get('sort_order') ?? '';
                 $product->save();
@@ -423,6 +425,7 @@ class AdminProductController extends Controller
                     $product->weight = $data->get('weight') ?? '';
                     $product->weight_class_id = $data->get('weight_class_id') ?? null;
                     isset($imageName) ? $product->image = $imageName : null;
+                    $product->slug = Str::slug($data->get('product_name'));
                     $product->status = true;
                     $product->sort_order = (int)$data->get('sort_order') ?? '';
                     $product->update();

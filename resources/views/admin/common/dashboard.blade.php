@@ -24,7 +24,7 @@
                     <div class="card dashboard dashboard-card1">
                         <div class="card-body p-5">
                             <p class="fs-1"><strong>{{ $total_brands ?? 0 }}</strong></p>
-                            <h2><strong>Register As A Brand</strong></h2>
+                            <h2><strong>DEMO</strong></h2>
                         </div>
                     </div>
                 </div>
@@ -32,7 +32,7 @@
                     <div class="card dashboard dashboard-card2">
                         <div class="card-body p-5">
                             <p class="fs-1"><strong>{{ $total_retailers ?? 0 }}</strong></p>
-                            <h2><strong>Register As A Retailer</strong></h2>
+                            <h2><strong>DEMO</strong></h2>
                         </div>
                     </div>
                 </div>
@@ -40,7 +40,7 @@
                     <div class="card dashboard dashboard-card3">
                         <div class="card-body p-5">
                             <p class="fs-1"><strong>{{ $total_wholesalers ?? 0 }}</strong></p>
-                            <h2><strong>Register As A Wholsaler</strong></h2>
+                            <h2><strong>DEMO</strong></h2>
                         </div>
                     </div>
                 </div>

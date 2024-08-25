@@ -20,7 +20,7 @@ use App\Http\Controllers\Admin\Storefront\AdminCategoryController;
 
 // Catalog
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/product', [ProductController::class, 'index'])->name('product');
+Route::get('/product/{product_id}/{slug?}', [ProductController::class, 'productDetail'])->name('product-detail');
 
 // Admin
 Route::get('/admin', function () {

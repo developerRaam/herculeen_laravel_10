@@ -32,20 +32,6 @@ body {
     margin: 0;
 }
 
-.product-item {
-    position: relative;
-    margin-bottom: 30px;
-}
-.product-item img.product-image {
-    background: var(--light-color);
-    border: 1px solid var(--grey-color);
-    border-radius: 6px;
-    padding: 10px;
-    cursor: pointer;
-    margin-bottom: 20px;
-    width: 100%;
-}
-
 .section-header {
     width: 100%;
     padding-top: 30px;
@@ -168,20 +154,24 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6 {
     margin-left: 0;
   }
 
-/*----- Featured Products Section
---------------------------------------------------------------*/
+/*----- Featured Products Section -------------------------------------------------*/
+
+.product-item{
+  box-shadow: 0px -1px 10px 2px #ddd;
+  position: relative;
+  margin-bottom: 30px;
+}
 .product-store .product-item {
     position: relative;
     margin-bottom: 30px;
 }
 .product-item img.product-image {
-    background: var(--light-color);
-    border: 1px solid var(--grey-color);
-    border-radius: 6px;
-    padding: 10px;
-    cursor: pointer;
-    margin-bottom: 20px;
-    width: 100%;
+  background: var(--light-color);
+  border-radius: 6px;
+  padding: 10px;
+  cursor: pointer;
+  margin-bottom: 0;
+  width: 100%;
 }
 .product-item .cart-concern {
     background: var(--light-color);
@@ -194,11 +184,11 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6 {
     bottom: 300px;
     z-index: 9;
     transition: 0.5s ease-out;
-    padding: 20px 30px;
     opacity: 0;
+    border: 1px solid #ddd;
 }
 .product-item:hover .cart-concern {
-    bottom: 280px;
+    bottom: 80px;
     opacity: 1;
 }
 i.icon.icon-arrow-io {
@@ -225,6 +215,7 @@ i.icon.icon-arrow-io {
     font-size: 1.4em;
     margin: 0;
 }
-.product-item .item-price {
-    font-size: 1.8em;
+
+.product-detail{
+  padding: 5px;
 }

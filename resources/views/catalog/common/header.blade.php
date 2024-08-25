@@ -1,12 +1,11 @@
-<nav class="p-1 sticky-top" style="background:#0f0f7a;margin-top: -1px;">
+<nav class="p-1 sticky-top" style="background:#ff006f;margin-top: -1px;">
     <div class="container">
         <div class="row">
-            <div class="col-6 col-md-3">
-                {{-- <h2 class="text-white">B2B</h2> --}}
-                <a href="/"><img height="80" width="150" src="{{ URL::asset('image/logo.png') }}" alt="ez lifestyle"></a>
+            <div class="col-6">
+                <a href="/"><img height="80" width="150" src="{{ URL::asset('image/logo.png') }}" alt="ez lifestyle" class="d-block d-md-none"></a>
             </div>
-            <div class="col-6 col-md-9">
-                <div class="mt-3 nav_desktop nav_mobile_view">
+            <div class="col-6 col-md-12">
+                <div class="nav_desktop nav_mobile_view">
                     <ul class="list-unstyled text-white d-flex justify-content-center mb-0">
                         <li class="px-3 fs-5 navbar_items"><a class="text-decoration-none text-white" href="/">Home</a></li>
                         <li class="px-3 fs-5 navbar_items"><a class="text-decoration-none text-white" href="#">Our Story</a></li>

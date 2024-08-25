@@ -18,8 +18,6 @@ class HomeController extends Controller
 
         $data['banners'] = DB::table('banners')->where('status', 1)->orderBy('sort','asc')->get();
 
-        $data['x'] = 10;
-
         return view('catalog.index', $data);
     }
 }
