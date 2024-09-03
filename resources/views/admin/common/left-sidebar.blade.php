@@ -8,6 +8,8 @@
                 <div class="dropdown-container" id="dropdown-column_left-1">
                     <a class="text-decoration-none text-white d-block" style="padding-left:3rem !important" href="{{ route('category') }}"><i class="fa-solid fa-angles-right"></i> Categoreis</a>
                     <a class="text-decoration-none text-white d-block" style="padding-left:3rem !important" href="{{ route('admin-storefront-product') }}"><i class="fa-solid fa-angles-right"></i> Products</a>
+                    <a class="text-decoration-none text-white d-block" style="padding-left:3rem !important" href="{{ route('colors') }}"><i class="fa-solid fa-angles-right"></i> Colors</a>
+                    <a class="text-decoration-none text-white d-block" style="padding-left:3rem !important" href="{{ route('size') }}"><i class="fa-solid fa-angles-right"></i> Size</a>
                 </div>
             </li>
             <li>

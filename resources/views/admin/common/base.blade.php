@@ -27,7 +27,7 @@
     <script src="https://cdn.datatables.net/2.0.5/js/dataTables.js"></script>
     <!-- summernote -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs5.min.css" rel="stylesheet">
-    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs5.min.js"></script>
     <!-- Select Multilevel -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/css/selectize.default.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/js/standalone/selectize.min.js"></script>   
@@ -45,7 +45,7 @@
         const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
         const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
-        // summernote 
+        // start summernote 
         $(document).ready(function() {
             $('#summernote').summernote({
             height: 300,
@@ -70,6 +70,15 @@
             });
         });
 
+        $(document).ready(function() {
+            $('.summernote').summernote();
+            var noteBar = $('.note-toolbar');
+            noteBar.find('[data-toggle]').each(function() {
+                $(this).attr('data-bs-toggle', $(this).attr('data-toggle')).removeAttr('data-toggle');
+            });
+        });
+        // end summernote
+
        // Select Multilevel 
        $(document).ready(function(){
             $("#category-dropdown").selectize({
@@ -84,6 +93,7 @@
                 }
             });
         });
+        // end Select Multilevel 
     </script>
 </body>
 </html>

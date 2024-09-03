@@ -98,7 +98,7 @@ class Product extends Model
         foreach ($images as $image) {
             if($image){
                 $imageName = $image->image;
-                $imagePath = public_path('image/uploads/') . $imageName;
+                $imagePath = public_path('image/products/') . $imageName;
                 if (file_exists($imagePath)) {
                     unlink($imagePath);
                 }

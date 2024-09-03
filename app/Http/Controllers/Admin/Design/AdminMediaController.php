@@ -27,7 +27,7 @@ class AdminMediaController extends Controller
 
     public function uploadFile(Request $request){
          
-        $folderPath = public_path('image/uploads');
+        $folderPath = public_path('image/products');
         if (!file_exists($folderPath)) {
             mkdir($folderPath, 0777, true);
         }
@@ -37,11 +37,11 @@ class AdminMediaController extends Controller
             
             foreach ($files as $key => $file) {               
                 $imageName = $file->getClientOriginalName();
-                $imagePath = public_path('image/uploads/') . $imageName ;
+                $imagePath = public_path('image/products/') . $imageName ;
     
                 if (!file_exists($imagePath)) {
                     // Move the file to the desired location
-                    $file->move(public_path('image/uploads'), $imageName);
+                    $file->move(public_path('image/products'), $imageName);
                 }
             }
             $array = [
@@ -58,7 +58,7 @@ class AdminMediaController extends Controller
     }
 
     public function getFiles(){
-        $folderPath = public_path('image/uploads');
+        $folderPath = public_path('image/products');
 
         if (!file_exists($folderPath)) {
             return response()->json(['error' => 'Directory does not exist'], 404);
@@ -72,7 +72,7 @@ class AdminMediaController extends Controller
 
         foreach ($directory as $file) {
             if(is_file($folderPath .'/'. $file)){
-                $filename = URL::to('image/uploads/'.$file);
+                $filename = URL::to('image/products/'.$file);
                 $arr1 = [
                     'href' => $filename,
                     'text' => $file
@@ -80,7 +80,7 @@ class AdminMediaController extends Controller
                 array_push( $files, $arr1);
             }
             if(is_dir($folderPath .'/'. $file)){
-                $foldername = URL::to('image/uploads/'.$file);
+                $foldername = URL::to('image/products/'.$file);
                 $arr2 = [
                     'href' =>  $foldername,
                     'text' => $file
@@ -99,7 +99,7 @@ class AdminMediaController extends Controller
 
     public function createFolder(Request $request){
         $folderName = $request->request->get('folder_name');
-        $folderPath = public_path('image/uploads');
+        $folderPath = public_path('image/products');
         $new_folder = $folderPath .'/'. $folderName;
 
         if (!file_exists($folderPath)) {
@@ -119,7 +119,7 @@ class AdminMediaController extends Controller
 
     // delete files
     public function delete(Request $request){
-        $folderPath = public_path('image/uploads');
+        $folderPath = public_path('image/products');
         $files = $request->input('files', []);
         if (!empty($files)) {
             $fileUrls = explode(',', $files[0]);

@@ -72,6 +72,9 @@
                                 <button class="nav-link" id="image-tab" data-bs-toggle="tab" data-bs-target="#image" type="button" role="tab" aria-controls="image" aria-selected="false">Image</button>
                             </li>
                             <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="variation-tab" data-bs-toggle="tab" data-bs-target="#variation" type="button" role="tab" aria-controls="variation" aria-selected="false">Variations</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="other-link-tab" data-bs-toggle="tab" data-bs-target="#other-link" type="button" role="tab" aria-controls="other-link" aria-selected="false">Other Link</button>
                             </li>
                         </ul>
@@ -168,7 +171,7 @@
                                                 </span>
                                             </div>
                                         </div>
-                                        <div class="row mb-4">
+                                        {{-- <div class="row mb-4">
                                             <div class="col-2 text-end">
                                                 <label for="upc">UPC</label>
                                             </div>
@@ -212,7 +215,7 @@
                                                 <input type="text" id="mpn" name="mpn" class="form-control p-2" value="{{ isset($product) ? $product['product']->mpn : old('mpn') }}" placeholder="mpn">
                                                 <span class="form-text">Manufacturer Part Number</span>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                     </section>
                                     <!-- Stock -->
                                     <section class="stock">
@@ -561,7 +564,7 @@
                                         <div class="d-flex justify-content-between align-items-center mb-4">
                                             <div class="col-sm-4 col-md-3">
                                                 <div class="card p-2" style="width: 12rem">
-                                                    <img src="{{ isset($product['product']->image) ? asset("image/uploads").'/'.($product['product']->image) : asset('image/not-image-available.png')}}" alt="Product Image" class="card-img-top" id="productReviewImage">
+                                                    <img src="{{ isset($product['product']->image) ? asset("image/cache/products").'/'.($product['product']->product_id .'/'. str_replace(".jpg",'',$product['product']->image) .'_300x300.jpg') : asset('image/not-image-available.png')}}" alt="Product Image" class="card-img-top" id="productReviewImage">
                                                     <input type="file" name="image" id="productImageUpload" accept="image/*" style="display: none;" onchange="productPreviewImage(event)">
                                                     <div class="card-body text-center mt-2"> 
                                                         <button type="button" class="btn btn-primary fs-5 px-3" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit" onclick="productTriggerFileUpload()"><i class="fa-solid fa-pencil"></i></button>
@@ -589,7 +592,7 @@
                                                             <td>
                                                                 <div class="col-sm-4 col-md-3">
                                                                     <div class="card p-2" style="width: 12rem">
-                                                                        <img src="{{ isset($image->image) ? asset("image/uploads").'/'.($image->image) : asset('image/not-image-available.png')}}" alt="Product Image" class="card-img-top" id="imagePreview_{{$i}}">
+                                                                        <img src="{{ isset($image->image) ? asset("image/cache/products").'/'.($product['product']->product_id .'/'. str_replace(".jpg",'',$product['product']->image) .'_300x300.jpg') : asset('image/not-image-available.png')}}" alt="Product Image" class="card-img-top" id="imagePreview_{{$i}}">
                                                                         <input type="file" class="product_images" name="product_image[{{$i}}][image]" id="imageUpload_{{$i}}" accept="image/*" style="display: none;" onchange="previewImage(event, {{$i}})">
                                                                         <div class="card-body text-center mt-2"> 
                                                                             <button type="button" class="btn btn-primary fs-5 px-3" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit" onclick="triggerFileUpload({{$i}})"><i class="fa-solid fa-pencil"></i></button>
@@ -617,6 +620,13 @@
                                                 </tr>
                                             </tfoot>
                                         </table>
+                                    </div>
+                                </div>
+                                <!-- Variations -->
+                                <div class="tab-pane fade show" id="variation" role="tabpanel" aria-labelledby="variation-tab">
+                                    <div class="mt-4"></div>
+                                    <div class="col-sm-12 mb-4">
+                                        jhbjhjjjj
                                     </div>
                                 </div>
                                 <!-- Other Link -->

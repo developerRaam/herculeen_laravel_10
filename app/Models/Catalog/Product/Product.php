@@ -16,9 +16,10 @@ class Product extends Model
         // products
         $product = DB::table('products')
                     ->leftJoin('product_prices', 'products.id', '=', 'product_prices.product_id')
+                    ->select('products.*', 'product_prices.list_price','product_prices.mrp')
                     ->where('products.id', $product_id)->first();
 
-        $images = DB::table('product_images')->where('product_id', $product->id)->get();
+        $images = DB::table('product_images')->where('product_id', $product_id)->get();
 
         $data['product'] = $product;
         $data['images'] = $images;

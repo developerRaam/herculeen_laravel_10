@@ -74,7 +74,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row g-4" id="getAllUploads"></div>                                
+                                <div class="row g-4" id="getAllproducts"></div>                                
                             </div>
                         </div>
                     </div>
@@ -134,12 +134,12 @@
         }
 
         function getFiles(){
-            let getAllUploads = document.getElementById('getAllUploads');
+            let getAllproducts = document.getElementById('getAllproducts');
             $.ajax({
                 url: "/admin/media/getFiles",
                 type: "get",
                 success: function (response) {
-                    getAllUploads.innerHTML = '';
+                    getAllproducts.innerHTML = '';
                     if(response.folders){
                         let files = response.folders;
                         files.forEach(element => {
@@ -151,7 +151,7 @@
                                 html += '</a>';              
                                 html += '</div>';
                                 html += '</div>';
-                            getAllUploads.innerHTML += html;
+                            getAllproducts.innerHTML += html;
                        });
                     }
                     if(response.files){
@@ -166,7 +166,7 @@
                                 html += '</a>';              
                                 html += '</div>';
                                 html += '</div>';
-                            getAllUploads.innerHTML += html;
+                            getAllproducts.innerHTML += html;
                        });
                     }
                 },

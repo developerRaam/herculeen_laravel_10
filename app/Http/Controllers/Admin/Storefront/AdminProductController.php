@@ -21,6 +21,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 
+// create new manager instance with desired driver
+use Intervention\Image\ImageManager;
+
 class AdminProductController extends Controller
 {
     public function index(Request $request)
@@ -147,20 +150,6 @@ class AdminProductController extends Controller
             // Inserting a new product using the save method
             if (null !== $data->get('product_name') || null !== $data->get('model')) {
 
-                // Upload product image
-                $file = $request->file('image'); // get files
-                if(null !== $file){
-                    $folderPath = public_path('image/uploads');
-                    if (!file_exists($folderPath)) {
-                        mkdir($folderPath, 0777, true);
-                    }
-                    $imageName = time() . '_' . $file->getClientOriginalName();
-                    $imagePath = public_path('image/uploads/') . $imageName;
-                    if (!file_exists($imagePath)) {
-                        $file->move(public_path('image/uploads/'), $imageName);
-                    }
-                }
-
                 $product = new Product();
                 $product->product_name = $data->get('product_name') ?? '';
                 $product->product_description = $data->get('description') ?? '';
@@ -198,6 +187,48 @@ class AdminProductController extends Controller
             $product_id = $product->id;
 
             if (isset($product_id)) {
+
+                // Upload product image
+                $file = $request->file('image'); // get files
+                if(null !== $file){
+                    $folderPath = public_path('image/products');
+                    if (!file_exists($folderPath)) {
+                        mkdir($folderPath, 0777, true);
+                    }
+                    if(!file_exists($folderPath.'/'.$product_id)){
+                        mkdir($folderPath.'/'.$product_id, 0777, true);
+                    }
+                    $imageName = time() . '_' . Str::uuid();
+                    $mimeType = '.jpg';
+                    $imagePath = public_path('image/products/'.$product_id.'/') . $imageName . $mimeType;
+                    if (!file_exists($imagePath)) {
+                        $file->move(public_path('image/products/'.$product_id.'/'), $imageName . $mimeType);
+                    }
+                    
+                    // image cache
+                    $cachePath = public_path('image/cache/products');
+                    if(!file_exists($cachePath.'/'.$product_id)){
+                        mkdir($cachePath.'/'.$product_id, 0777, true);
+                    }
+                    $imageManager = ImageManager::imagick()->read($imagePath);
+                    $imageCachePath = public_path('image/cache/products/'.$product_id.'/') . $imageName . $mimeType;
+                    if(!file_exists($imageCachePath)){
+                        $size = [500,300,100];
+                        for ($i=0; $i < count($size); $i++) { 
+                            // resize to 300 x 200 pixel
+                            $imageManager->scaleDown(height:$size[$i]);
+                            $imageManager->save(public_path('image/cache/products/'.$product_id.'/'. $imageName .'_'. $size[$i] .'x'. $size[$i] . $mimeType));
+                        }
+
+                    }
+                    // End Upload product image
+                }
+
+                // upload product image
+                $product_update = Product::where('id', $product_id)->first();
+                $product_update->image = $imageName . $mimeType ?? null;
+                $product_update->update();
+
                 // product to category
                 if (null !== $request->input('category_ids')) {
                     foreach($request->input('category_ids', []) as $category_id) {
@@ -269,24 +300,45 @@ class AdminProductController extends Controller
                 // Product additional Image
                 if ($request->file('product_image') != null) {
 
-                    $folderPath = public_path('image/uploads');
+                    $folderPath = public_path('image/products');
                     if (!file_exists($folderPath)) {
                         mkdir($folderPath, 0777, true);
+                    }
+                    if(!file_exists($folderPath.'/'.$product_id)){
+                        mkdir($folderPath.'/'.$product_id, 0777, true);
                     }
 
                     $files = $request->file('product_image'); // get files
                     foreach ($files as $key => $file) {
-                        $imageName = time() . '_' . $file['image']->getClientOriginalName();
-                        $imagePath = public_path('image/uploads/') . $imageName;
+                        $imageName = time() . '_' . Str::uuid();
+                        $mimeType = '.jpg';
+                        $imagePath = public_path('image/products/'.$product_id.'/') . $imageName . $mimeType;
                         // sort
                         $sort = $request->input('product_image_sort')[$key]['sort'];
                         if (!file_exists($imagePath)) {
-                            $file['image']->move(public_path('image/uploads/'), $imageName);
+                            $file['image']->move(public_path('image/products/'.$product_id.'/'), $imageName . $mimeType);
                             $image = new ProductImage();
                             $image->product_id = $product_id;
-                            $image->image = $imageName;
+                            $image->image = $imageName . $mimeType;
                             $image->sort = $sort;
                             $image->save();
+                        }
+
+                        // image cache
+                        $cachePath = public_path('image/cache/products');
+                        if(!file_exists($cachePath.'/'.$product_id)){
+                            mkdir($cachePath.'/'.$product_id, 0777, true);
+                        }
+                        $imageManager = ImageManager::imagick()->read($imagePath);
+                        $imageCachePath = public_path('image/cache/products/'.$product_id.'/') . $imageName . $mimeType;
+                        if(!file_exists($imageCachePath)){
+                            $size = [500,300,100];
+                            for ($i=0; $i < count($size); $i++) { 
+                                // resize to 300 x 200 pixel
+                                $imageManager->scaleDown(height:$size[$i]);
+                                $imageManager->save(public_path('image/cache/products/'.$product_id.'/'. $imageName .'_'. $size[$i] .'x'. $size[$i] . $mimeType));
+                            }
+
                         }
                     }
                 }
@@ -332,13 +384,11 @@ class AdminProductController extends Controller
         $data['back'] = URL::to('/admin/storefront/product');
         $data['save'] = URL::to('/admin/storefront/product-save');       
 
-        $data['product'] = Product::getProduct($product_id);   
+        $data['product'] = Product::getProduct($product_id);
 
         $data['categories'] = Category::getCategory(); 
 
         $data['getProductCategory'] = ProductCategory::getProductCategory($product_id);
-
-        // dd($data['categories']);
 
         return view('admin/storefront/product_form', $data);
     }
@@ -384,21 +434,60 @@ class AdminProductController extends Controller
             if (!empty($product_id)) {
                 if (null !== $data->get('product_name') || null !== $data->get('model')) {
 
+                    $product = Product::where('id', $product_id)->first();
+
                     // Upload product image
                     $file = $request->file('image'); // get files
                     if(null !== $file){
-                        $folderPath = public_path('image/uploads');
+                        $folderPath = public_path('image/products');
                         if (!file_exists($folderPath)) {
                             mkdir($folderPath, 0777, true);
                         }
-                        $imageName = time() . '_' . $file->getClientOriginalName();
-                        $imagePath = public_path('image/uploads/') . $imageName;
+                        if(!file_exists($folderPath.'/'.$product_id)){
+                            mkdir($folderPath.'/'.$product_id, 0777, true);
+                        }
+                        $imageName = time() . '_' . Str::uuid();
+                        $mimeType = '.jpg';
+
+                        // remove image before update
+                        $image_name = isset($product->image) ? $product->image : null;
+                        if($image_name){
+                            if(file_exists(public_path('image/products/'.$product_id.'/') . $image_name)){
+                                unlink(public_path('image/products/'.$product_id.'/') . $image_name);
+                                $image_replace = str_replace(".jpg",'',$image_name);
+                                $size = [500,300,100];
+                                for ($i=0; $i < count($size); $i++) {
+                                    if(public_path('image/cache/products/'.$product_id.'/') . $image_replace .'_'. $size[$i] .'x'. $size[$i] . $mimeType){
+                                        unlink(public_path('image/cache/products/'.$product_id.'/') . $image_replace .'_'. $size[$i] .'x'. $size[$i] . $mimeType);
+                                    }
+                                }
+                            }
+                        }
+
+                        $imagePath = public_path('image/products/'.$product_id.'/') . $imageName . $mimeType;
                         if (!file_exists($imagePath)) {
-                            $file->move(public_path('image/uploads/'), $imageName);
+                            $file->move(public_path('image/products/'.$product_id.'/'), $imageName . $mimeType);
+                        }
+
+                        // image cache
+                        $cachePath = public_path('image/cache/products');
+                        if(!file_exists($cachePath.'/'.$product_id)){
+                            mkdir($cachePath.'/'.$product_id, 0777, true);
+                        }
+                        $imageManager = ImageManager::imagick()->read($imagePath);
+                        $imageCachePath = public_path('image/cache/products/'.$product_id.'/') . $imageName . $mimeType;
+                        if(!file_exists($imageCachePath)){
+                            $size = [500,300,100];
+                            for ($i=0; $i < count($size); $i++) { 
+                                // resize to 300 x 200 pixel
+                                $imageManager->scaleDown(height:$size[$i]);
+                                $imageManager->save(public_path('image/cache/products/'.$product_id.'/'. $imageName .'_'. $size[$i] .'x'. $size[$i] . $mimeType));
+                            }
+
                         }
                     }
+                    // end Upload product image
 
-                    $product = Product::where('id', $product_id)->first();
                     $product->product_name = $data->get('product_name') ?? '';
                     $product->product_description = $data->get('description') ?? '';
                     $product->tag = $data->get('product_tag') ?? '';
@@ -424,7 +513,7 @@ class AdminProductController extends Controller
                     $product->length_class_id = $data->get('length_class_id') ?? null;
                     $product->weight = $data->get('weight') ?? '';
                     $product->weight_class_id = $data->get('weight_class_id') ?? null;
-                    isset($imageName) ? $product->image = $imageName : null;
+                    isset($imageName) ? $product->image = $imageName . $mimeType : null;
                     $product->slug = Str::slug($data->get('product_name'));
                     $product->status = true;
                     $product->sort_order = (int)$data->get('sort_order') ?? '';
@@ -516,19 +605,22 @@ class AdminProductController extends Controller
                 // Product Image
                 if ($request->file('product_image') != null) {
 
-                    $folderPath = public_path('image/uploads');
+                    $folderPath = public_path('image/products');
                     if (!file_exists($folderPath)) {
                         mkdir($folderPath, 0777, true);
+                    }
+                    if(!file_exists($folderPath.'/'.$product_id)){
+                        mkdir($folderPath.'/'.$product_id, 0777, true);
                     }
 
                     $files = $request->file('product_image'); // get files
                     foreach ($files as $key => $file) {
                         $imageName = time() . '_' . $file['image']->getClientOriginalName();
-                        $imagePath = public_path('image/uploads/') . $imageName;
+                        $imagePath = public_path('image/products/'.'/'.$product_id.'/') . $imageName;
                         // sort
                         $sort = $request->input('product_image_sort')[$key]['sort'];
 
-                        $file['image']->move(public_path('image/uploads/'), $imageName);
+                        $file['image']->move(public_path('image/products/'.'/'.$product_id.'/'), $imageName);
 
                         $image = ProductImage::where('product_id', $product_id)->first();
                        

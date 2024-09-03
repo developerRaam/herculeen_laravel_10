@@ -25,7 +25,6 @@ return new class extends Migration
             $table->string('firstname')->nullable();
             $table->timestamps();
             
- 			// company	address_1	address_2	city	postcode	country_id	zone_id	custom_field	default
         });
     }
 

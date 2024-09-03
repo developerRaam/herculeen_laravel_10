@@ -16,6 +16,8 @@ use App\Http\Controllers\admin\AdminDemoDataTableController;
 use App\Http\Controllers\Admin\Design\AdminMediaController;
 use App\Http\Controllers\Admin\Storefront\AdminProductController;
 use App\Http\Controllers\Admin\Storefront\AdminCategoryController;
+use App\Http\Controllers\Admin\Storefront\ColorController;
+use App\Http\Controllers\Admin\Storefront\SizeController;
 
 
 // Catalog
@@ -60,6 +62,20 @@ Route::middleware(['AdminMiddlewareLogin'])->prefix('admin/storefront')->group(f
     Route::get('category-edit/category_id={category_id}', [AdminCategoryController::class, 'edit'])->name('edit-category');
     Route::post('category-update/category_id={category_id}', [AdminCategoryController::class, 'update'])->name('update-category');
     Route::get('category-delete/category_id={category_id}', [AdminCategoryController::class, 'delete'])->name('delete-category');
+
+    Route::get('color/', [ColorController::class, 'index'])->name('colors');
+    Route::get('color-form',[ColorController::class, 'form']);
+    Route::post('color-save',[ColorController::class, 'save'])->name('save-color');
+    Route::get('color-edit/color_id={color_id}',[ColorController::class, 'edit'])->name('edit-color');
+    Route::post('color-update/color_id={color_id}',[ColorController::class, 'update'])->name('update-color');
+    Route::post('color-delete/color_id={color_id}',[ColorController::class, 'delete'])->name('delete-color');
+
+    Route::get('size/', [SizeController::class, 'index'])->name('size');
+    Route::get('size-form',[SizeController::class, 'form']);
+    Route::post('size-save',[SizeController::class, 'save'])->name('save-size');
+    Route::get('size-edit/size_id={size_id}',[SizeController::class, 'edit'])->name('edit-size');
+    Route::post('size-update/size_id={size_id}',[SizeController::class, 'update'])->name('update-size');
+    Route::post('size-delete/size_id={size_id}',[SizeController::class, 'delete'])->name('delete-size');
 });
 
 Route::get('/admin/media', [AdminMediaController::class, 'index'])->name('admin-media')->middleware('AdminMiddlewareLogin');

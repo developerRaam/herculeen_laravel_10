@@ -14,12 +14,12 @@
                     @if ($product['images'])
                         <div class="col-sm-2 text-center">
                             @foreach ($product['images'] as $image)
-                                <img class="mb-3 product_side_image" data-id="1" height="100" src="{{ asset('image/uploads/').'/'.($image->image) }}">
+                                <img class="mb-3 product_side_image" data-id="1" width="70" height="70" src="{{ asset("image/cache/products").'/'.($product['product']->id .'/'. str_replace(".jpg",'',$image->image) .'_100x100.jpg') }}" data-src="{{ asset("image/products").'/'.($product['product']->id .'/'. $image->image) }}">
                             @endforeach
                         </div>
                     @endif
                     <div class="col-sm-10 text-center product overflow-hidden">
-                        <img class="mb-3 product_image" src="{{ ($product['product']->image) ? asset("image/uploads").'/'.($product['product']->image) : asset('image/not-image-available.png')}}" style="max-height: 550px">
+                        <img class="mb-3 product_image" src="{{ ($product['product']->image) ? asset("image/products").'/'.($product['product']->id .'/'.$product['product']->image) : asset('image/not-image-available.png')}}" style="max-height: 550px">
                     </div>
                 </div>
             </div>
@@ -108,7 +108,7 @@
     const product_side_images = document.querySelectorAll('.product_side_image');
     product_side_images.forEach(side_image => {
         side_image.addEventListener('mouseover', () => {
-            document.querySelector('.product_image').src = side_image.src
+            document.querySelector('.product_image').src = side_image.getAttribute('data-src');
         });
     });
 
