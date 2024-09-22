@@ -2,14 +2,22 @@
     <div class="container">
         <div class="row">
             <div class="col-6">
-                <a href="/"><img height="80" width="150" src="{{ URL::asset('image/logo.png') }}" alt="ez lifestyle" class="d-block d-md-none"></a>
+                <a href="/"><img height="80" width="150" src="{{ URL::asset('image/setting/site') .'/'. app('settings')['site_logo'] }}" alt="ez lifestyle" class="d-block d-md-none"></a>
             </div>
             <div class="col-6 col-md-12">
                 <div class="nav_desktop nav_mobile_view">
                     <ul class="list-unstyled text-white d-flex justify-content-center mb-0">
-                        <li class="px-3 fs-5 navbar_items"><a class="text-decoration-none text-white" href="/">Home</a></li>
-                        <li class="px-3 fs-5 navbar_items"><a class="text-decoration-none text-white" href="#">Our Story</a></li>
-                        <li class="px-3 fs-5 navbar_items"><a class="text-decoration-none text-white" href="#">Services</a></li>
+                        @foreach ($service_categories as $category)
+                            @if($category->menu_top === 1)
+                                <li class="px-3 fs-5 navbar_items"><a class="text-decoration-none text-white" href="{{ route('catalog.category') .'/'. $category->id .'/'. $category->slug . '?sort=latest' }}">{{ $category->category_name }}</a>
+                                    @if ($category->parent_id == $category->id)
+                                    <ul class="navbar_items-link">
+                                        <li><a href="#">{{ $category->category_name }}</a></li>
+                                    </ul> 
+                                    @endif
+                                </li>
+                            @endif
+                        @endforeach
                         <li class="px-3 fs-5 navbar_items active-link">
                             <a class="text-decoration-none text-white" href="#">Register</a>
                             <ul class="navbar_items-link">
@@ -18,8 +26,6 @@
                                 <li><a href="#">Register As A Wholesaler</a></li>
                             </ul>
                         </li>
-                        <li class="px-3 fs-5 navbar_items"><a class="text-decoration-none text-white" href="#">Blog</a></li>
-                        <li class="px-3 fs-5 navbar_items"><a class="text-decoration-none text-white" href="#">Contact Us</a></li>
                     </ul>
                 </div>
                 <div class="nav_mobile text-end column-left-mobile">

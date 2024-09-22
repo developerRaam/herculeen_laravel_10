@@ -18,6 +18,8 @@ class HomeController extends Controller
 
         $data['banners'] = DB::table('banners')->where('status', 1)->orderBy('sort','asc')->get();
 
+        $data['category_route'] = route('catalog.category') . '?sort=latest';
+
         return view('catalog.index', $data);
     }
 }

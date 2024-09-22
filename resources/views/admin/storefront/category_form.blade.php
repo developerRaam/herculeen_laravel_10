@@ -72,7 +72,7 @@
                                                 $isSelected = isset($categoryPath) && $category->id == $categoryPath->path_id;
                                             @endphp
                                             <option value="{{ $category->id }}" {{ $isSelected ? 'selected' : '' }}>
-                                                {{ $category->full_path }}
+                                                {{-- {{ $category->full_path }} --}}
                                             </option>
                                         @endforeach
                                     </select> 
@@ -151,12 +151,27 @@
 
                             <div class="row mb-4">
                                 <div class="col-2 text-end">
+                                    <label for="menu_top">Menu Top</label>
+                                </div>
+                                <div class="col-10 form-check form-switch">
+                                    <input class="form-check-input fs-3 m-0" id="menu_top" name="menu_top" type="checkbox" role="switch" {{ isset($category) && property_exists($category, 'menu_top') ? (($category->menu_top) ? 'checked': '') : old('menu_top') }}  >
+                                </div>
+                            </div>
+
+                            <div class="row mb-4">
+                                <div class="col-2 text-end">
                                     <label for="status">Status</label>
                                 </div>
                                 <div class="col-10 form-check form-switch">
-                                    <input class="form-check-input fs-3 m-0" id="status" name="status" type="checkbox" role="switch"  {{ isset($category) && property_exists($category, 'status') ? (($category->status) ? 'checked': '') : old('sort_order') }} >
+                                    {{$category->status}}
+                                    <input type="hidden" name="status" value="0">
+                                    <input class="form-check-input fs-3 m-0" id="status" name="status" type="checkbox" role="switch" value="1" {{ isset($category) && property_exists($category, 'status') ? (($category->status) ? 'checked': '') : old('status') }}>
                                 </div>
                             </div>
+
+                            @foreach ($category as $key =>  $item)
+                                {{$key .'='. $item}}
+                            @endforeach
 
                         </form>
                     </div>

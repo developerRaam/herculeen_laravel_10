@@ -20,7 +20,7 @@
     <div class="container">
         <div class="row">
            <div class="col-sm-3">
-            <a href="/"><img height="80" width="150" src="{{ URL::asset('image/logo.png') }}" alt="ez lifestyle"></a>
+            <a href="/"><img height="80" width="150" src="{{ URL::asset('image/setting/site') .'/'. app('settings')['site_logo'] }}" alt="ez lifestyle"></a>
            </div>
            <div class="col-sm-6">
             <div class="h-100 d-flex align-items-center">

@@ -16,13 +16,6 @@ return new class extends Migration
             $table->integer('customer_id')->nullable();
             $table->string('firstname')->nullable();
             $table->string('lastname')->nullable();
-            $table->string('firstname')->nullable();
-            $table->string('firstname')->nullable();
-            $table->string('firstname')->nullable();
-            $table->string('firstname')->nullable();
-            $table->string('firstname')->nullable();
-            $table->string('firstname')->nullable();
-            $table->string('firstname')->nullable();
             $table->timestamps();
             
         });

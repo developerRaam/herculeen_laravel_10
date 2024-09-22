@@ -5,24 +5,29 @@ use Illuminate\Support\Facades\Route;
 // Catalog
 use App\Http\Controllers\Catalog\HomeController;
 use App\Http\Controllers\Catalog\Product\ProductController;
+use App\Http\Controllers\Catalog\Product\CategoryController;
 
 //admin
 use App\Http\Controllers\Admin\Common\AdminLoginController;
 use App\Http\Controllers\Admin\Common\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminContactController;
 use App\Http\Controllers\Admin\Setting\SettingController;
+use App\Http\Controllers\Admin\Setting\EcommerceLinkController;
 use App\Http\Controllers\Admin\Design\BannerController;
 use App\Http\Controllers\admin\AdminDemoDataTableController;
 use App\Http\Controllers\Admin\Design\AdminMediaController;
+use App\Http\Controllers\Admin\Setting\SiteController;
 use App\Http\Controllers\Admin\Storefront\AdminProductController;
 use App\Http\Controllers\Admin\Storefront\AdminCategoryController;
 use App\Http\Controllers\Admin\Storefront\ColorController;
 use App\Http\Controllers\Admin\Storefront\SizeController;
 
-
 // Catalog
-Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/product/{product_id}/{slug?}', [ProductController::class, 'productDetail'])->name('product-detail');
+Route::name('catalog.')->group(function () {
+    Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::get('/product/{product_id}/{slug?}', [ProductController::class, 'productDetail'])->name('product-detail');
+    Route::get('/category/{category_id?}/{category_slug?}', [CategoryController::class, 'index'])->name('category');
+});
 
 // Admin
 Route::get('/admin', function () {
@@ -37,8 +42,13 @@ Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name
 Route::get('/admin/contact-us', [AdminContactController::class, 'index'])->name('admin-contact')->middleware('AdminMiddlewareLogin');
 Route::post('/admin/contact-us', [AdminContactController::class, 'saveContact'])->name('admin-contact')->middleware('AdminMiddlewareLogin');
 
-Route::get('/admin/setting', [SettingController::class, 'index'])->name('admin-setting')->middleware('AdminMiddlewareLogin');
-Route::post('/admin/setting', [SettingController::class, 'saveSetting'])->name('admin-setting')->middleware('AdminMiddlewareLogin');
+Route::middleware(['AdminMiddlewareLogin'])->prefix('admin/setting')->group(function () {
+    Route::get('/', [SettingController::class, 'index'])->name('admin-setting');
+    Route::get('/ecommerce-links', [EcommerceLinkController::class, 'index'])->name('ecommerce-links');
+    Route::post('/ecommerce-links-save', [EcommerceLinkController::class, 'save'])->name('ecommerce-links-save');
+    Route::get('/site', [SiteController::class, 'index'])->name('site');
+    Route::post('/site-save', [SiteController::class, 'save'])->name('site-save');
+});
 
 Route::get('/admin/banner', [BannerController::class, 'index'])->name('admin-banner')->middleware('AdminMiddlewareLogin');
 Route::post('/admin/banner', [BannerController::class, 'saveBanner'])->name('admin-banner')->middleware('AdminMiddlewareLogin');

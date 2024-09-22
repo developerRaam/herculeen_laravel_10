@@ -219,3 +219,71 @@ i.icon.icon-arrow-io {
 .product-detail{
   padding: 5px;
 }
+
+.truncate-lines {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* height: 2.6em; */
+}
+
+/* ===================  Select 2  ===================*/
+   /* Custom select box */
+   .custom-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 5px 100px 5px 15px;
+    font-size: 16px;
+    color: #333;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    position: relative;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%23777777" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5H7z"/></svg>'); /* Down Arrow */
+    background-position: right 10px center;
+    background-repeat: no-repeat;
+    background-size: 20px;
+}
+
+.custom-select:hover {
+    background-color: #eaeaea;
+    border-color: #888;
+}
+
+.custom-select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Make it responsive */
+@media screen and (max-width: 768px) {
+    .custom-select {
+        width: 100%;
+        font-size: 14px;
+        padding: 8px 40px 8px 15px;
+    }
+}
+
+.select2-container .select2-selection--single {
+   height: 35px; /* Desired height */
+}
+/* Increase height of the Select2 dropdown itself */
+.select2-dropdown {
+    max-height: 5 00px; /* Adjust the max height for the dropdown */
+    overflow-y: auto;  /* Enable scroll if needed */
+}
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 36px;
+}
+.select2-container--default .select2-results>.select2-results__options {
+    max-height: 400px !important;
+    overflow-y: auto !important;
+}
+
+/* ================ End Select 2 =========================*/

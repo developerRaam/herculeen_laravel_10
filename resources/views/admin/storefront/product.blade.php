@@ -49,6 +49,7 @@
                                     <th>Model</th>
                                     <th>Price</th>
                                     <th>Quantity</th>
+                                    <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -61,6 +62,7 @@
                                         <td>{{$product->model}}</td>
                                         <td>Rs.{{ number_format($product->list_price,2) }}</td>
                                         <td>{{$product->quantity}}</td>
+                                        <td> @if($product->status) <span class="bg-success rounded p-1 text-white">Enabled</span> @else <span class="bg-warning rounded p-1">Disabled</span> @endif </td>
                                         <td>
                                             <a class="btn btn-primary" href="{{ route('admin-product-edit', ['product_id' => $product->product_id]) }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit"><i class="fa-solid fa-pencil"></i></a>
                                             <a class="btn btn-danger" href="{{ route('admin-product-delete', ['product_id' => $product->product_id]) }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete"><i class="fa-solid fa-trash"></i></a>

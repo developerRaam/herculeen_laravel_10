@@ -74,9 +74,13 @@
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="variation-tab" data-bs-toggle="tab" data-bs-target="#variation" type="button" role="tab" aria-controls="variation" aria-selected="false">Variations</button>
                             </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="other-link-tab" data-bs-toggle="tab" data-bs-target="#other-link" type="button" role="tab" aria-controls="other-link" aria-selected="false">Other Link</button>
-                            </li>
+                            @isset(app('settings')['ecommerce_other_url_status'])
+                                @if (app('settings')['ecommerce_other_url_status'])
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="other-link-tab" data-bs-toggle="tab" data-bs-target="#other-link" type="button" role="tab" aria-controls="other-link" aria-selected="false">Other Link</button>
+                                    </li>  
+                                @endif
+                            @endisset
                         </ul>
                         <!-- Tab content -->
                         <form action="{{ $action }}" id="saveForm" method="post" enctype="multipart/form-data">
@@ -129,7 +133,7 @@
                                                 <label for="product_tag">Product Tags</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="text" id="product_tag" name="product_tag" class="form-control p-2" value="{{  old('product_tag') }}" placeholder="Product Tags">
+                                                <input type="text" id="product_tag" name="product_tag" class="form-control p-2" value="{{ isset($product) ? $product['product']->tag : old('product_tag') }}" placeholder="Product Tags">
                                             </div>
                                         </div>
                                     </div>
@@ -332,7 +336,8 @@
                                                 <label for="status">Status</label>
                                             </div>
                                             <div class="col-10 form-check form-switch">
-                                                <input class="form-check-input fs-3 m-0" id="status" name="status" type="checkbox" role="switch">
+                                                <input type="hidden" name="status" value="0">
+                                                <input class="form-check-input fs-3 m-0" id="status" name="status" type="checkbox" role="switch" value="1" @isset($product) ? @if($product['product']->status) checked @endif @endisset >
                                             </div>
                                         </div>
                                         <div class="row mb-4">
@@ -635,13 +640,10 @@
                                     <h4>Other E-commerce URL</h4><hr>
                                     <div class="row mb-4">
                                         <div class="col-2 text-end">
-                                            <label for="amazon_link">Amazon</label>
+                                            <label for="amazon_url">Amazon</label>
                                         </div>
                                         <div class="col-8">
-                                            <input type="text" id="amazon_link" name="amazon_link" class="form-control p-2" value="{{ old('amazon_link') }}" placeholder="Amazon">
-                                        </div>
-                                        <div class="col-2 form-check form-switch">
-                                            <input class="form-check-input fs-3 ms-3" name="amazon_link_status" type="checkbox" role="switch">
+                                            <input type="text" id="amazon_url" name="amazon_url" class="form-control p-2" value="{{ isset($other_links->amazon) ? $other_links->amazon : old('amazon_url') }}" placeholder="Amazon">
                                         </div>
                                     </div>
                                     <div class="row mb-4">
@@ -649,10 +651,7 @@
                                             <label for="flipkart_url">Flipkart</label>
                                         </div>
                                         <div class="col-8">
-                                            <input type="text" id="flipkart_url" name="flipkart_url" class="form-control p-2" value="{{ old('flipkart_url') }}" placeholder="Flipkart">
-                                        </div>
-                                        <div class="col-2 form-check form-switch">
-                                            <input class="form-check-input fs-3 ms-3" name="flipkart_url_status" type="checkbox" role="switch">
+                                            <input type="text" id="flipkart_url" name="flipkart_url" class="form-control p-2" value="{{ isset($other_links->flipkart) ? $other_links->flipkart : old('flipkart_url') }}" placeholder="Flipkart">
                                         </div>
                                     </div>
                                     <div class="row mb-4">
@@ -660,10 +659,7 @@
                                             <label for="myntra_url">Myntra</label>
                                         </div>
                                         <div class="col-8">
-                                            <input type="text" id="myntra_url" name="myntra_url" class="form-control p-2" value="{{ old('myntra_url') }}" placeholder="Myntra">
-                                        </div>
-                                        <div class="col-2 form-check form-switch">
-                                            <input class="form-check-input fs-3 ms-3" name="myntra_url_status" type="checkbox" role="switch">
+                                            <input type="text" id="myntra_url" name="myntra_url" class="form-control p-2" value="{{ isset($other_links->myntra) ? $other_links->myntra : old('myntra_url') }}" placeholder="Myntra">
                                         </div>
                                     </div>
                                     <div class="row mb-4">
@@ -671,10 +667,7 @@
                                             <label for="ajio_url">Ajio</label>
                                         </div>
                                         <div class="col-8">
-                                            <input type="text" id="ajio_url" name="ajio_url" class="form-control p-2" value="{{ old('ajio_url') }}" placeholder="Ajio">
-                                        </div>
-                                        <div class="col-2 form-check form-switch">
-                                            <input class="form-check-input fs-3 ms-3" name="ajio_url_status" type="checkbox" role="switch">
+                                            <input type="text" id="ajio_url" name="ajio_url" class="form-control p-2" value="{{ isset($other_links->ajio) ? $other_links->ajio : old('ajio_url') }}" placeholder="Ajio">
                                         </div>
                                     </div>
                                     <div class="row mb-4">
@@ -682,10 +675,15 @@
                                             <label for="meesho_url">Meesho</label>
                                         </div>
                                         <div class="col-8">
-                                            <input type="text" id="meesho_url" name="meesho_url" class="form-control p-2" value="{{ old('meesho_url') }}" placeholder="Meesho">
+                                            <input type="text" id="meesho_url" name="meesho_url" class="form-control p-2" value="{{ isset($other_links->meesho) ? $other_links->meesho : old('meesho_url') }}" placeholder="Meesho">
                                         </div>
-                                        <div class="col-2 form-check form-switch">
-                                            <input class="form-check-input fs-3 ms-3" name="meesho_url_status" type="checkbox" role="switch">
+                                    </div>
+                                    <div class="row mb-4">
+                                        <div class="col-2 text-end">
+                                            <label for="status">Status</label>
+                                        </div>
+                                        <div class="col-10 form-check form-switch">
+                                            <input class="form-check-input fs-3 ms-3" name="other_url_status" type="checkbox" {{ isset($other_links) && property_exists($other_links, 'status') ? (($other_links->status) ? 'checked': '') : old('status') }} role="switch" >
                                         </div>
                                     </div>
                                 </div>

@@ -14,10 +14,16 @@ class SettingsSeeder extends Seeder
     public function run(): void
     {
         DB::table('settings')->insert([
-            'logo' => 'default_logo.png',
-            'site_name' => 'Your Site Name',
-            'site_description' => 'Your Site Description',
-            'status' => true,
-        ]);
+        [
+            'code' => 'ecommerce',
+            'key' => 'ecommerce_other_url_status',
+            'value' => 0
+        ],
+        [
+            'code' => 'site',
+            'key' => 'site_logo',
+            'value' => 'logo.png'
+        ]
+    ]);
     }
 }

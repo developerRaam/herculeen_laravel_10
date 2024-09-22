@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\URL;
 use App\Models\Admin\Storefront\Category\Category;
 use App\Models\Admin\Storefront\Category\CategoryPath;
 use Exception;
+use Illuminate\Support\Str;
 
 use App\Providers\SettingProvider;
 
@@ -114,13 +115,15 @@ class AdminCategoryController extends Controller
                 // added new category
                 $category = new Category();
                 $category->category_name = $data->get('category_name');
+                $category->slug = Str::slug($data->get('category_name'));
                 $category->parent_id = $data->get('parent_id') ?? null;
                 $category->description = $data->get('description') ?? '';
                 $category->meta_tag = $data->get('meta_tag') ?? '';
                 $category->image = $imageName ?? null;
                 $category->sort_order = $data->get('sort_order') ?? 0;
                 $category->level = 0;
-                $category->status = ($data->get('status')) ? 1 : 0 ;
+                $category->menu_top = ($data->get('menu_top')) ? 1 : 0 ;
+                $category->status = $data->get('status');
                 $category->created_at = NOW();
                 $category->updated_at = NOW();
                 $category->save();
@@ -165,9 +168,9 @@ class AdminCategoryController extends Controller
 
 
         $data['category'] = Category::getCategory($category_id); 
-        // dd($data['category']);
         $data['categories'] = Category::getCategory(); 
         $data['categoryPath'] = CategoryPath::categoryPath($category_id);
+        // dd($data['category']);
     
         return view('admin/storefront/category_form', $data);
     }
@@ -206,12 +209,14 @@ class AdminCategoryController extends Controller
 
                 if ($category) {
                     $category->category_name = $data->get('category_name');
+                    $category->slug = Str::slug($data->get('category_name'));
                     $category->parent_id = $data->get('parent_id') ?? null;
                     $category->description = $data->get('description') ?? '';
                     $category->meta_tag = $data->get('meta_tag') ?? '';
                     isset($imageName) ? $category->image = $imageName : null;
                     $category->sort_order = $data->get('sort_order') ?? 0;
-                    $category->status = ($data->get('status')) ? 1 : 0;
+                    $category->status = $data->get('status');
+                    $category->menu_top = ($data->get('menu_top')) ? 1 : 0;
                     $category->level = 0;
                     $category->updated_at = NOW();
                     $category->update();

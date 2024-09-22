@@ -178,7 +178,7 @@ class AdminProductController extends Controller
                 $product->weight_class_id = $data->get('weight_class_id') ?? null;
                 $product->image = $imageName ?? null;
                 $product->slug = Str::slug($data->get('product_name'));
-                $product->status = true;
+                $product->status = $data->get('status');
                 $product->sort_order = (int)$data->get('sort_order') ?? '';
                 $product->save();
             }
@@ -213,7 +213,7 @@ class AdminProductController extends Controller
                     $imageManager = ImageManager::imagick()->read($imagePath);
                     $imageCachePath = public_path('image/cache/products/'.$product_id.'/') . $imageName . $mimeType;
                     if(!file_exists($imageCachePath)){
-                        $size = [500,300,100];
+                        $size = [700,500,300,100];
                         for ($i=0; $i < count($size); $i++) { 
                             // resize to 300 x 200 pixel
                             $imageManager->scaleDown(height:$size[$i]);
@@ -332,7 +332,7 @@ class AdminProductController extends Controller
                         $imageManager = ImageManager::imagick()->read($imagePath);
                         $imageCachePath = public_path('image/cache/products/'.$product_id.'/') . $imageName . $mimeType;
                         if(!file_exists($imageCachePath)){
-                            $size = [500,300,100];
+                            $size = [700,500,300,100];
                             for ($i=0; $i < count($size); $i++) { 
                                 // resize to 300 x 200 pixel
                                 $imageManager->scaleDown(height:$size[$i]);
@@ -344,15 +344,15 @@ class AdminProductController extends Controller
                 }
 
                 // Product other links
-                if ($data->get('amazon') != '' || $data->get('flipkart') != '' || $data->get('myntra') != '' || $data->get('ajio') != '' || $data->get('meesho') != '') {
+                if ($data->get('amazon_url') != '' || $data->get('flipkart_url') != '' || $data->get('myntra_url') != '' || $data->get('ajio_url') != '' || $data->get('meesho_url') != '' || $data->get('other_url_status') != '') {
                     $otherLink = new ProductOtherLink();
                     $otherLink->product_id = $product_id;;
-                    $otherLink->amazon = null;
-                    $otherLink->flipkart = null;
-                    $otherLink->myntra = null;
-                    $otherLink->ajio = null;
-                    $otherLink->meesho = null;
-                    $otherLink->status = false;
+                    $otherLink->amazon = $data->get('amazon_url') ?? '';
+                        $otherLink->flipkart = $data->get('flipkart_url') ?? '';
+                        $otherLink->myntra = $data->get('myntra_url') ?? '';
+                        $otherLink->ajio = $data->get('ajio_url') ?? '';
+                        $otherLink->meesho = $data->get('meesho_url') ?? '';
+                        $otherLink->status = $data->get('other_url_status') ? 1 : 0;
                     $otherLink->save();
                 }
             }
@@ -389,6 +389,8 @@ class AdminProductController extends Controller
         $data['categories'] = Category::getCategory(); 
 
         $data['getProductCategory'] = ProductCategory::getProductCategory($product_id);
+
+        $data['other_links'] = DB::table('product_other_links')->where('product_id', $product_id)->first();
 
         return view('admin/storefront/product_form', $data);
     }
@@ -455,9 +457,9 @@ class AdminProductController extends Controller
                             if(file_exists(public_path('image/products/'.$product_id.'/') . $image_name)){
                                 unlink(public_path('image/products/'.$product_id.'/') . $image_name);
                                 $image_replace = str_replace(".jpg",'',$image_name);
-                                $size = [500,300,100];
+                                $size = [700,500,300,100];
                                 for ($i=0; $i < count($size); $i++) {
-                                    if(public_path('image/cache/products/'.$product_id.'/') . $image_replace .'_'. $size[$i] .'x'. $size[$i] . $mimeType){
+                                    if(file_exists(public_path('image/cache/products/'.$product_id.'/') . $image_replace .'_'. $size[$i] .'x'. $size[$i] . $mimeType)){
                                         unlink(public_path('image/cache/products/'.$product_id.'/') . $image_replace .'_'. $size[$i] .'x'. $size[$i] . $mimeType);
                                     }
                                 }
@@ -477,7 +479,7 @@ class AdminProductController extends Controller
                         $imageManager = ImageManager::imagick()->read($imagePath);
                         $imageCachePath = public_path('image/cache/products/'.$product_id.'/') . $imageName . $mimeType;
                         if(!file_exists($imageCachePath)){
-                            $size = [500,300,100];
+                            $size = [700,500,300,100];
                             for ($i=0; $i < count($size); $i++) { 
                                 // resize to 300 x 200 pixel
                                 $imageManager->scaleDown(height:$size[$i]);
@@ -515,7 +517,7 @@ class AdminProductController extends Controller
                     $product->weight_class_id = $data->get('weight_class_id') ?? null;
                     isset($imageName) ? $product->image = $imageName . $mimeType : null;
                     $product->slug = Str::slug($data->get('product_name'));
-                    $product->status = true;
+                    $product->status = $data->get('status');
                     $product->sort_order = (int)$data->get('sort_order') ?? '';
                     $product->update();
                 }
@@ -639,16 +641,28 @@ class AdminProductController extends Controller
                 }
 
                 // Product other links
-                if ($data->get('amazon') != '' || $data->get('flipkart') != '' || $data->get('myntra') != '' || $data->get('ajio') != '' || $data->get('meesho') != '') {
+                if ($data->get('amazon_url') != '' || $data->get('flipkart_url') != '' || $data->get('myntra_url') != '' || $data->get('ajio_url') != '' || $data->get('meesho_url') != '' || $data->get('other_url_status') != '') {
                     $otherLink = ProductOtherLink::where('product_id', $product_id)->first();
-                    $otherLink->product_id = $product_id;;
-                    $otherLink->amazon = null;
-                    $otherLink->flipkart = null;
-                    $otherLink->myntra = null;
-                    $otherLink->ajio = null;
-                    $otherLink->meesho = null;
-                    $otherLink->status = false;
-                    $otherLink->update();
+                    if($otherLink){
+                        $otherLink->product_id = $product_id;;
+                        $otherLink->amazon = $data->get('amazon_url') ?? '';
+                        $otherLink->flipkart = $data->get('flipkart_url') ?? '';
+                        $otherLink->myntra = $data->get('myntra_url') ?? '';
+                        $otherLink->ajio = $data->get('ajio_url') ?? '';
+                        $otherLink->meesho = $data->get('meesho_url') ?? '';
+                        $otherLink->status = $data->get('other_url_status') ? 1 : 0;
+                        $otherLink->update();
+                    }else{
+                        $otherLink = new ProductOtherLink();
+                        $otherLink->product_id = $product_id;;
+                        $otherLink->amazon = $data->get('amazon_url') ?? '';
+                        $otherLink->flipkart = $data->get('flipkart_url') ?? '';
+                        $otherLink->myntra = $data->get('myntra_url') ?? '';
+                        $otherLink->ajio = $data->get('ajio_url') ?? '';
+                        $otherLink->meesho = $data->get('meesho_url') ?? '';
+                        $otherLink->status = $data->get('other_url_status') ? 1 : 0;
+                        $otherLink->save();
+                    }
                 }
                 return redirect('admin/storefront/product')->with('success', 'Product updated successfully.');
             }

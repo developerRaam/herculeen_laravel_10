@@ -59,7 +59,7 @@ class Product extends Model
     }
 
     public static function getProducts($request = null){
-        $query = 'SELECT p.id as product_id, p.image, p.product_name, p.model, pp.list_price, pp.mrp, p.quantity FROM  products p LEFT JOIN  product_prices pp ON pp.product_id = p.id  WHERE 1=1';
+        $query = 'SELECT p.id as product_id, p.image, p.product_name, p.model, pp.list_price, pp.mrp, p.quantity, p.status FROM  products p LEFT JOIN  product_prices pp ON pp.product_id = p.id  WHERE 1=1';
 
         // Filter
        if($request){

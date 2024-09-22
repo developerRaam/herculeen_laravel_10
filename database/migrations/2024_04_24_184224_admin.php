@@ -26,20 +26,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        // Insert default values into the admins table
-        DB::table('admins')->insert([
-            'username' => 'admin',
-            'password' => '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918',
-            'firstname' => 'admin',
-            'lastname' => 'admin',
-            'email' => 'admin@gmail.com',
-            'image' => NULL,
-            'ip' => NULL,
-            'status' => 1,
-            'admin_group_id' => 0,
-            'created_at' => '2024-04-24 19:58:10',
-            'updated_at' => '2024-04-24 19:58:10'
-        ]);
     }
 
     /**

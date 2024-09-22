@@ -1,24 +1,14 @@
 
-<style>
-  .truncate-two-lines {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    height: 2.6em; /* Adjust this value based on your line-height */
-}
-</style>
-
 <div class="row">
   @if ($products)
   @forelse ($products as $product)
-    <div class="col-sm-2 col-md-4 col-lg-2  ">
+    <div class="col-sm-4 col-md-3 col-lg-3">
+      <a href="{{ route('catalog.product-detail', ['product_id' => $product->product_id, 'slug' => $product->slug]) }}">
         <div class="product-item">
             <div class="image-holder">
-              <img src="{{ ($product->image) ? asset("image/cache/products").'/'.($product->product_id .'/'. str_replace(".jpg",'',$product->image) .'_500x500.jpg') : asset('image/not-image-available.png')}}" alt="{{$product->product_name}}" class="product-image" style="max-height:300px;object-fit:contain;">
+              <img src="{{ ($product->image) ? asset("image/cache/products").'/'.($product->product_id .'/'. str_replace(".jpg",'',$product->image) .'_700x700.jpg') : asset('image/not-image-available.png')}}" alt="{{$product->product_name}}" class="product-image" style="max-height:500px;object-fit:contain;">
             </div>
-            <div class="cart-concern">
+            {{-- <div class="cart-concern">
               <div class="cart-button d-flex justify-content-center align-items-center p-1" style="background-color: #eceef1;">
                 <div class="col-6 border-end">
                   <a href="#" class="text-decoration-none text-dark pe-3">
@@ -31,14 +21,14 @@
                    </a>
                  </div>
               </div>
-            </div>
+            </div> --}}
             <div class="product-detail">
-              <h3 class="product-title fs-6 truncate-two-lines">
-                <a href="{{ route('product-detail', ['product_id' => $product->product_id, 'slug' => $product->slug]) }}">{{$product->product_name}}</a>
-              </h3>
-              <span class="text-primary fs-6"><strong>Rs.</strong>{{ number_format($product->list_price, 0) }}</span>
+              <h3 class="product-title fs-6 truncate-lines mb-0"><small>{{$product->product_name}}</small></h3>
+              <p class="mb-0 text-muted truncate-lines" style="color:teal;font-size:13px">{{ $product->tag }}</p>
+              <span class="text-dark fs-6"><strong>Rs.{{ number_format($product->list_price, 0) }}</strong></span>
             </div>
         </div>
+      </a>
     </div>
   @empty
       

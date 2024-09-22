@@ -26,6 +26,9 @@
                             </ul>
                         </div>
                     </div>
+                    <div>
+                        <button id="submitButton" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Save">Save</button>
+                    </div>
                 </div>
             </div>
             
@@ -35,38 +38,21 @@
                     @include('admin.common.alert')
                     
                     <div class="px-3 py-2 title-list">
-                        <p class="mb-0"><i class="fa-solid fa-pencil"></i> Setting List</p>
+                        <p class="mb-0"><i class="fa-solid fa-pencil"></i> Ecommerce Status</p>
                     </div>
                     <div class="card rounded-0 p-3 mb-3 ">
-                        <div class="row">
-
-                            <div class="col-sm-3">
-                                <a href="{{ $ecommerce_links }}" class="text-decoration-none">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="d-flex align-items-center">
-                                                <p class="me-2 mb-0"><i class="fa-solid fa-link"></i></p>
-                                                <p class="mb-0">Other Ecommerce Links</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
+                        <form id="saveForm" action="{{$action}}" method="post" enctype="multipart/form-data">
+                            @csrf
+                            <div class="row mb-4">
+                                <div class="col-2 text-end">
+                                    <label for="ecommerce_other_url_status">Status</label>
+                                </div>
+                                <div class="col-10 form-check form-switch">
+                                    <input type="hidden" name="ecommerce_other_url_status" value="0">
+                                    <input class="form-check-input fs-3 m-0" id="ecommerce_other_url_status" name="ecommerce_other_url_status" type="checkbox" value="1" @if($ecommerce_other_url_status) checked @endif role="switch" >
+                                </div>
                             </div>
-
-                            <div class="col-sm-3">
-                                <a href="{{ $site_url }}" class="text-decoration-none">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="d-flex align-items-center">
-                                                <p class="me-2 mb-0"><i class="fa-solid fa-globe"></i></p>
-                                                <p class="mb-0">Site Setting</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -76,7 +62,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             let submitButton = document.getElementById("submitButton");
-            let form = document.getElementById("myForm");
+            let form = document.getElementById("saveForm");
 
             submitButton.addEventListener("click", function() {
                 form.submit(); // This will submit the form when the button is clicked

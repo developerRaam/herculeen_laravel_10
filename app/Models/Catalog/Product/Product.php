@@ -27,25 +27,47 @@ class Product extends Model
         return $data ?? null;
     }
 
-    public static function getProducts($request = null){
-        $query = 'SELECT p.id as product_id,p.image, p.product_name, p.model, pp.list_price, pp.mrp, p.quantity,p.slug FROM  products p LEFT JOIN  product_prices pp ON pp.product_id = p.id  WHERE 1=1';
+    public static function getProducts($filter = array()){
+        $query = 'SELECT p.id as product_id,p.image, p.product_name, p.tag, p.model, pp.list_price, pp.mrp, p.quantity,p.slug FROM  products p LEFT JOIN  product_prices pp ON pp.product_id = p.id  WHERE p.status=1';
+
+        // Get Category
+        if (isset($filter['category_id']) && null !== $filter['category_id']) {
+            $product_ids = '';
+            $category = DB::table('product_categories')->where('category_id', $filter['category_id'])->get();
+            foreach ($category as $value) {
+                $product_ids .= $value->product_id . ','; // Concatenate product IDs
+            }
+            // Remove the trailing comma, if any
+            $product_ids = rtrim($product_ids, ',');
+
+            if($product_ids){
+                $query .= " and p.id IN (" . $product_ids . ")";
+            }else{
+                $query .= " and p.id IN (0)";
+            }
+        }
+
+        // dd($query);
 
         // Filter
-        if($request){
-            if (null !== $request->query('product_name')) {
-                $query .= ' AND p.product_name=' . "'" . $request->query('product_name') . "'";
+        if($filter){
+            if (isset($filter['desc']) && null !== $filter['desc']) {
+                $query .= " order by p.product_name " . $filter['desc'] . "";
             }
-            if (null !== $request->query('model')) {
-                $query .= ' AND p.model=' . "'" . $request->query('model') . "'";
+            if (isset($filter['asc']) && null !== $filter['asc']) {
+                $query .= " order by p.product_name " . $filter['asc'] . "";
             }
-            if (null !== $request->query('price')) {
-                $query .= ' AND pp.list_price=' . "'" . $request->query('price') . "'";
+            if (isset($filter['limit']) && null !== $filter['limit']) {
+                $query .= " limit "  . $filter['limit'] . "";
             }
-            if (null !== $request->query('quantity')) {
-                $query .= ' AND  p.quantity=' . "'" . $request->query('quantity') . "'";
+            if (isset($filter['latest']) && null !== $filter['latest']) {
+                $query .= " order by p.created_at "  . $filter['latest'] . "";
             }
-            if (null !== $request->query('product_name')) {
-                $query .= ' AND status=' . "'" . $request->query('status') . "'";
+            if (isset($filter['low_to_high']) && null !== $filter['low_to_high']) {
+                $query .= " order by pp.list_price "  . $filter['low_to_high'] . "";
+            }
+            if (isset($filter['high_to_low']) && null !== $filter['high_to_low']) {
+                $query .= " order by pp.list_price "  . $filter['high_to_low'] . "";
             }
         }
 

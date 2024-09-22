@@ -3,6 +3,9 @@
 namespace App\Providers;
 
 use App\Models\Admin\Setting\Setting;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 
 class SettingProvider extends ServiceProvider
@@ -32,7 +35,13 @@ class SettingProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        View::composer('*', function ($view) {
+            // Fetch categories from cache or database
+            $service_categories = DB::table('category')->where('status', true)->get();
+
+            // Make categories available to all views
+            $view->with('service_categories', $service_categories);
+        });
     }
     
 }
