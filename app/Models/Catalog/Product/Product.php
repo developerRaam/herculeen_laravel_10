@@ -47,8 +47,6 @@ class Product extends Model
             }
         }
 
-        // dd($query);
-
         // Filter
         if($filter){
             if (isset($filter['desc']) && null !== $filter['desc']) {

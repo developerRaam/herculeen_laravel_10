@@ -36,12 +36,35 @@ class SettingProvider extends ServiceProvider
     public function boot(): void
     {
         View::composer('*', function ($view) {
-            // Fetch categories from cache or database
-            $service_categories = DB::table('category')->where('status', true)->get();
+            // Fetch active top-level categories
+            $categories = DB::table('category')
+                ->where('status', true)
+                ->whereNull('parent_id') // Only top-level categories
+                ->get();
+
+            // Recursive function to get children
+            $service_categories = $categories->map(function ($category) {
+                return $this->getCategoryWithChildren($category);
+            });
 
             // Make categories available to all views
             $view->with('service_categories', $service_categories);
         });
     }
+
+    private function getCategoryWithChildren($category)
+    {
+        $category->children = DB::table('category')
+            ->where('parent_id', $category->id)
+            ->where('status', true)
+            ->get()
+            ->map(function ($child) {
+                return $this->getCategoryWithChildren($child); // Recursively get children
+            });
+
+        return $category;
+    }
+
+
     
 }

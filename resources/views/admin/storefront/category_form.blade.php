@@ -67,12 +67,12 @@
                                 <div class="col-10">
                                     <select id="category-dropdown" name="parent_id" class="multiple-select">
                                         <option value="">Select Parent Category</option>
-                                        @foreach($categories as $category)
+                                        @foreach($categories as $cat)
                                             @php
-                                                $isSelected = isset($categoryPath) && $category->id == $categoryPath->path_id;
+                                                $isSelected = isset($categoryPath) && $cat->id == $categoryPath->path_id;
                                             @endphp
-                                            <option value="{{ $category->id }}" {{ $isSelected ? 'selected' : '' }}>
-                                                {{-- {{ $category->full_path }} --}}
+                                            <option value="{{ $cat->id }}" {{ $isSelected ? 'selected' : '' }}>
+                                                {{ $cat->full_path }}
                                             </option>
                                         @endforeach
                                     </select> 
@@ -117,7 +117,7 @@
                                 </div>
                                 <div class="col-10">
                                     <div class="card p-2" style="width: 12rem">
-                                        <img src="{{ asset('image/not-image-available.png')}}" alt="Category Image" class="card-img-top" id="imagePreview"  onclick="triggerFileUpload()">
+                                        <img src="{{ isset($category->image) ? asset('image/category/'.$category->image) : asset('image/not-image-available.png')}}" alt="Category Image" class="card-img-top" id="imagePreview"  onclick="triggerFileUpload()">
                                         <input type="file" name="image" id="imageUpload" accept="image/*" style="display: none;" onchange="previewImage(event)">
                                         <div class="card-body text-center mt-1"> 
                                             <button type="button" class="btn btn-danger fs-5 px-3" onclick="removeImage()" data-bs-toggle="tooltip" data-bs-placement="top" title="Clear"><i class="fa-solid fa-trash"></i></button>
@@ -168,11 +168,6 @@
                                     <input class="form-check-input fs-3 m-0" id="status" name="status" type="checkbox" role="switch" value="1" {{ isset($category) && property_exists($category, 'status') ? (($category->status) ? 'checked': '') : old('status') }}>
                                 </div>
                             </div>
-
-                            @foreach ($category as $key =>  $item)
-                                {{$key .'='. $item}}
-                            @endforeach
-
                         </form>
                     </div>
                 </div>

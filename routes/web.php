@@ -26,7 +26,8 @@ use App\Http\Controllers\Admin\Storefront\SizeController;
 Route::name('catalog.')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('/product/{product_id}/{slug?}', [ProductController::class, 'productDetail'])->name('product-detail');
-    Route::get('/category/{category_id?}/{category_slug?}', [CategoryController::class, 'index'])->name('category');
+    Route::get('/products/{category_id?}/{category_slug?}', [ProductController::class, 'getAllProduct'])->name('product-all');
+    Route::get('category/', [CategoryController::class, 'getAllCategories'])->name('getAllCategories');
 });
 
 // Admin
@@ -65,6 +66,8 @@ Route::middleware(['AdminMiddlewareLogin'])->prefix('admin/storefront')->group(f
     Route::get('product-edit/product_id={product_id}', [AdminProductController::class, 'editProduct'])->name("admin-product-edit");
     Route::post('product-update/product_id={product_id}', [AdminProductController::class, 'updateProduct'])->name("admin-product-update");
     Route::get('product-delete/product_id={product_id}', [AdminProductController::class, 'delete'])->name('admin-product-delete');
+    Route::post('product-variation/', [AdminProductController::class, 'addVariation'])->name('admin-addVariation');
+    Route::get('product-get-variation/{product_id}', [AdminProductController::class, 'getVariation'])->name('admin-getVariation');
     
     Route::get('category/', [AdminCategoryController::class, 'index'])->name('category');
     Route::get('category-form/', [AdminCategoryController::class, 'form']);

@@ -15,30 +15,37 @@
 }
 .navbar_items-link{
   display: none;
-  width: 250px;
+  width: auto;
+  padding: 5px;
   position: absolute;
   z-index: 9999;
   list-style: none;
   left: -17px;
   margin-top: 10px;
   background: #fff;
+  min-width: 250px;
   cursor: pointer;
-  /* border: 1px solid #ddd; */
+  border: 1px solid #ddd;
   line-height: 2.5rem;
   padding: 0;
 }
+
+.navbar_items-link li{
+  border-bottom: 1px solid #ddd;
+}
 .navbar_items-link a{
   padding-left: 5px;
+  color: #000;
 
 }
 .navbar_items-link a:hover{
   display: block;
   background-color: #000;
-  color: #ddd;
+  color: #fff;
 }
 
 .navbar_items:hover{
-    border: 1px solid #ddd;
+    background-color: #000;
 }
 
   @media(min-width: 900px){

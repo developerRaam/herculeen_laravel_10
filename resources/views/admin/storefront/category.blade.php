@@ -44,9 +44,10 @@
                             <thead>
                                 <tr>
                                     <th width="5%" class="text-center"><input type="checkbox" class="form-check-input" name="" id=""></th>
-                                    <th width="20%" height="50">Image</th>
+                                    <th width="15%" height="50">Image</th>
                                     <th width="40%">Category Name</th>
-                                    <th width="7%">Sort</th>
+                                    <th width="8">Top</th>
+                                    <th width="9%">Sort</th>
                                     <th width="7%">Status</th>
                                     <th width="15%">Action</th>
                                 </tr>
@@ -55,8 +56,9 @@
                                 @foreach ($categories as $category)
                                     <tr>
                                         <td class="text-center"><input type="checkbox" class="form-check-input" name="" id=""></td>
-                                        <td><img width="50" height="50" src="{{ ($category->image) ? asset("image/products/category").'/'.($category->image) : asset('image/not-image-available.png')}}" alt="{{$category->category_name}}"></td>
+                                        <td><img width="50" height="50" src="{{ ($category->image) ? asset("image/category").'/'.($category->image) : asset('image/not-image-available.png')}}" alt="{{$category->category_name}}"></td>
                                         <td>{{$category->full_path}}</td>
+                                        <td>{{ $category->menu_top }}</td>
                                         <td>{{$category->sort_order }}</td>
                                         <td>{{$category->status}}</td>
                                         <td>

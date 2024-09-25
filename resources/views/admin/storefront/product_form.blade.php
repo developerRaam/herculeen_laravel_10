@@ -71,9 +71,6 @@
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="image-tab" data-bs-toggle="tab" data-bs-target="#image" type="button" role="tab" aria-controls="image" aria-selected="false">Image</button>
                             </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="variation-tab" data-bs-toggle="tab" data-bs-target="#variation" type="button" role="tab" aria-controls="variation" aria-selected="false">Variations</button>
-                            </li>
                             @isset(app('settings')['ecommerce_other_url_status'])
                                 @if (app('settings')['ecommerce_other_url_status'])
                                     <li class="nav-item" role="presentation">
@@ -625,13 +622,6 @@
                                                 </tr>
                                             </tfoot>
                                         </table>
-                                    </div>
-                                </div>
-                                <!-- Variations -->
-                                <div class="tab-pane fade show" id="variation" role="tabpanel" aria-labelledby="variation-tab">
-                                    <div class="mt-4"></div>
-                                    <div class="col-sm-12 mb-4">
-                                        jhbjhjjjj
                                     </div>
                                 </div>
                                 <!-- Other Link -->

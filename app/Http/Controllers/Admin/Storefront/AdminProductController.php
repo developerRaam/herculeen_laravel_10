@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Storefront;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin\Storefront\Category\Category;
+use App\Models\Admin\Storefront\Color\Color;
 use App\Models\Admin\Storefront\Product\Product;
 use App\Models\Admin\Storefront\Product\ProductCategory;
 use App\Models\Admin\Storefront\Product\ProductDiscount;
@@ -14,6 +15,8 @@ use App\Models\Admin\Storefront\Product\ProductOtherLink;
 use App\Models\Admin\Storefront\Product\ProductPrice;
 use App\Models\Admin\Storefront\Product\ProductReward;
 use App\Models\Admin\Storefront\Product\ProductSpecial;
+use App\Models\Admin\Storefront\Product\ProductVariation;
+use App\Models\Admin\Storefront\Size\Size;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -78,6 +81,9 @@ class AdminProductController extends Controller
 
         $data['products'] = $paginator;
         $data['pagination'] = $paginator;
+        $data['colors'] = Color::getAllColor();
+        $data['sizes'] = Size::getAllSize();
+        $data['product_variation_route'] = route('admin-addVariation');
 
         return view('admin.storefront.product', $data);
     }
@@ -679,6 +685,58 @@ class AdminProductController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
             dd($e->getMessage());
+        }
+    }
+
+    public function addVariation(Request $request){
+        // Add variations
+        if($request->input('color_id') && $request->input('size_id') && $request->input('combinations')){
+
+            $product_id = $request->request->get('product_id');
+            $colorIds = $request->input('color_id');
+            $sizeIds = $request->input('size_id');
+            $combinations = $request->input('combinations');
+            $quantities = $request->input('variation_qty');
+            $prices = $request->input('variation_price');
+
+            $variationtData = [];
+
+            for ($i = 0; $i < count($colorIds); $i++) {
+                $variationtData[] = [
+                    'product_id' => $product_id,
+                    'color_id' => $colorIds[$i],
+                    'size_id' => $sizeIds[$i],
+                    'combination' => $combinations[$i],
+                    'price' => $prices[$i] ?? null, 
+                    'quantity' => $quantities[$i] ?? null,
+                ];
+            }
+
+            if($product_id){
+                try{
+                    ProductVariation::addVariation($variationtData);
+                    return redirect('admin/storefront/product')->with('success', 'Product variation added successfully.');
+                }catch(Exception $e){
+                    dd($e->getMessage());
+                }
+            }else{
+                return redirect('admin/storefront/product')->with('error', 'Product ID Not Found.');
+        }
+        }else{
+            return redirect('admin/storefront/product')->with('error', 'Variation Data Not Found.');
+        }
+    }
+
+    public function getVariation($product_id){
+        $variationtData = ProductVariation::getVariation($product_id);
+        if ($variationtData) {
+            $data = [
+                'success' => true,
+                'variationData' => $variationtData
+            ];
+            return response()->json($data);
+        } else {
+            return response()->json(['error' => 'Product Variation Not Available']);
         }
     }
 }

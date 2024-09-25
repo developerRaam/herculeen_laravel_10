@@ -17,7 +17,7 @@
         }
     }
 </style>
-<footer style="background: #dddddd17">
+<footer style="background: #ddddddb5">
     <div class="container">
         <div class="row text-dark">
             <div class="col-md-4 py-2">

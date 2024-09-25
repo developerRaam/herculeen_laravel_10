@@ -8,24 +8,30 @@
                 <div class="nav_desktop nav_mobile_view">
                     <ul class="list-unstyled text-white d-flex justify-content-center mb-0">
                         @foreach ($service_categories as $category)
-                            @if($category->menu_top === 1)
-                                <li class="px-3 fs-5 navbar_items"><a class="text-decoration-none text-white" href="{{ route('catalog.category') .'/'. $category->id .'/'. $category->slug . '?sort=latest' }}">{{ $category->category_name }}</a>
-                                    @if ($category->parent_id == $category->id)
-                                    <ul class="navbar_items-link">
-                                        <li><a href="#">{{ $category->category_name }}</a></li>
-                                    </ul> 
+                            @if ($category->menu_top === 1)
+                                <li class="px-3 fs-5 navbar_items active-link">
+                                    <a class="text-decoration-none text-white" href="{{ route('catalog.product-all', [$category->id, $category->slug]) . '?sort=latest' }}">
+                                        {{ $category->category_name }}
+                                    </a>
+                                    @if ($category->children->isNotEmpty())
+                                        <ul class="navbar_items-link">
+                                            @foreach ($category->children as $child)
+                                                <li class="p-0 mb-0">
+                                                    <a class="text-decoration-none d-block ps-2" href="{{ route('catalog.product-all', [$child->id, $child->slug]) }}">
+                                                        {{ $child->category_name }}
+                                                    </a>
+                                                </li>
+                                            @endforeach
+                                        </ul>
                                     @endif
+                                    {{-- @if ($category->children->isNotEmpty())
+                                        <ul class="navbar_items-link">
+                                            @include('partials.category_list', ['categories' => $category->children])
+                                        </ul>
+                                    @endif --}}
                                 </li>
                             @endif
                         @endforeach
-                        <li class="px-3 fs-5 navbar_items active-link">
-                            <a class="text-decoration-none text-white" href="#">Register</a>
-                            <ul class="navbar_items-link">
-                                <li><a href="#">Register As A Brand</a></li>
-                                <li><a href="#">Register As A Retailer</a></li>
-                                <li><a href="#">Register As A Wholesaler</a></li>
-                            </ul>
-                        </li>
                     </ul>
                 </div>
                 <div class="nav_mobile text-end column-left-mobile">
@@ -40,15 +46,32 @@
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
           </div>
           <div class="offcanvas-body">
-            <ul class="list-unstyled mb-0">
-                <li class="px-3 fs-5 navbar_items"><a class="text-decoration-none d-block text-dark" href="/">Home</a></li>
-                <li class="px-3 fs-5 navbar_items"><a class="text-decoration-none d-block text-dark" href="#">Our Story</a></li>
-                <li class="px-3 fs-5 navbar_items"><a class="text-decoration-none d-block text-dark" href="#">Services</a></li>
-                <li class="px-3 fs-5 navbar_items"><a class="text-decoration-none d-block text-dark" href="#">Register As A Brand</a></li>
-                <li class="px-3 fs-5 navbar_items"><a class="text-decoration-none d-block text-dark" href="#">Register As A Retailer</a></li>
-                <li class="px-3 fs-5 navbar_items"><a class="text-decoration-none d-block text-dark" href="#">Register As A Wholesaler</a></li>
-                <li class="px-3 fs-5 navbar_items"><a class="text-decoration-none d-block text-dark" href="#">Blog</a></li>
-                <li class="px-3 fs-5 navbar_items"><a class="text-decoration-none d-block text-dark" href="#">Contact Us</a></li>
+            <ul class="list-unstyled mb-0">                
+                @foreach ($service_categories as $category)
+                    @if ($category->menu_top === 1)
+                        <li class="px-3 fs-5 navbar_items active-link">
+                            <a class="text-decoration-none text-dark" href="javascript:void(0)">
+                                {{ $category->category_name }}
+                            </a>
+                            @if ($category->children->isNotEmpty())
+                                <ul class="navbar_items-link">
+                                    @foreach ($category->children as $child)
+                                        <li class="p-0 mb-0">
+                                            <a class="text-decoration-none d-block text-dark d-block ps-2" href="{{ route('catalog.product-all', [$child->id, $child->slug]) }}">
+                                                {{ $child->category_name }}
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @endif
+                            {{-- @if ($category->children->isNotEmpty())
+                                <ul class="navbar_items-link">
+                                    @include('partials.category_list', ['categories' => $category->children])
+                                </ul>
+                            @endif --}}
+                        </li>
+                    @endif
+                @endforeach
             </ul>
           </div>
         </div>
@@ -56,33 +79,44 @@
 </nav>
 
 <script>
-    let navbar_items_link = document.querySelector('.navbar_items-link');
-    let active_link = document.querySelector('.active-link');
+    // Select all active links
+    let active_links = document.querySelectorAll('.navbar_items.active-link');
 
-    active_link.addEventListener('mouseover', () => {
-        navbar_items_link.style.display = 'block';
-    });
+    // Loop through each active link and add event listeners
+    active_links.forEach(active_link => {
+        const navbar_items_link = active_link.querySelector('.navbar_items-link');
 
-    // Add event listener to hide the dropdown only when the mouse leaves both active_link and navbar_items_link
-    active_link.addEventListener('mouseleave', () => {
-        setTimeout(() => {
-            if (!isHover(active_link) && !isHover(navbar_items_link)) {
-                navbar_items_link.style.display = 'none';
+        active_link.addEventListener('mouseenter', () => {
+            if (navbar_items_link) {
+                navbar_items_link.style.display = 'block';
             }
-        }, 200);
+        });
+
+        active_link.addEventListener('mouseleave', () => {
+            hideDropdown(navbar_items_link);
+        });
+
+        // Hide dropdown when mouse leaves the ul
+        if (navbar_items_link) {
+            navbar_items_link.addEventListener('mouseleave', () => {
+                hideDropdown(navbar_items_link);
+            });
+        }
     });
 
-    navbar_items_link.addEventListener('mouseleave', () => {
+    // Function to hide the dropdown
+    function hideDropdown(dropdown) {
         setTimeout(() => {
-            if (!isHover(active_link) && !isHover(navbar_items_link)) {
-                navbar_items_link.style.display = 'none';
+            if (!isHover(dropdown) && !isHover(dropdown.parentElement)) {
+                if (dropdown) {
+                    dropdown.style.display = 'none';
+                }
             }
-        }, 200);
-    });
+        }, 50);
+    }
 
-    // Helper function to check if element is being hovered
+    // Helper function to check if a single element is being hovered
     function isHover(element) {
         return element.matches(':hover');
     }
-
 </script>

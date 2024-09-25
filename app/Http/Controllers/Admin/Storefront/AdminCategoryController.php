@@ -101,14 +101,14 @@ class AdminCategoryController extends Controller
                 // Upload image
                 $file = $request->file('image'); // get files
                 if(null !== $file){
-                    $folderPath = public_path('image/products/category');
+                    $folderPath = public_path('image/category');
                     if (!file_exists($folderPath)) {
                         mkdir($folderPath, 0777, true);
                     }
                     $imageName = time() . '_' . $file->getClientOriginalName();
-                    $imagePath = public_path('image/products/category') . $imageName;
+                    $imagePath = public_path('image/category') . $imageName;
                     if (!file_exists($imagePath)) {
-                        $file->move(public_path('image/products/category/'), $imageName);
+                        $file->move(public_path('image/category/'), $imageName);
                     }
                 }
 
@@ -194,14 +194,14 @@ class AdminCategoryController extends Controller
                 // Upload image
                 $file = $request->file('image'); // get files
                 if(null !== $file){
-                    $folderPath = public_path('image/products/category');
+                    $folderPath = public_path('image/category');
                     if (!file_exists($folderPath)) {
                         mkdir($folderPath, 0777, true);
                     }
                     $imageName = time() . '_' . $file->getClientOriginalName();
-                    $imagePath = public_path('image/products/category') . $imageName;
+                    $imagePath = public_path('image/category') . $imageName;
                     if (!file_exists($imagePath)) {
-                        $file->move(public_path('image/products/category/'), $imageName);
+                        $file->move(public_path('image/category/'), $imageName);
                     }
                 }
 

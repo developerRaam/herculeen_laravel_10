@@ -64,13 +64,109 @@
                                         <td>{{$product->quantity}}</td>
                                         <td> @if($product->status) <span class="bg-success rounded p-1 text-white">Enabled</span> @else <span class="bg-warning rounded p-1">Disabled</span> @endif </td>
                                         <td>
-                                            <a class="btn btn-primary" href="{{ route('admin-product-edit', ['product_id' => $product->product_id]) }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit"><i class="fa-solid fa-pencil"></i></a>
+                                            <a class="btn btn-primary mb-1" href="{{ route('admin-product-edit', ['product_id' => $product->product_id]) }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit"><i class="fa-solid fa-pencil"></i></a>
+                                            <button type="button" class="btn btn-primary mb-1 addVariation" data-product-id="{{ $product->product_id }}" data-bs-toggle="modal" data-bs-target="#addVariation">
+                                                <span class="b-block" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add Variation"><i class="fa-solid fa-plus"></i></span>
+                                            </button>
                                             <a class="btn btn-danger" href="{{ route('admin-product-delete', ['product_id' => $product->product_id]) }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete"><i class="fa-solid fa-trash"></i></a>
                                         </td>
                                     </tr>
                                     @endforeach
                                 </tbody>
                         </table>
+
+                        <!-- Add variation -->
+                        <div class="modal fade" id="addVariation" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addVariationLabel" aria-hidden="true">
+                            <div class="modal-dialog" style="max-width: 1100px">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="addVariationLabel">Modal title</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="{{ $product_variation_route }}" method="post">
+                                        @csrf
+                                        <input type="hidden" name="product_id" id="product_id">
+                                        <div class="col-sm-12 mb-4">
+                                            <div class="row">
+                                                <div class="col-sm-5 mb-4">
+                                                    <div class="row mb-4">
+                                                        <div class="col-2 text-end">
+                                                            <label for="color">Color</label>
+                                                        </div>
+                                                        <div class="col-10">
+                                                            <select id="color" class="form-control">
+                                                                <option value="">Select color</option>
+                                                                @foreach ($colors as $color)
+                                                                    <option value="{{ $color->id }}">{{ $color->color_name }} </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div> 
+                                                    <div class="row mb-4">
+                                                        <div class="col-2 text-end">
+                                                            <label for="size">Size</label>
+                                                        </div>
+                                                        <div class="col-10">
+                                                            <select id="size" class="form-control">
+                                                                <option value="">Select Size</option>
+                                                                @foreach ($sizes as $size)
+                                                                    <option value="{{ $size->id }}">{{ $size->size_name }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-4">
+                                                        <div class="col-2 text-end">
+                                                            <label for="variation_qty">Quantity</label>
+                                                        </div>
+                                                        <div class="col-10">
+                                                            <input type="number" id="variation_qty" name="variation_qty" class="form-control" value="" placeholder="Quantity">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-4">
+                                                        <div class="col-2 text-end">
+                                                            <label for="variation_price">Price</label>
+                                                        </div>
+                                                        <div class="col-10">
+                                                            <input type="number" id="variation_price" name="variation_price" class="form-control" value="" placeholder="Price">
+                                                        </div>
+                                                    </div> 
+                                                    <div class="text-end">
+                                                        <button type="button" class="btn btn-outline-success" id="addVariationBtn">Add Variation</button>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-7">
+                                                    <div class="text-start">
+                                                        <div class="text-start" id="variationsSection">
+                                                            <h5>Variations</h5>
+                                                            <table class="table table-bordered">
+                                                                <tr>
+                                                                    <th>Sr.</th>
+                                                                    <th>Quantity</th>
+                                                                    <th>Price</th>
+                                                                    <th>Combination</th>
+                                                                    <th>Action</th>
+                                                                </tr>
+                                                                <tbody id="variationsList">
+                                                                   
+                                                                </tbody>
+                                                                <caption class="text-center fs-4" id="variation_not_available"></caption>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary" id="saveVariation">Save</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
 
                         <!-- Pagination -->
                         @include('admin.common.pagination')
@@ -140,5 +236,144 @@
         // Redirect to the constructed URL
         window.location.href = urlWithParams;
     });
+
+    // start variation
+
+    // model
+    document.querySelectorAll('.addVariation').forEach(button => {
+        button.addEventListener('click', function() {
+            const productId = this.getAttribute('data-product-id');
+            document.getElementById('product_id').value = productId;
+            getVariations(productId);
+        });
+    });
+    // show
+    function getVariations(product_id){
+        let count = 0;
+        $.ajax({
+            url: '/admin/storefront/product-get-variation/' + product_id,
+            type: 'GET',
+            success: function(response) {
+                const variationsSection = document.getElementById('variationsSection');
+                const variationsList = document.getElementById('variationsList');
+                variationsList.innerHTML = '';
+                if(response.success){
+                    response.variationData.forEach(data => {     
+                        console.log(response.variationData)
+                        // Create a new table row for the variation
+                        let row = document.createElement('tr');
+    
+                        count += 1; // Increment counter
+    
+                        row.innerHTML = `
+                            <td>${count}</td>
+                            <td>
+                                <input type="hidden" name="variation_qty[]" value="${data['quantity']}">
+                                <span>${data['quantity']}</span>
+                            </td>
+                            <td>
+                                <input type="hidden" name="variation_price[]" value="${data['price']}">
+                                <span>${data['price']}</span>    
+                            </td>
+                            <td>
+                                <input type="hidden" name="color_id[]" value="${data['color_id']}">
+                                <input type="hidden" name="size_id[]" value="${data['size_id']}">
+                                <input type="hidden" name="combinations[]" value="${data['color_id']}_${data['size_id']}">
+                                <span>${data['color_name']}_${data['size_name']}</span>    
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-danger btn-sm" onclick="removeVariation(this)">Remove</button>
+                            </td>
+                        `;
+    
+                        variationsList.appendChild(row);
+                        document.getElementById('variation_not_available').innerHTML = '';
+                        document.getElementById('saveVariation').removeAttribute('disabled');
+                    });
+                }else{
+                    document.getElementById('saveVariation').setAttribute('disabled', true);
+                    document.getElementById('variation_not_available').innerHTML = response.error
+                }                    
+            },
+
+            error: function(xhr) {
+                console.log(xhr.responseText); // Output any error messages
+            }
+        });
+    }
+
+    // add variation
+    document.getElementById('addVariationBtn').addEventListener('click', function() {
+        let count = 0;
+        const colorSelect = document.getElementById('color');
+        const sizeSelect = document.getElementById('size');
+        const variationQty = document.getElementById('variation_qty').value;
+        const variationPrice = document.getElementById('variation_price').value;
+
+        const colorId = colorSelect.value;
+        const colorName = colorSelect.options[colorSelect.selectedIndex].text;
+
+        const sizeId = sizeSelect.value;
+        const sizeName = sizeSelect.options[sizeSelect.selectedIndex].text;
+
+        if (colorId && sizeId) {
+            const variationsSection = document.getElementById('variationsSection');
+            const variationsList = document.getElementById('variationsList');
+
+            // Create a new table row for the variation
+            const row = document.createElement('tr');
+
+            count += 1; // Increment counter
+
+            row.innerHTML = `
+                <td>${count}</td>
+                <td>
+                    <input type="hidden" name="variation_qty[]" value="${variationQty}">
+                    <span>${variationQty}</span>
+                </td>
+                <td>
+                    <input type="hidden" name="variation_price[]" value="${variationPrice}">
+                    <span>${variationPrice}</span>    
+                </td>
+                <td>
+                    <input type="hidden" name="color_id[]" value="${colorId}">
+                    <input type="hidden" name="size_id[]" value="${sizeId}">
+                    <input type="hidden" name="combinations[]" value="${colorId}_${sizeId}">
+                    <span>${colorName}_${sizeName}</span>    
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger btn-sm" onclick="removeVariation(this)">Remove</button>
+                </td>
+            `;
+
+            variationsList.appendChild(row);
+            document.getElementById('variation_not_available').innerHTML = '';
+            document.getElementById('saveVariation').removeAttribute('disabled');
+
+            // Optionally, clear the selection
+            colorSelect.value = '';
+            sizeSelect.value = '';
+        } else {
+            alert('Please select both color and size.');
+        }
+    });
+
+    function removeVariation(button) {
+        const row = button.closest('tr');
+        row.remove();
+
+        // Decrement the counter and update the remaining rows
+        count -= 1;
+        updateRowNumbers();
+    }
+
+    function updateRowNumbers() {
+        const rows = document.querySelectorAll('#variationsList tr');
+        rows.forEach((row, index) => {
+            row.querySelector('td:first-child').textContent = index + 1;
+        });
+    }
+
+    // end variation
 </script>
 @endsection

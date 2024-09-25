@@ -287,3 +287,35 @@ i.icon.icon-arrow-io {
 }
 
 /* ================ End Select 2 =========================*/
+
+/* ==== All categories ---*/
+
+.category_image {
+  overflow: hidden;
+  border-radius: 50%; 
+  width: 215; 
+  height: 215px; 
+  display: flex; 
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto; 
+  transition: transform 0.3s; 
+  background-color: #f7f7f7; 
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
+}
+
+.category_image:hover {
+  transform: scale(1.05); 
+}
+
+.category-img {
+  padding: 40px;
+  width: 100%; 
+  height: auto; 
+}
+
+.text-center {
+  text-align: center; 
+  font-weight: bold; 
+  margin-top: 8px; 
+}

@@ -10,34 +10,12 @@ use Illuminate\Support\Facades\DB;
 
 class CategoryController extends Controller
 {
-    public function index(Request $request, $category_id=null){
+    public function getAllCategories(){
 
-        $sort = $request->query('sort');
-
-        // Filter 
-        $filter = [];
-        if($sort === 'desc'){
-            $filter['desc'] = $sort;
-        }else if($sort === 'asc'){
-            $filter['asc'] = $sort;
-        }else if($sort === 'latest'){
-            $filter['latest'] = 'desc';
-        }else if($sort === 'discounted'){
-            $filter['discounted'] = $sort;
-        }else if($sort === 'low_to_high'){
-            $filter['low_to_high'] = 'asc';
-        }else if($sort === 'high_to_low'){
-            $filter['high_to_low'] = 'desc';
-        }
-
-        if($category_id){
-            $filter['category_id'] = $category_id;
-        }
-        
         // Pagination
-        $perPage = 20;
+        $perPage = 12;
         $currentPage = request()->query('page', 1);
-        $results = Product::getProducts($filter);
+        $results = DB::table('category')->where('status', true)->orderBy('id','desc')->get();
         $products = collect($results);
         $totalCount = $products->count();
         $paginator = new LengthAwarePaginator(
@@ -48,13 +26,9 @@ class CategoryController extends Controller
             ['path' => request()->url(), 'query' => request()->query()]
         );
 
-        $data['products'] = $paginator;
+        $data['categories'] = $paginator;
+        // dd($data['categories']);
         $data['pagination'] = $paginator;
-
-        $data['colors'] = DB::table('colors')->get();
-        $data['sizes'] = DB::table('size')->get();
-        $data['sort'] = $sort;
-        
 
         return view('catalog.product.category', $data);
     }
