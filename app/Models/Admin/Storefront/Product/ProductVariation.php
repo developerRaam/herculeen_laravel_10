@@ -16,31 +16,21 @@ class ProductVariation extends Model
 
     public static function addVariation($data = array()){
 
-        foreach ($data as $value) {
+        $product_id = (int)$data['product_id'];
 
-            $getVariation = DB::table('product_variation')->where('product_id', $value['product_id'])->where('combination', $value['combination'])->first();
+        DB::table('product_variation')->where('product_id', $product_id)->delete();
 
-            if($getVariation){
-                DB::table('product_variation')->where('id', $getVariation->id)->update([
-                    'color_id' => $value['color_id'] ?? null ,
-                    'size_id' => $value['size_id'] ?? null,
-                    'price' => $value['price'] ?? null,
-                    'quantity' => $value['quantity'] ?? 0,
-                    'updated_at' => now(),
-                ]);
-            }else{
-                DB::table('product_variation')->insert([
-                    'product_id' => $value['product_id'],
-                    'color_id' => $value['color_id'] ?? null,
-                    'size_id' => $value['size_id'] ?? null,
-                    'combination' => $value['combination'] ?? null,
-                    'price' => $value['price'] ?? null,
-                    'quantity' => $value['quantity'] ?? 0,
-                    'created_at' => now(),
-                    'updated_at' => now()
-                ]);
-            }
-
+        foreach ($data['variation_data'] as $value) {
+            DB::table('product_variation')->insert([
+                'product_id' => $product_id,
+                'color_id' => $value['color_id'] ?? null,
+                'size_id' => $value['size_id'] ?? null,
+                'combination' => $value['combination'] ?? null,
+                'price' => $value['price'] ?? null,
+                'quantity' => $value['quantity'] ?? 0,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
         }
     }
 

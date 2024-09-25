@@ -60,27 +60,27 @@ class Product extends Model
 
     public static function getProducts($request = null){
         $query = 'SELECT p.id as product_id, p.image, p.product_name, p.model, pp.list_price, pp.mrp, p.quantity, p.status FROM  products p LEFT JOIN  product_prices pp ON pp.product_id = p.id  WHERE 1=1';
-
         // Filter
-       if($request){
-        if (null !== $request->query('product_name')) {
-            $query .= ' AND p.product_name=' . "'" . $request->query('product_name') . "'";
+        if($request){
+            if (null !== $request->query('product_name')) {
+                $query .= ' AND p.product_name like ' . '\'%'. $request->query('product_name') .'%\'';
+            }
+            if (null !== $request->query('model')) {
+                $query .= ' AND p.model like ' . '\'%'. $request->query('model') .'%\'';
+            }
+            if (null !== $request->query('price')) {
+                $query .= ' AND pp.list_price like ' . '\'%'. $request->query('price') .'%\'';
+            }
+            if (null !== $request->query('quantity')) {
+                $query .= ' AND  p.quantity like ' . '\'%'. $request->query('quantity') .'%\'';
+            }
+            if (null !== $request->query('status')) {
+                $query .= ' AND status=' . "'" . $request->query('status') . "'";
+            }
         }
-        if (null !== $request->query('model')) {
-            $query .= ' AND p.model=' . "'" . $request->query('model') . "'";
-        }
-        if (null !== $request->query('price')) {
-            $query .= ' AND pp.list_price=' . "'" . $request->query('price') . "'";
-        }
-        if (null !== $request->query('quantity')) {
-            $query .= ' AND  p.quantity=' . "'" . $request->query('quantity') . "'";
-        }
-        if (null !== $request->query('product_name')) {
-            $query .= ' AND status=' . "'" . $request->query('status') . "'";
-        }
-       }
-
-        return DB::select($query);
+        
+        return  DB::select($query);
+        // dd($query);
     }
 
     public static function deleteProduct($product_id){

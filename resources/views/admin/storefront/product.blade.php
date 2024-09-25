@@ -68,7 +68,7 @@
                                             <button type="button" class="btn btn-primary mb-1 addVariation" data-product-id="{{ $product->product_id }}" data-bs-toggle="modal" data-bs-target="#addVariation">
                                                 <span class="b-block" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add Variation"><i class="fa-solid fa-plus"></i></span>
                                             </button>
-                                            <a class="btn btn-danger" href="{{ route('admin-product-delete', ['product_id' => $product->product_id]) }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete"><i class="fa-solid fa-trash"></i></a>
+                                            <a class="btn btn-danger deleteProduct" href="javascript:void(0)" data-product-id="{{ $product->product_id }}" data-href="{{ route('admin-product-delete', ['product_id' => $product->product_id]) }}" data-product-name="{{$product->product_name}}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete"><i class="fa-solid fa-trash"></i></a>
                                         </td>
                                     </tr>
                                     @endforeach
@@ -182,25 +182,25 @@
                             {{-- @csrf --}}
                             <div class="mb-3">
                                 <label for="product_name" class="form-label fw-bold">Product Name</label>
-                                <input type="text" class="form-control" name="product_name" value="{{old('product_name')}}" id="product_name" placeholder="Product Name">
+                                <input type="text" class="form-control" name="product_name" value="{{ $product_name ?? '' }}" id="product_name" placeholder="Product Name">
                             </div>
                             <div class="mb-3">
                                 <label for="model" class="form-label fw-bold">Model</label>
-                                <input type="text" class="form-control" name="model" id="model" placeholder="Model">
+                                <input type="text" class="form-control" name="model" id="model" value="{{ $model ?? '' }}" placeholder="Model">
                             </div>
                             <div class="mb-3">
                                 <label for="price" class="form-label fw-bold">Price</label>
-                                <input type="text" class="form-control" name="price" id="price" placeholder="Price">
+                                <input type="text" class="form-control" name="price" id="price" value="{{ $price ?? '' }}" placeholder="Price">
                             </div>
                             <div class="mb-3">
                                 <label for="quantity" class="form-label fw-bold">Quantity</label>
-                                <input type="text" class="form-control" name="quantity" id="quantity" placeholder="Quantity">
+                                <input type="text" class="form-control" name="quantity" id="quantity" value="{{ $quantity ?? '' }}" placeholder="Quantity">
                             </div>
                             <div class="mb-3">
                                 <label for="status" class="form-label fw-bold">Status</label>
                                 <select name="status" id="status" class="form-control">
-                                    <option value="1">Enable</option>
-                                    <option value="0">Disable</option>
+                                    <option value="1" @if($status == 1) selected @endif>Enable</option>
+                                    <option value="0" @if($status == 0) selected @endif>Disable</option>
                                 </select>
                             </div>
                             <div class="mb-3 text-end">
@@ -259,7 +259,6 @@
                 variationsList.innerHTML = '';
                 if(response.success){
                     response.variationData.forEach(data => {     
-                        console.log(response.variationData)
                         // Create a new table row for the variation
                         let row = document.createElement('tr');
     
@@ -375,5 +374,32 @@
     }
 
     // end variation
+
+
+    // confirm box
+    let deleteButton = document.querySelectorAll('.deleteProduct');
+    deleteButton.forEach(element => {
+        element.addEventListener('click', function(e) {
+            e.preventDefault(); // Prevent the default action
+            let product_id = element.getAttribute('data-product-id')
+            let url = element.getAttribute('data-href')
+            let product_name = element.getAttribute('data-product-name')
+            Swal.fire({
+                title: 'Are you sure?',
+                html: 'Do you want delete this product.' + '<br><strong>'+product_name+'</strong>' ,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'No',
+                confirmButtonText: 'Yes'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Redirect to the deletion URL
+                    window.location.href = url;
+                }
+            });
+        });
+    });
 </script>
 @endsection

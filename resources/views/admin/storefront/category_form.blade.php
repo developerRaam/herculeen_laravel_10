@@ -163,7 +163,6 @@
                                     <label for="status">Status</label>
                                 </div>
                                 <div class="col-10 form-check form-switch">
-                                    {{$category->status}}
                                     <input type="hidden" name="status" value="0">
                                     <input class="form-check-input fs-3 m-0" id="status" name="status" type="checkbox" role="switch" value="1" {{ isset($category) && property_exists($category, 'status') ? (($category->status) ? 'checked': '') : old('status') }}>
                                 </div>

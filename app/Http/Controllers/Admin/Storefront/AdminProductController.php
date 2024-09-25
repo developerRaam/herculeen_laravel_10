@@ -46,24 +46,12 @@ class AdminProductController extends Controller
 
         $data['add'] = URL::to('/admin/storefront/product-form');
 
-        $query = 'SELECT p.id as product_id,pi.image, p.product_name, p.model, pp.list_price, pp.mrp, p.quantity FROM  products p LEFT JOIN product_images pi ON p.id = pi.product_id LEFT JOIN  product_prices pp ON pp.product_id = p.id  WHERE 1=1';
-
         // Filter
-        if (null !== $request->query('product_name')) {
-            $query .= ' AND p.product_name=' . "'" . $request->query('product_name') . "'";
-        }
-        if (null !== $request->query('model')) {
-            $query .= ' AND p.model=' . "'" . $request->query('model') . "'";
-        }
-        if (null !== $request->query('price')) {
-            $query .= ' AND pp.list_price=' . "'" . $request->query('price') . "'";
-        }
-        if (null !== $request->query('quantity')) {
-            $query .= ' AND  p.quantity=' . "'" . $request->query('quantity') . "'";
-        }
-        if (null !== $request->query('product_name')) {
-            $query .= ' AND status=' . "'" . $request->query('status') . "'";
-        }
+        $data['product_name'] = $request->query('product_name') ?? null;
+        $data['model'] = $request->query('model') ?? null;
+        $data['price'] = $request->query('price') ?? null;
+        $data['quantity'] = $request->query('quantity') ?? null;
+        $data['status'] = $request->query('status') ?? 1;
 
         // Pagination
         $perPage = 20;
@@ -702,8 +690,7 @@ class AdminProductController extends Controller
             $variationtData = [];
 
             for ($i = 0; $i < count($colorIds); $i++) {
-                $variationtData[] = [
-                    'product_id' => $product_id,
+                $variationtData['variation_data'][] = [
                     'color_id' => $colorIds[$i],
                     'size_id' => $sizeIds[$i],
                     'combination' => $combinations[$i],
@@ -711,6 +698,7 @@ class AdminProductController extends Controller
                     'quantity' => $quantities[$i] ?? null,
                 ];
             }
+            $variationtData = array_merge($variationtData, ['product_id' => $product_id]);
 
             if($product_id){
                 try{
