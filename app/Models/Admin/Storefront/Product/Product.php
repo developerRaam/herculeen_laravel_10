@@ -93,6 +93,7 @@ class Product extends Model
         ProductReward::where('product_id', $product_id)->delete();
         ProductFilter::where('product_id', $product_id)->delete();
         ProductOtherLink::where('product_id', $product_id)->delete();
+        ProductVariation::where('product_id', $product_id)->delete();
 
         $images = ProductImage::where('product_id', $product_id)->get();
         foreach ($images as $image) {

@@ -56,15 +56,15 @@
                                         <td class="text-center"><input type="checkbox" class="form-check-input" name="" id=""></td>
                                         <td>{{$color->color_name}}</td>
                                         <td>
-                                            <div>
-                                                <span>{{$color->code}} </span>
-                                                <span class="ms-4 rounded" style="width:20px; height:20px;display: inline-block; background-color: {{$color->code}}"></span>
+                                            <div class="d-flex align-items-center">
+                                                <span class="me-3 rounded-circle border" style="width:20px; height:20px;display: inline-block; background-color: {{$color->code}}"></span>
+                                                <span> {{$color->code}} </span>
                                             </div>
                                         </td>
                                         <td>{{$color->sort}}</td>
                                         <td>
                                             <a class="btn btn-primary" href="{{ route('edit-color', ['color_id' => $color->id]) }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit"><i class="fa-solid fa-pencil"></i></a>
-                                            <a class="btn btn-danger" href="{{ route('delete-color', ['color_id' => $color->id]) }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete"><i class="fa-solid fa-trash"></i></a>
+                                            <a class="btn btn-danger deleteColor" data-href="{{ route('delete-color', ['color_id' => $color->id]) }}" data-color-name="{{$color->color_name}}" data-color-id data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete"><i class="fa-solid fa-trash"></i></a>
                                         </td>
                                     </tr>
                                     @endforeach
@@ -75,5 +75,31 @@
             </div>
         </div>
     </div>
+    <script>
+        // confirm box
+        let deleteButton = document.querySelectorAll('.deleteColor');
+        deleteButton.forEach(element => {
+            element.addEventListener('click', function(e) {
+                e.preventDefault(); // Prevent the default action
+                let url = element.getAttribute('data-href')
+                let name = element.getAttribute('data-color-name')
+                Swal.fire({
+                    title: 'Are you sure?',
+                    html: 'Do you want delete this Color.' + '<br><strong>'+name+'</strong>' ,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    cancelButtonText: 'No',
+                    confirmButtonText: 'Yes'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Redirect to the deletion URL
+                        window.location.href = url;
+                    }
+                });
+            });
+        });
+    </script>
 </section>
 @endsection

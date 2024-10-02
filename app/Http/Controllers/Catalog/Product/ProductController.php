@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\Catalog\Product;
 
+use App\Http\Controllers\Catalog\Common\Pagination;
 use App\Http\Controllers\Controller;
 use App\Models\Catalog\Product\Product;
 use Illuminate\Http\Request;
-use App\Models\Catalog\Contact;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
@@ -41,23 +40,14 @@ class ProductController extends Controller
         if($category_id){
             $filter['category_id'] = $category_id;
         }
-        
-        // Pagination
-        $perPage = 40;
-        $currentPage = request()->query('page', 1);
-        $results = Product::getProducts($filter);
-        $products = collect($results);
-        $totalCount = $products->count();
-        $paginator = new LengthAwarePaginator(
-            $products->forPage($currentPage, $perPage),
-            $totalCount,
-            $perPage,
-            $currentPage,
-            ['path' => request()->url(), 'query' => request()->query()]
-        );
 
-        $data['products'] = $paginator;
-        $data['pagination'] = $paginator;
+        // Pagination
+        $results = Product::getProducts($filter);
+        $perPage = 40;
+        $paginator = Pagination::pagination($results, $perPage);
+
+        $data['products'] = $paginator['items'];
+        $data['pagination'] = $paginator['pagination'];
 
         $data['colors'] = DB::table('colors')->get();
         $data['sizes'] = DB::table('size')->get();
@@ -65,7 +55,34 @@ class ProductController extends Controller
         $data['category_id'] = $category_id;
         $data['category_slug'] = $category_slug;
         
-
         return view('catalog.product.product_all', $data);
+    }
+
+    public function getProductByFilter(Request $request){
+        if(null !== $request->input('size_ids')){
+            $filter['size_ids'] = $request->input('size_ids');
+        }else{
+            $filter['size_ids'] = null;
+        }
+        
+        if(null !== $request->request->get('sort')){
+            $filter['sort'] = $request->request->get('sort');
+        }else{
+            $filter['sort'] = null;
+        }
+        
+        $results = Product::getProductByFilter($filter);
+        
+        // Pagination
+        $perPage = 40;
+        $paginator = Pagination::pagination($results, $perPage);
+
+        $data['products'] = $paginator['items'];
+        $data['pagination'] = $paginator['pagination'];
+
+        $data['size_ids'] = $filter['size_ids'];
+        $data['sort'] = $filter['sort'];
+
+        return response()->json($data);
     }
 }

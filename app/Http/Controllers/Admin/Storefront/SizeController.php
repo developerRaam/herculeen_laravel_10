@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Admin\Storefront\Size\Size;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 
 class SizeController extends Controller
@@ -84,7 +85,13 @@ class SizeController extends Controller
 
     }
 
-    public function delete(){
-        
+    public function delete($size_id){
+        try {
+            Size::where('id', $size_id)->delete();
+            return redirect('admin/storefront/size')->with('success', 'Size deleted successfully.');
+        } catch (Exception $e) {
+            DB::rollBack();
+            dd($e->getMessage());
+        }
     }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Admin\Storefront\Color\Color;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 
 class ColorController extends Controller
@@ -85,7 +86,13 @@ class ColorController extends Controller
 
     }
 
-    public function delete(){
-
+    public function delete($color_id){
+        try {
+            Color::where('id', $color_id)->delete();
+            return redirect('admin/storefront/color')->with('success', 'Color deleted successfully.');
+        } catch (Exception $e) {
+            DB::rollBack();
+            dd($e->getMessage());
+        }
     }
 }

@@ -36,6 +36,9 @@
 </head>
 <body>
     @yield('content')
+
+     <!-- Sweet alert -->
+    <script src="{{ URL::asset('js/admin/sweet-alert.js')}}"></script>
     
     <script>
  

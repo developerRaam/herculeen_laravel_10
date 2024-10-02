@@ -517,11 +517,6 @@ class AdminProductController extends Controller
                 }
 
                 // product to category
-                if (null !== $data->get('category_id') || null !== $data->get('category_id')) {
-                   
-                }
-
-                // product to category
                 if (null !== $request->input('category_ids')) {
                     foreach($request->input('category_ids', []) as $category_id) {
                         $category = ProductCategory::where('product_id', $product_id)->where('category_id', $category_id)->first();
@@ -536,6 +531,8 @@ class AdminProductController extends Controller
                         }
 
                     }
+                }else{
+                    ProductCategory::where('product_id', $product_id)->delete();
                 }
 
                 // Product price

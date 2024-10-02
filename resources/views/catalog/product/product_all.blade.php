@@ -50,7 +50,7 @@
                     @if ($sizes)
                         @foreach ($sizes as $size)
                             <div class="mt-3 d-flex align-items-center" style="line-height: 15px">
-                                <input type="checkbox" class="size" name="size_id" value="{{ $size->id }}"
+                                <input type="checkbox" class="size size_ids" value="{{ $size->id }}"
                                     style="height: 18px; width:18px">
                                 <span class="ms-2">{{ $size->size_name }}</span>
                             </div>
@@ -63,7 +63,7 @@
                     @if ($colors)
                         @foreach ($colors as $color)
                             <div class="mt-3 d-flex align-items-center">
-                                <input type="checkbox" class="color" name="color_id" value="{{ $color->id }}"
+                                <input type="checkbox" class="color color_ids" value="{{ $color->id }}"
                                     style="height:18px; width:18px">
                                 <p class="mb-0 ms-2 d-flex align-items-center" style="line-height: 15px">
                                     <span class="d-block border"
@@ -80,11 +80,10 @@
                 <div class="row">
                     @if ($products)
                         <!-- Total -->
-                        <div class="mb-3"><span>Total Products: <strong>{{ $pagination->total() }}</strong></span></div>
+                        <div class="mb-3"><span>Total Products: <strong>{{ $pagination['total'] }}</strong></span></div>
                         @forelse ($products as $product)
-                            <div class="col-12 col-sm-6 col-md-3 col-lg-3">
-                                <a
-                                    href="{{ route('catalog.product-detail', ['product_id' => $product->product_id, 'slug' => $product->slug]) }}">
+                            <div class="col-12 col-sm-6 col-md-3 col-lg-3 products">
+                                <a href="{{ route('catalog.product-detail', ['product_id' => $product->product_id, 'slug' => $product->slug]) }}">
                                     <div class="product-item">
                                         <div class="image-holder">
                                             <img src="{{ $product->image ? asset('image/cache/products') . '/' . ($product->product_id . '/' . str_replace('.jpg', '', $product->image) . '_500x500.jpg') : asset('image/not-image-available.png') }}"
@@ -130,6 +129,10 @@
     </section>
 
     <script>
+
+        let category_id = {!! json_encode($category_id) !!};
+        let category_slug = {!! json_encode($category_slug) !!};
+
         // Clear
         document.getElementById('clear_all').addEventListener('click', () => {
             document.querySelectorAll('.size').forEach(element => {
@@ -141,8 +144,6 @@
         })
 
         // Sorting
-        let category_id = {!! json_encode($category_id) !!};
-        let category_slug = {!! json_encode($category_slug) !!};
         if (category_id !== null) {
             document.getElementById('filters').addEventListener('change', function() {
                 const selectedValue = encodeURIComponent(this.value);
@@ -154,6 +155,63 @@
                 window.location.href = '/products?sort=' + selectedValue;
             });
         }
+
+        // Filter by color
+        let color_ids = document.querySelectorAll('.color_ids');
+        let size_ids = document.querySelectorAll('.size_ids');
+
+        size_ids.forEach(element => {
+            element.addEventListener("click", () => {
+                // Collect all checked size IDs into an array
+                let selectedSizeIds = Array.from(size_ids)
+                    .filter(checkbox => checkbox.checked)
+                    .map(checkbox => checkbox.value);
+
+                const currentUrl = window.location.href;
+                const url = new URL(currentUrl);
+                const sortValue = url.searchParams.get('sort');
+
+                $.ajax({
+                    url: '/products-by-size',
+                    type: 'POST',
+                    data: {
+                        '_token': '{{ csrf_token() }}',
+                        'sort': sortValue,
+                        'size_ids': selectedSizeIds // Send the array of size IDs
+                    },
+                    // beforeSend: function() {
+                    //     $(placeholder).addClass('loading');
+                    // },
+                    // complete: function() {
+                    //     $(placeholder).removeClass('loading');
+                    // },
+                    success: function(response) {
+                        let products = response.products
+                        // if (Array.isArray(products) && products.length === 0) {
+                        //     console.log(products);
+                        //     let htmlproducts = document.querySelectorAll('.products');
+                        //     if(htmlproducts){
+                        //         htmlproducts.forEach(el => el.innerHTML = '');
+                        //     }
+                        //     products.forEach(product => {
+                                
+                        //     });
+
+                        // }
+                    },
+                    error: function(xhr) {
+                        console.error(xhr);
+                    }
+                });
+            });
+        });
+
+        color_ids.forEach(element => {
+            element.addEventListener("click", () => {
+                let color_id = element.checked ? element.value : null;
+                console.log(color_id)
+            })
+        });
     </script>
 
 @endsection

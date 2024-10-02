@@ -30,7 +30,7 @@ class Product extends Model
     public static function getProducts($filter = array()){
         $query = 'SELECT p.id as product_id,p.image, p.product_name, p.tag, p.model, pp.list_price, pp.mrp, p.quantity,p.slug FROM  products p LEFT JOIN  product_prices pp ON pp.product_id = p.id  WHERE p.status=1';
 
-        // Get Category
+        //Get Category
         if (isset($filter['category_id']) && null !== $filter['category_id']) {
             $product_ids = '';
             $category = DB::table('product_categories')->where('category_id', $filter['category_id'])->get();
@@ -68,7 +68,36 @@ class Product extends Model
                 $query .= " order by pp.list_price "  . $filter['high_to_low'] . "";
             }
         }
-
+         
         return DB::select($query);
+    }
+
+    public static function getProductByFilter($filter = array()){
+        // by size
+        if (isset($filter['size_ids']) && null !== $filter['size_ids']) {
+            $result = Product::getProducts($filter);
+            $collection = [];
+            $sizes = DB::table('product_variation')->whereIn('size_id', $filter['size_ids'])->get();
+
+            foreach ($sizes as $size) {
+                foreach ($result as $product) {
+                    if($size->product_id == $product->product_id){
+                        $collection[] = [
+                            "product_id" => $product->product_id ?? null,
+                            "image" => $product->image ?? null,
+                            "product_name" => $product->product_name ?? null,
+                            "tag" => $product->tag ?? null,
+                            "model" => $product->model ?? null,
+                            "list_price" => $product->list_price ?? null,
+                            "mrp" => $product->mrp ?? null,
+                            "quantity" => $product->quantity ?? null,
+                            "slug" => $product->slug ?? null,
+                        ];
+                    }
+                }
+            }
+            return $collection;
+        } 
+        return [];
     }
 }

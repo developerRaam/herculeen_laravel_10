@@ -27,6 +27,7 @@ Route::name('catalog.')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('/product/{product_id}/{slug?}', [ProductController::class, 'productDetail'])->name('product-detail');
     Route::get('/products/{category_id?}/{category_slug?}', [ProductController::class, 'getAllProduct'])->name('product-all');
+    Route::post('/products/size={size_name}/{size_id}', [ProductController::class, 'getProductByFilter']);
     Route::get('category/', [CategoryController::class, 'getAllCategories'])->name('getAllCategories');
 });
 
@@ -81,14 +82,14 @@ Route::middleware(['AdminMiddlewareLogin'])->prefix('admin/storefront')->group(f
     Route::post('color-save',[ColorController::class, 'save'])->name('save-color');
     Route::get('color-edit/color_id={color_id}',[ColorController::class, 'edit'])->name('edit-color');
     Route::post('color-update/color_id={color_id}',[ColorController::class, 'update'])->name('update-color');
-    Route::post('color-delete/color_id={color_id}',[ColorController::class, 'delete'])->name('delete-color');
+    Route::get('color-delete/color_id={color_id}',[ColorController::class, 'delete'])->name('delete-color');
 
     Route::get('size/', [SizeController::class, 'index'])->name('size');
     Route::get('size-form',[SizeController::class, 'form']);
     Route::post('size-save',[SizeController::class, 'save'])->name('save-size');
     Route::get('size-edit/size_id={size_id}',[SizeController::class, 'edit'])->name('edit-size');
     Route::post('size-update/size_id={size_id}',[SizeController::class, 'update'])->name('update-size');
-    Route::post('size-delete/size_id={size_id}',[SizeController::class, 'delete'])->name('delete-size');
+    Route::get('size-delete/size_id={size_id}',[SizeController::class, 'delete'])->name('delete-size');
 });
 
 Route::get('/admin/media', [AdminMediaController::class, 'index'])->name('admin-media')->middleware('AdminMiddlewareLogin');

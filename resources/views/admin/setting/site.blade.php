@@ -87,10 +87,10 @@
 
                             <div class="row mb-4">
                                 <div class="col-2 text-end">
-                                    <label for="site_description">Site Description</label>
+                                    <label for="summernote">Site Description</label>
                                 </div>
                                 <div class="col-10">
-                                    <textarea name="site_description" id="site_description" class="form-control p-2" rows="5">
+                                    <textarea name="site_description" id="summernote" class="form-control p-2" rows="5">
                                         {{ isset($site_description) ? $site_description : old('site_description') }}
                                     </textarea>
                                 </div>

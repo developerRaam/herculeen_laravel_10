@@ -57,7 +57,7 @@
                                         <td>{{$size->sort }}</td>
                                         <td>
                                             <a class="btn btn-primary" href="{{ route('edit-size', ['size_id' => $size->id]) }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit"><i class="fa-solid fa-pencil"></i></a>
-                                            <a class="btn btn-danger" href="{{ route('delete-size', ['size_id' => $size->id]) }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete"><i class="fa-solid fa-trash"></i></a>
+                                            <a class="btn btn-danger deleteRow" data-href="{{ route('delete-size', ['size_id' => $size->id]) }}" data-row-name="Size" data-name="{{$size->size_name}}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete"><i class="fa-solid fa-trash"></i></a>
                                         </td>
                                     </tr>
                                 @endforeach

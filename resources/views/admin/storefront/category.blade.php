@@ -63,7 +63,7 @@
                                         <td>{{$category->status}}</td>
                                         <td>
                                             <a class="btn btn-primary" href="{{ route('edit-category', ['category_id' => $category->id]) }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit"><i class="fa-solid fa-pencil"></i></a>
-                                            <a class="btn btn-danger deleteCategory" href="javascript:void(0)" data-category-id="$category->id" data-href="{{ route('delete-category', ['category_id' => $category->id]) }}" data-category-name="{{ $category->full_path }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete"><i class="fa-solid fa-trash"></i></a>                                        
+                                            <a class="btn btn-danger deleteRow" href="javascript:void(0)" data-href="{{ route('delete-category', ['category_id' => $category->id]) }}" data-name="{{ $category->full_path }}" data-row-name="Category" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete"><i class="fa-solid fa-trash"></i></a>                                        
                                         </td>
                                     </tr>
                                     @endforeach
@@ -115,32 +115,4 @@
         </div>
     </div>
 </section>
-
-<script>
-    // confirm box
-    let deleteButton = document.querySelectorAll('.deleteCategory');
-    deleteButton.forEach(element => {
-        element.addEventListener('click', function(e) {
-            e.preventDefault(); // Prevent the default action
-            let category_id = element.getAttribute('data-category-id')
-            let url = element.getAttribute('data-href')
-            let category_name = element.getAttribute('data-category-name')
-            Swal.fire({
-                title: 'Are you sure?',
-                html: 'Do you want delete this category.' + '<br><strong>'+category_name+'</strong>' ,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                cancelButtonText: 'No',
-                confirmButtonText: 'Yes'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Redirect to the deletion URL
-                    window.location.href = url;
-                }
-            });
-        });
-    });
-</script>
 @endsection

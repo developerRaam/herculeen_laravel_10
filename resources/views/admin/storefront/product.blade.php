@@ -43,14 +43,14 @@
                         <table class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th class="text-center"><input type="checkbox" class="form-check-input" name="" id=""></th>
-                                    <th>Image</th>
-                                    <th>Product Name</th>
-                                    <th>Model</th>
-                                    <th>Price</th>
-                                    <th>Quantity</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
+                                    <th width="5%" class="text-center"><input type="checkbox" class="form-check-input" name="" id=""></th>
+                                    <th width="10%">Image</th>
+                                    <th width="30%">Product Name</th>
+                                    {{-- <th width="5%">Model</th> --}}
+                                    <th width="12%">Price</th>
+                                    <th width="12%">Quantity</th>
+                                    <th width="11%">Status</th>
+                                    <th width="20%">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -59,16 +59,16 @@
                                         <td class="text-center"><input type="checkbox" class="form-check-input" name="" id=""></td>
                                         <td><img width="50" height="50" src="{{ ($product->image) ? asset("image/cache/products").'/'.($product->product_id .'/'. str_replace(".jpg",'',$product->image) .'_100x100.jpg') : asset('image/not-image-available.png')}}" alt="{{$product->product_name}}"></td>
                                         <td>{{$product->product_name}}</td>
-                                        <td>{{$product->model}}</td>
+                                        {{-- <td>{{$product->model}}</td> --}}
                                         <td>Rs.{{ number_format($product->list_price,2) }}</td>
                                         <td>{{$product->quantity}}</td>
                                         <td> @if($product->status) <span class="bg-success rounded p-1 text-white">Enabled</span> @else <span class="bg-warning rounded p-1">Disabled</span> @endif </td>
                                         <td>
                                             <a class="btn btn-primary mb-1" href="{{ route('admin-product-edit', ['product_id' => $product->product_id]) }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit"><i class="fa-solid fa-pencil"></i></a>
                                             <button type="button" class="btn btn-primary mb-1 addVariation" data-product-id="{{ $product->product_id }}" data-bs-toggle="modal" data-bs-target="#addVariation">
-                                                <span class="b-block" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add Variation"><i class="fa-solid fa-plus"></i></span>
+                                                <span class="b-block" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add Variation"><i class="fa-solid fa-list"></i></span>
                                             </button>
-                                            <a class="btn btn-danger deleteProduct" href="javascript:void(0)" data-product-id="{{ $product->product_id }}" data-href="{{ route('admin-product-delete', ['product_id' => $product->product_id]) }}" data-product-name="{{$product->product_name}}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete"><i class="fa-solid fa-trash"></i></a>
+                                            <a class="btn btn-danger deleteRow" href="javascript:void(0)" data-href="{{ route('admin-product-delete', ['product_id' => $product->product_id]) }}" data-name="{{$product->product_name}}" data-row-name="Product" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete"><i class="fa-solid fa-trash"></i></a>
                                         </td>
                                     </tr>
                                     @endforeach
@@ -376,30 +376,5 @@
     // end variation
 
 
-    // confirm box
-    let deleteButton = document.querySelectorAll('.deleteProduct');
-    deleteButton.forEach(element => {
-        element.addEventListener('click', function(e) {
-            e.preventDefault(); // Prevent the default action
-            let product_id = element.getAttribute('data-product-id')
-            let url = element.getAttribute('data-href')
-            let product_name = element.getAttribute('data-product-name')
-            Swal.fire({
-                title: 'Are you sure?',
-                html: 'Do you want delete this product.' + '<br><strong>'+product_name+'</strong>' ,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                cancelButtonText: 'No',
-                confirmButtonText: 'Yes'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Redirect to the deletion URL
-                    window.location.href = url;
-                }
-            });
-        });
-    });
 </script>
 @endsection
