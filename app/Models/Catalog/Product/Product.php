@@ -30,25 +30,104 @@ class Product extends Model
     public static function getProducts($filter = array()){
         $query = 'SELECT p.id as product_id,p.image, p.product_name, p.tag, p.model, pp.list_price, pp.mrp, p.quantity,p.slug FROM  products p LEFT JOIN  product_prices pp ON pp.product_id = p.id  WHERE p.status=1';
 
+        $size_product_ids = [];
+        $color_product_ids = [];
+        $category_product_ids = [];
+
         //Get Category
         if (isset($filter['category_id']) && null !== $filter['category_id']) {
             $product_ids = '';
             $category = DB::table('product_categories')->where('category_id', $filter['category_id'])->get();
             foreach ($category as $value) {
-                $product_ids .= $value->product_id . ','; // Concatenate product IDs
+                $category_product_ids[] = $value->product_id;
             }
-            // Remove the trailing comma, if any
-            $product_ids = rtrim($product_ids, ',');
+        }
 
-            if($product_ids){
+        if($category_product_ids){
+            if((isset($filter['query_size']) && null !== $filter['query_size']) || isset($filter['query_color']) && null !== $filter['query_color']){
+                if(isset($filter['query_size']) && null !== $filter['query_size']){
+                    foreach($category_product_ids as $cat_product_id){
+                        foreach ($filter['query_size'] as $value) {
+                            $getSizeId = DB::table('size')->where('size_name', $value)->first();
+                            $sizes = DB::table('product_variation')->where('size_id', $getSizeId->id)->where('product_id', $cat_product_id)->get();
+                            foreach ($sizes as $size) {
+                                $size_product_ids[] = $size->product_id;
+                            }
+                        }
+                    }
+                }
+                if(isset($filter['query_color']) && null !== $filter['query_color']){
+                    foreach($category_product_ids as $cat_product_id){
+                        foreach ($filter['query_color'] as $value) {
+                            $getColorId = DB::table('colors')->where('color_name', $value)->first();
+                            $color = DB::table('product_variation')->where('color_id', $getColorId->id)->where('product_id', $cat_product_id)->get();
+                            foreach ($color as $size) {
+                                $color_product_ids[] = $size->product_id;
+                            }
+                        }
+                    }
+                }
+                // Remove duplicate product Ids
+                $union = array_unique(array_merge($size_product_ids, $color_product_ids));
+            }else{
+                // Remove duplicate product Ids
+                $union = array_unique(array_merge($category_product_ids));
+            }
+
+            if($union){
+                $product_ids = '';
+                foreach ($union as $value) {
+                    $product_ids .= $value . ',';
+                }
+                // Remove the trailing comma, if any
+                $product_ids = rtrim($product_ids, ',');
                 $query .= " and p.id IN (" . $product_ids . ")";
             }else{
                 $query .= " and p.id IN (0)";
+            }
+        }else{
+            // Size and color Filters
+            if((isset($filter['query_size']) && null !== $filter['query_size']) || isset($filter['query_color']) && null !== $filter['query_color']){
+                if(isset($filter['query_size']) && null !== $filter['query_size']){
+                    foreach ($filter['query_size'] as $value) {
+                        $getSizeId = DB::table('size')->where('size_name', $value)->first();
+                        $sizes = DB::table('product_variation')->where('size_id', $getSizeId->id)->get();
+                        foreach ($sizes as $size) {
+                            $size_product_ids[] = $size->product_id;
+                        }
+                    }
+                }
+                if(isset($filter['query_color']) && null !== $filter['query_color']){
+                    foreach ($filter['query_color'] as $value) {
+                        $getColorId = DB::table('colors')->where('color_name', $value)->first();
+                        $color = DB::table('product_variation')->where('color_id', $getColorId->id)->get();
+                        foreach ($color as $size) {
+                            $color_product_ids[] = $size->product_id;
+                        }
+                    }
+                }
+
+                // Remove duplicate product Ids
+                $union = array_unique(array_merge($size_product_ids, $color_product_ids));
+                if($union){
+                    $product_ids = '';
+                    foreach ($union as $value) {
+                        $product_ids .= $value . ',';
+                    }
+                    // Remove the trailing comma, if any
+                    $product_ids = rtrim($product_ids, ',');
+                    $query .= " and p.id IN (" . $product_ids . ")";
+                }else{
+                    $query .= " and p.id IN (0)";
+                }
             }
         }
 
         // Filter
         if($filter){
+            if(isset($filter['search']) && null !== $filter['search']){
+                $query .= ' AND p.product_name LIKE \'%' . $filter['search'] . '%\'';
+            }
             if (isset($filter['desc']) && null !== $filter['desc']) {
                 $query .= " order by p.product_name " . $filter['desc'] . "";
             }
@@ -68,36 +147,7 @@ class Product extends Model
                 $query .= " order by pp.list_price "  . $filter['high_to_low'] . "";
             }
         }
-         
+        
         return DB::select($query);
-    }
-
-    public static function getProductByFilter($filter = array()){
-        // by size
-        if (isset($filter['size_ids']) && null !== $filter['size_ids']) {
-            $result = Product::getProducts($filter);
-            $collection = [];
-            $sizes = DB::table('product_variation')->whereIn('size_id', $filter['size_ids'])->get();
-
-            foreach ($sizes as $size) {
-                foreach ($result as $product) {
-                    if($size->product_id == $product->product_id){
-                        $collection[] = [
-                            "product_id" => $product->product_id ?? null,
-                            "image" => $product->image ?? null,
-                            "product_name" => $product->product_name ?? null,
-                            "tag" => $product->tag ?? null,
-                            "model" => $product->model ?? null,
-                            "list_price" => $product->list_price ?? null,
-                            "mrp" => $product->mrp ?? null,
-                            "quantity" => $product->quantity ?? null,
-                            "slug" => $product->slug ?? null,
-                        ];
-                    }
-                }
-            }
-            return $collection;
-        } 
-        return [];
     }
 }

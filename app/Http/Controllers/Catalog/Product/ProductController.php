@@ -41,6 +41,21 @@ class ProductController extends Controller
             $filter['category_id'] = $category_id;
         }
 
+        // Filters
+        $filter['query_size'] = $data['query_size'] = $request->query('size') ?? null;
+        $filter['query_color'] = $data['query_color'] = $request->query('color') ?? null;
+
+        // search
+        $filter['search'] = $data['search'] = $request->query('search') ?? null;
+
+        // Removed sort for url
+        $data['query_string'] = $_SERVER['QUERY_STRING'] ?? '';
+        $data['query_string'] = explode('&', $data['query_string']);
+        $data['query_string'] = array_filter($data['query_string'], function($param) {
+            return !preg_match('/^sort=/', $param);
+        });
+        $data['query_string'] = implode('&', $data['query_string']);
+
         // Pagination
         $results = Product::getProducts($filter);
         $perPage = 40;
@@ -56,33 +71,5 @@ class ProductController extends Controller
         $data['category_slug'] = $category_slug;
         
         return view('catalog.product.product_all', $data);
-    }
-
-    public function getProductByFilter(Request $request){
-        if(null !== $request->input('size_ids')){
-            $filter['size_ids'] = $request->input('size_ids');
-        }else{
-            $filter['size_ids'] = null;
-        }
-        
-        if(null !== $request->request->get('sort')){
-            $filter['sort'] = $request->request->get('sort');
-        }else{
-            $filter['sort'] = null;
-        }
-        
-        $results = Product::getProductByFilter($filter);
-        
-        // Pagination
-        $perPage = 40;
-        $paginator = Pagination::pagination($results, $perPage);
-
-        $data['products'] = $paginator['items'];
-        $data['pagination'] = $paginator['pagination'];
-
-        $data['size_ids'] = $filter['size_ids'];
-        $data['sort'] = $filter['sort'];
-
-        return response()->json($data);
     }
 }

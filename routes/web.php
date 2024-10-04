@@ -21,14 +21,15 @@ use App\Http\Controllers\Admin\Storefront\AdminProductController;
 use App\Http\Controllers\Admin\Storefront\AdminCategoryController;
 use App\Http\Controllers\Admin\Storefront\ColorController;
 use App\Http\Controllers\Admin\Storefront\SizeController;
+use App\Http\Controllers\Catalog\Product\SearchController;
 
 // Catalog
 Route::name('catalog.')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('/product/{product_id}/{slug?}', [ProductController::class, 'productDetail'])->name('product-detail');
     Route::get('/products/{category_id?}/{category_slug?}', [ProductController::class, 'getAllProduct'])->name('product-all');
-    Route::post('/products/size={size_name}/{size_id}', [ProductController::class, 'getProductByFilter']);
-    Route::get('category/', [CategoryController::class, 'getAllCategories'])->name('getAllCategories');
+    Route::get('/category', [CategoryController::class, 'getAllCategories'])->name('getAllCategories');
+
 });
 
 // Admin

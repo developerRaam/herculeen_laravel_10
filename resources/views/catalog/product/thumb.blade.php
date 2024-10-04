@@ -2,7 +2,7 @@
 <div class="row">
   @if ($products)
   @forelse ($products as $product)
-    <div class="col-sm-4 col-md-3 col-lg-3">
+    <div class="col-6 col-sm-4 col-md-4 col-lg-3">
       <a href="{{ route('catalog.product-detail', ['product_id' => $product->product_id, 'slug' => $product->slug]) }}">
         <div class="product-item">
             <div class="image-holder">
