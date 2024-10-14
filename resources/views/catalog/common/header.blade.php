@@ -1,4 +1,5 @@
-<nav class="p-1 sticky-top" style="background:#ff006f;margin-top: -1px;">
+
+<nav class="p-1 sticky-top" style="background:#000;margin-top: -1px;">
     <div class="container">
         <div class="row">
             <div class="col-6">
@@ -45,20 +46,26 @@
           <div class="offcanvas-header">
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
           </div>
-          <div class="offcanvas-body">
+          <div class="offcanvas-body px-0">
             <ul class="list-unstyled mb-0">                
                 @foreach ($service_categories as $category)
                     @if ($category->menu_top === 1)
-                        <li class="px-3 fs-5 navbar_items active-link">
-                            <a class="text-decoration-none text-dark" href="javascript:void(0)">
-                                {{ $category->category_name }}
+                        <li class="fs-5 mb-0" style="border-bottom: 1px solid #fff">
+                            <a class="text-decoration-none sidebar_link_menu text-dark d-block d-flex justify-content-between px-3" data-category-id="{{ $category->id }}" style="background-color:#ddd" href="javascript:void(0)">
+                                <span>{{ $category->category_name }}</span>
+                                <span><i class="fa-solid fa-plus"></i></span>
                             </a>
                             @if ($category->children->isNotEmpty())
-                                <ul class="navbar_items-link">
+                            <ul class="list-unstyled sidebar_link_item" id="sidebar_link_item_{{ $category->id }}" style="display: none">
+                                    <li class="ps-4 mb-0 border-bottom">
+                                        <a class="text-decoration-none text-primary d-block d-block ps-2" href="{{ route('catalog.product-all', [$category->id, $category->slug]) }}">
+                                            {{ $category->category_name }}
+                                        </a>
+                                    </li>
                                     @foreach ($category->children as $child)
-                                        <li class="p-0 mb-0">
+                                        <li class="ps-4 mb-0 border-bottom">
                                             <a class="text-decoration-none d-block text-dark d-block ps-2" href="{{ route('catalog.product-all', [$child->id, $child->slug]) }}">
-                                                {{ $child->category_name }}
+                                                <i class="fa-solid fa-angle-right fs-6"></i> {{ $child->category_name }}
                                             </a>
                                         </li>
                                     @endforeach
@@ -77,6 +84,27 @@
         </div>
     </div>
 </nav>
+
+<script>
+    // for mobile device
+    const sidebar_link_menu = document.querySelectorAll('.sidebar_link_menu');
+    sidebar_link_menu.forEach(element => {
+        element.addEventListener('click', () => {
+            let category_id = element.getAttribute('data-category-id');
+            let sidebar_link_item = document.getElementById('sidebar_link_item_'+category_id);
+
+            if (sidebar_link_item) { 
+                if (sidebar_link_item.style.display === 'block') {
+                    sidebar_link_item.style.display = 'none';
+                } else {
+                    sidebar_link_item.style.display = 'block';
+                    sidebar_link_item.style.transition = 'all 2s'
+
+                }
+            } 
+        })
+    });
+</script>
 
 <script>
     // Select all active links

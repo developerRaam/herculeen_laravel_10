@@ -28,6 +28,7 @@
                     </div>
                     <div>
                         <a class="btn btn-primary fs-4 px-3" href="{{$add}}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add Product"><i class="fa-solid fa-plus"></i></a>
+                        <a class="btn btn-danger fs-4 px-3" data-name="Selected Products" href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete Product" id="multi-selection-delete-button"><i class="fa-solid fa-trash"></i></a>
                     </div>
                 </div>
             </div>
@@ -43,7 +44,7 @@
                         <table class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th width="5%" class="text-center"><input type="checkbox" class="form-check-input" name="" id=""></th>
+                                    <th width="5%" class="text-center"><input type="checkbox" class="form-check-input" name="" id="multiselections"></th>
                                     <th width="10%">Image</th>
                                     <th width="30%">Product Name</th>
                                     {{-- <th width="5%">Model</th> --}}
@@ -56,8 +57,8 @@
                             <tbody>
                                 @foreach ($products as $product)
                                     <tr>
-                                        <td class="text-center"><input type="checkbox" class="form-check-input" name="" id=""></td>
-                                        <td><img width="50" height="50" src="{{ ($product->image) ? asset("image/cache/products").'/'.($product->product_id .'/'. str_replace(".jpg",'',$product->image) .'_100x100.jpg') : asset('image/not-image-available.png')}}" alt="{{$product->product_name}}"></td>
+                                        <td class="text-center"><input type="checkbox" class="form-check-input selectBox" name="" data-product-id="{{$product->product_id}}"></td>
+                                        <td class="text-center"><img height="50" src="{{ ($product->image) ? asset("image/cache/products").'/'.($product->product_id .'/'. str_replace(".jpg",'',$product->image) .'_100x100.jpg') : asset('image/not-image-available.png')}}" alt="{{$product->product_name}}"></td>
                                         <td>{{$product->product_name}}</td>
                                         {{-- <td>{{$product->model}}</td> --}}
                                         <td>Rs.{{ number_format($product->list_price,2) }}</td>
@@ -375,6 +376,100 @@
 
     // end variation
 
+    // ======================== multi selections ================================
+    let productList = [];
+    const multiSelection = document.getElementById('multiselections');
+    const selectBox = document.querySelectorAll('.selectBox');
 
+    multiSelection.addEventListener('click', () => {
+        productList = [];
+        
+        selectBox.forEach(element => {
+            let productId = element.getAttribute('data-product-id')
+            if(productId){
+                if(multiSelection.checked){
+                    productList.push(productId)
+                    element.checked = true
+                }else{
+                    productList.pop(productId)
+                    element.checked = false
+                }
+            }
+        }); 
+    })
+
+    selectBox.forEach(element => {
+        productList = [];
+        element.addEventListener('click', () => {
+            let productId = element.getAttribute('data-product-id')
+            if(productId){
+                if(element.checked){
+                    productList.push(productId)
+                    element.checked = true
+                }else{
+                    productList.pop(productId)
+                    element.checked = false
+                }
+            }
+
+            // unchecked multiselection when rest product
+            if(selectBox.length !== productList.length){
+                multiSelection.checked = false
+            }else{
+                multiSelection.checked = true
+            }
+        })
+    }); 
+
+    // for multiselection confirm box
+    document.getElementById('multi-selection-delete-button').addEventListener('click', function(e) {
+        e.preventDefault(); // Prevent the default action
+        let name = document.getElementById('multi-selection-delete-button').getAttribute('data-name')
+        if(productList.length < 1){
+            dataName = "<span style='color:red'>You must select a product to delete</span>"
+        }else{
+            dataName = `<span>Do you want delete this ${name}</span>`
+        }
+        Swal.fire({
+            title: 'Are you sure?',
+            html: dataName ,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'No',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/admin/storefront/deleteMultiSelection',
+                    method : 'post',
+                    data: {
+                        'productList' : productList,
+                        '_token': '{{ csrf_token() }}',
+                    },
+                    dataType: 'json',
+                    success: function(response){
+                        if(response.success){
+                            Swal.fire({
+                                title: 'Success',
+                                html: response.message ,
+                                icon: 'success',
+                                showCancelButton: false,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Ok'
+                            }).then((result) => {
+                                window.location.href = {!! json_encode($product_page_url) !!};
+                            });
+                        }
+                    }
+                })
+            }
+        });
+    });
+
+
+    // ========================= End multi selection =======================
 </script>
 @endsection

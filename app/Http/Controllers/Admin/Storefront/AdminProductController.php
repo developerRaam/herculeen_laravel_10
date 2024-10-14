@@ -72,6 +72,7 @@ class AdminProductController extends Controller
         $data['colors'] = Color::getAllColor();
         $data['sizes'] = Size::getAllSize();
         $data['product_variation_route'] = route('admin-addVariation');
+        $data['product_page_url'] = URL::to('/admin/storefront/product');
 
         return view('admin.storefront.product', $data);
     }
@@ -213,15 +214,13 @@ class AdminProductController extends Controller
                             $imageManager->scaleDown(height:$size[$i]);
                             $imageManager->save(public_path('image/cache/products/'.$product_id.'/'. $imageName .'_'. $size[$i] .'x'. $size[$i] . $mimeType));
                         }
-
                     }
+                    // upload product image
+                    $product_update = Product::where('id', $product_id)->first();
+                    $product_update->image = $imageName . $mimeType ?? null;
+                    $product_update->update();
                     // End Upload product image
                 }
-
-                // upload product image
-                $product_update = Product::where('id', $product_id)->first();
-                $product_update->image = $imageName . $mimeType ?? null;
-                $product_update->update();
 
                 // product to category
                 if (null !== $request->input('category_ids')) {
@@ -352,11 +351,11 @@ class AdminProductController extends Controller
             }
             return redirect('admin/storefront/product')->with('success', 'Product created successfully.');
         } catch (Exception $e) {
-            dd($e->getMessage());
+            dd($e);
         }
     }
 
-    public function editProduct(Request $request, $product_id)
+    public function editProduct(Request $request, int $product_id)
     {
         $data['heading_title'] = "Edit Product";
 
@@ -539,10 +538,15 @@ class AdminProductController extends Controller
                 if (!empty($validatedData['list_price']) && !empty($validatedData['mrp'])) {
                     $price = ProductPrice::where('product_id', $product_id)->first();
                     if ($price) {
-                        $price->product_id = (int) $product_id;
-                        $price->list_price = $data->get('list_price') ?? '';;
-                        $price->mrp = $data->get('mrp') ?? '';;
+                        $price->list_price = $data->get('list_price') ?? '';
+                        $price->mrp = $data->get('mrp') ?? '';
                         $price->update();
+                    }else{
+                        $price = new ProductPrice();
+                        $price->product_id = (int) $product_id;
+                        $price->list_price = $data->get('list_price') ?? '';
+                        $price->mrp = $data->get('mrp') ?? '';
+                        $price->save();
                     }
                 }
 
@@ -595,8 +599,8 @@ class AdminProductController extends Controller
                     $filter->update();
                 }
 
-                // Product Image
-                if ($request->file('product_image') != null) {
+                 // Product additional Image
+                 if ($request->file('product_image') != null) {
 
                     $folderPath = public_path('image/products');
                     if (!file_exists($folderPath)) {
@@ -608,25 +612,43 @@ class AdminProductController extends Controller
 
                     $files = $request->file('product_image'); // get files
                     foreach ($files as $key => $file) {
-                        $imageName = time() . '_' . $file['image']->getClientOriginalName();
-                        $imagePath = public_path('image/products/'.'/'.$product_id.'/') . $imageName;
+                        $imageName = time() . '_' . Str::uuid();
+                        $mimeType = '.jpg';
+                        $imagePath = public_path('image/products/'.$product_id.'/') . $imageName . $mimeType;
                         // sort
                         $sort = $request->input('product_image_sort')[$key]['sort'];
+                        $image_id = $request->input('product_image_id')[$key]['image_id'];
+                        if (!file_exists($imagePath)) {
+                            $file['image']->move(public_path('image/products/'.$product_id.'/'), $imageName . $mimeType);
+                            $image = ProductImage::where('id', $image_id)->where('product_id', $product_id)->first();
+                            if($image){
+                                $image->image = $imageName . $mimeType;
+                                $image->sort = $sort;
+                                $image->save();
+                            }else{
+                                $image = new ProductImage();
+                                $image->product_id = $product_id;
+                                $image->image = $imageName . $mimeType;
+                                $image->sort = $sort;
+                                $image->save();
+                            }
+                        }
 
-                        $file['image']->move(public_path('image/products/'.'/'.$product_id.'/'), $imageName);
+                        // image cache
+                        $cachePath = public_path('image/cache/products');
+                        if(!file_exists($cachePath.'/'.$product_id)){
+                            mkdir($cachePath.'/'.$product_id, 0777, true);
+                        }
+                        $imageManager = ImageManager::imagick()->read($imagePath);
+                        $imageCachePath = public_path('image/cache/products/'.$product_id.'/') . $imageName . $mimeType;
+                        if(!file_exists($imageCachePath)){
+                            $size = [700,500,300,100];
+                            for ($i=0; $i < count($size); $i++) { 
+                                // resize to 300 x 200 pixel
+                                $imageManager->scaleDown(height:$size[$i]);
+                                $imageManager->save(public_path('image/cache/products/'.$product_id.'/'. $imageName .'_'. $size[$i] .'x'. $size[$i] . $mimeType));
+                            }
 
-                        $image = ProductImage::where('product_id', $product_id)->first();
-                       
-                        if ($image) {
-                            $image->image = $imageName;
-                            $image->sort = $sort;
-                            $image->update();
-                        } else {
-                            $image = new ProductImage();
-                            $image->product_id = $product_id;
-                            $image->image = $imageName;
-                            $image->sort = $sort;
-                            $image->save();
                         }
                     }
                 }
@@ -675,9 +697,9 @@ class AdminProductController extends Controller
 
     public function addVariation(Request $request){
         // Add variations
+        $product_id = $request->request->get('product_id');
         if($request->input('color_id') && $request->input('size_id') && $request->input('combinations')){
 
-            $product_id = $request->request->get('product_id');
             $colorIds = $request->input('color_id');
             $sizeIds = $request->input('size_id');
             $combinations = $request->input('combinations');
@@ -697,17 +719,15 @@ class AdminProductController extends Controller
             }
             $variationtData = array_merge($variationtData, ['product_id' => $product_id]);
 
-            if($product_id){
-                try{
-                    ProductVariation::addVariation($variationtData);
-                    return redirect('admin/storefront/product')->with('success', 'Product variation added successfully.');
-                }catch(Exception $e){
-                    dd($e->getMessage());
-                }
-            }else{
-                return redirect('admin/storefront/product')->with('error', 'Product ID Not Found.');
-        }
+            try{
+                ProductVariation::addVariation($variationtData);
+                return redirect('admin/storefront/product')->with('success', 'Product variation added successfully.');
+            }catch(Exception $e){
+                dd($e->getMessage());
+            }
         }else{
+            ProductVariation::addVariation(['product_id' => $product_id]);
+            return redirect('admin/storefront/product')->with('success', 'Product variation added successfully.');
             return redirect('admin/storefront/product')->with('error', 'Variation Data Not Found.');
         }
     }
@@ -721,7 +741,28 @@ class AdminProductController extends Controller
             ];
             return response()->json($data);
         } else {
-            return response()->json(['error' => 'Product Variation Not Available']);
+            return response()->json(['error' => 'Not found any product variation']);
+        }
+    }
+
+    public function deleteMultiSelection(Request $request){
+        $productList = $request->input('productList');
+        if($productList){
+            foreach ($productList as $value) {
+                $product_id = (int)$value;
+                Product::deleteProduct($product_id);
+            }
+            $json = [
+                'success' => 1,
+                'message' => "Product deleted successfully"
+            ];
+            return response()->json($json);
+        }else{
+            $json = [
+                'error' => 1,
+                'message' => "You must select a product to delete."
+            ];
+            return response()->json($json);
         }
     }
 }

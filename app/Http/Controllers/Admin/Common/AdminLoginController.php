@@ -16,10 +16,7 @@ class AdminLoginController extends Controller
 
     public function adminLogin(Request $request)
     {
-        $request->validate([
-            'username' => 'required',
-            'password' => 'required',
-        ]);
+
         // $hashed=Hash::make($request->password);
         // dd($hashed);
         // Hash::check($request->password,$admin->password);

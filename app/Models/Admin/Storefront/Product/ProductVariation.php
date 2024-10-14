@@ -20,17 +20,21 @@ class ProductVariation extends Model
 
         DB::table('product_variation')->where('product_id', $product_id)->delete();
 
-        foreach ($data['variation_data'] as $value) {
-            DB::table('product_variation')->insert([
-                'product_id' => $product_id,
-                'color_id' => $value['color_id'] ?? null,
-                'size_id' => $value['size_id'] ?? null,
-                'combination' => $value['combination'] ?? null,
-                'price' => $value['price'] ?? null,
-                'quantity' => $value['quantity'] ?? 0,
-                'created_at' => now(),
-                'updated_at' => now()
-            ]);
+        $variation_data = $data['variation_data'] ?? null;
+
+        if($variation_data){
+            foreach ($variation_data as $value) {
+                DB::table('product_variation')->insert([
+                    'product_id' => $product_id,
+                    'color_id' => $value['color_id'] ?? null,
+                    'size_id' => $value['size_id'] ?? null,
+                    'combination' => $value['combination'] ?? null,
+                    'price' => $value['price'] ?? null,
+                    'quantity' => $value['quantity'] ?? 0,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]);
+            }
         }
     }
 

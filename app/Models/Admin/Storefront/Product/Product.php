@@ -50,7 +50,7 @@ class Product extends Model
                     ->leftJoin('product_prices', 'products.id', '=', 'product_prices.product_id')
                     ->where('products.id', $product_id)->first();
 
-        $images = DB::table('product_images')->where('product_id', $product->id)->get();
+        $images = DB::table('product_images')->where('product_id', $product_id)->get();
 
         $data['product'] = $product;
         $data['images'] = $images;

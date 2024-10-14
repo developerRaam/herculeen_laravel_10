@@ -70,6 +70,7 @@ Route::middleware(['AdminMiddlewareLogin'])->prefix('admin/storefront')->group(f
     Route::get('product-delete/product_id={product_id}', [AdminProductController::class, 'delete'])->name('admin-product-delete');
     Route::post('product-variation/', [AdminProductController::class, 'addVariation'])->name('admin-addVariation');
     Route::get('product-get-variation/{product_id}', [AdminProductController::class, 'getVariation'])->name('admin-getVariation');
+    Route::post('deleteMultiSelection/', [AdminProductController::class, 'deleteMultiSelection']);
     
     Route::get('category/', [AdminCategoryController::class, 'index'])->name('category');
     Route::get('category-form/', [AdminCategoryController::class, 'form']);

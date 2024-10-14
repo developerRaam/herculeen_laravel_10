@@ -31,17 +31,17 @@
             <ul class="h-100 d-flex align-items-center p-2 mx-3 list-unstyled">
                 <li class="mx-2">
                     <a href="#" class="text-decoration-none text-white">
-                        <i class="fa-regular fa-heart p-2 rounded-circle" style="background-color: #ff006f;"></i>
+                        <i class="fa-regular fa-heart p-2 rounded-circle" style="background-color: #000;"></i>
                     </a>
                 </li>
                 <li class="mx-2">
                     <a href="#" class="text-decoration-none text-white">
-                        <i class="fa-solid fa-cart-plus p-2 rounded-circle" style="background-color: #ff006f;"></i>
+                        <i class="fa-solid fa-cart-plus p-2 rounded-circle" style="background-color: #000;"></i>
                     </a>
                 </li>
                 <li class="dropdown mx-2">
                     <a href="#" class="text-decoration-none text-white " data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fa-solid fa-user p-2 rounded-circle" style="background-color: #ff006f;"></i>
+                        <i class="fa-solid fa-user p-2 rounded-circle" style="background-color: #000;"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end user-dropdown" style="z-index: 1500">
                         <li><a class="dropdown-item" href="#">Register</a></li>

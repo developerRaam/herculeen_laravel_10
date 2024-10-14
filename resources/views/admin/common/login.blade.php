@@ -10,18 +10,9 @@
             <div class="card">
                 <div class="card-body">
                     <h2 class="fs-4 mb-4 text-center">Admin Login</h2>
-                    @if(Session::has('success'))
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            {{ Session::get('success') }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    @endif
-                    @if(Session::has('error'))
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            {{ Session::get('error') }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    @endif
+                    <!-- Alert Message -->
+                    @include('admin.common.alert')
+                    
                     <form action="{{ route('admin-login') }}" method="POST">
                         @csrf
                         <div class="form-group mb-3">

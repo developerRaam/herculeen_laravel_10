@@ -594,7 +594,7 @@
                                                             <td>
                                                                 <div class="col-sm-4 col-md-3">
                                                                     <div class="card p-2" style="width: 12rem">
-                                                                        <img src="{{ isset($image->image) ? asset("image/cache/products").'/'.($product['product']->product_id .'/'. str_replace(".jpg",'',$product['product']->image) .'_300x300.jpg') : asset('image/not-image-available.png')}}" alt="Product Image" class="card-img-top" id="imagePreview_{{$i}}">
+                                                                        <img src="{{ isset($image->image) ? asset("image/cache/products").'/'.($image->product_id .'/'. str_replace(".jpg",'',$image->image) .'_300x300.jpg') : asset('image/not-image-available.png')}}" data-image-id="{{$image->id}}" alt="Product Image" class="card-img-top" id="imagePreview_{{$i}}">
                                                                         <input type="file" class="product_images" name="product_image[{{$i}}][image]" id="imageUpload_{{$i}}" accept="image/*" style="display: none;" onchange="previewImage(event, {{$i}})">
                                                                         <div class="card-body text-center mt-2"> 
                                                                             <button type="button" class="btn btn-primary fs-5 px-3" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit" onclick="triggerFileUpload({{$i}})"><i class="fa-solid fa-pencil"></i></button>
@@ -842,6 +842,14 @@ function previewImage(event, index) {
         reader.onload = function(e) {
             const img = document.getElementById(`imagePreview_${index}`);
             img.src = e.target.result;
+
+            // create image id element
+            let dataImageId = img.getAttribute('data-image-id');
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = dataImageId
+            input.name = `product_image_id[${index}][image_id]`;
+            img.insertAdjacentElement('afterend', input);
         }
         reader.readAsDataURL(file);
     }
