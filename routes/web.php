@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\Setting\SettingController;
 use App\Http\Controllers\Admin\Setting\EcommerceLinkController;
 use App\Http\Controllers\Admin\Design\BannerController;
 use App\Http\Controllers\admin\AdminDemoDataTableController;
+use App\Http\Controllers\Admin\Customers\CustomerController;
 use App\Http\Controllers\Admin\Design\AdminMediaController;
 use App\Http\Controllers\Admin\Setting\SiteController;
 use App\Http\Controllers\Admin\Storefront\AdminProductController;
@@ -99,3 +100,9 @@ Route::post('/admin/media/uploadFile', [AdminMediaController::class, 'uploadFile
 Route::get('/admin/media/getFiles', [AdminMediaController::class, 'getFiles'])->middleware('AdminMiddlewareLogin');
 Route::post('/admin/media/createFolder', [AdminMediaController::class, 'createFolder'])->middleware('AdminMiddlewareLogin');
 Route::post('/admin/media/delete', [AdminMediaController::class, 'delete'])->middleware('AdminMiddlewareLogin');
+
+Route::middleware(['AdminMiddlewareLogin'])->prefix('admin/customer')->group(function () {
+    Route::get('customer', [CustomerController::class, 'index'])->name('customer');
+    Route::get('customer-form', [CustomerController::class, 'form'])->name('customer-form');
+    Route::post('customer-save', [CustomerController::class, 'save'])->name('customer-save');
+});

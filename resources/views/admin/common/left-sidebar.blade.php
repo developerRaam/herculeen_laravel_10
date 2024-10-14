@@ -13,6 +13,12 @@
                 </div>
             </li>
             <li>
+                <button class="dropdown-btn left-side-btn" data-dropdown="column_left-2"><span><i class="fas fa-user"></i> Customers</span> <i class="fa fa-caret-down"></i></button>
+                <div class="dropdown-container" id="dropdown-column_left-2">
+                    <a class="text-decoration-none text-white d-block" style="padding-left:3rem !important" href="{{ route('customer') }}"><i class="fa-solid fa-angles-right"></i> Customer</a>
+                </div>
+            </li>
+            <li>
                 <button class="dropdown-btn left-side-btn" data-dropdown="column_left-2"><span><i class="fas fa-desktop"></i> Design</span> <i class="fa fa-caret-down"></i></button>
                 <div class="dropdown-container" id="dropdown-column_left-2">
                     <a class="text-decoration-none text-white d-block" style="padding-left:3rem !important" href="{{ route('admin-banner') }}"><i class="fa-solid fa-angles-right"></i> Banner</a>

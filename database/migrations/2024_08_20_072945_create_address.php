@@ -13,9 +13,15 @@ return new class extends Migration
     {
         Schema::create('address', function (Blueprint $table) {
             $table->id();
-            $table->integer('customer_id')->nullable();
-            $table->string('firstname')->nullable();
-            $table->string('lastname')->nullable();
+            $table->integer('customer_id');
+            $table->string('name')->nullable();
+            $table->bigInteger('contact');
+            $table->string('address_1');
+            $table->string('address_2')->nullable();
+            $table->string('city', 50);
+            $table->integer('state_id');
+            $table->integer('country_id');
+            $table->integer('default');
             $table->timestamps();
             
         });
