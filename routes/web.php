@@ -104,5 +104,8 @@ Route::post('/admin/media/delete', [AdminMediaController::class, 'delete'])->mid
 Route::middleware(['AdminMiddlewareLogin'])->prefix('admin/customer')->group(function () {
     Route::get('customer', [CustomerController::class, 'index'])->name('customer');
     Route::get('customer-form', [CustomerController::class, 'form'])->name('customer-form');
-    Route::post('customer-save', [CustomerController::class, 'save'])->name('customer-save');
+    Route::get('customer-edit/customer_id={customer_id}', [CustomerController::class, 'edit'])->name('customer-edit');
+    Route::post('customer-save/{customer_id?}', [CustomerController::class, 'save'])->name('customer-save');
+    Route::get('customer-delete/{customer_id}', [CustomerController::class, 'delete'])->name('customer-delete');
+    Route::post('deleteMultiSelection/', [CustomerController::class, 'deleteMultiSelection']);
 });

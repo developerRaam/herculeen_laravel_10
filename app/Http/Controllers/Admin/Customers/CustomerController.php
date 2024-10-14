@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Customers;
 
+use App\Http\Controllers\Admin\Common\Pagination;
 use App\Http\Controllers\Controller;
 use App\Models\Admin\Customers\Customer;
 use Exception;
@@ -33,6 +34,14 @@ class CustomerController extends Controller
 
         $data['product_page_url'] = URL::to('/admin/customer/customer');
 
+        // Pagination
+        $results = Customer::getCustomers();
+        $perPage = 50;
+        $paginator = Pagination::pagination($results, $perPage);
+        $data['customers'] = $paginator['items'];
+        $data['pagination'] = $paginator['pagination'];
+
+
         return view('admin.customer.customer', $data);
     }
 
@@ -55,7 +64,35 @@ class CustomerController extends Controller
         return view('admin.customer.customer-form', $data);
     }
 
-    public function save(Request $request){
+    public function edit($customer_id = null){
+        $data['heading_title'] = "Customers";
+
+        $data['breadcrumbs'] = [];
+        $data['breadcrumbs'][] = [
+            'text' => 'Home',
+            'href' => URL::to('/admin/dashboard')
+        ];
+        $data['breadcrumbs'][] = [
+            'text' => 'Customers',
+            'href' => URL::to('/admin/customer/customer/')
+        ];
+
+        $data['breadcrumbs'][] = [
+            'text' => 'Edit Customer',
+            'href' => URL::to('/admin/customer/customer-edit/customer_id='.$customer_id)
+        ];
+
+        $data['action'] = route('customer-save', ['customer_id' => $customer_id]);
+        $data['back'] = route('customer');
+
+        if($customer_id){
+            $data['customer'] = Customer::getCustomerById($customer_id);
+        }
+
+        return view('admin.customer.customer-form', $data);
+    }
+
+    public function save(Request $request, $customer_id = null){
 
         $validate = $request->validate([
             'customer_name' => 'required|string|max:255',
@@ -69,14 +106,34 @@ class CustomerController extends Controller
             $data = $request->all();
 
             // verify email 
-            $verifyEmail = Customer::getCustomer($data['email']);
-            if($verifyEmail){
-                return redirect()->route('customer-form')->with('email_error', 'Email already exists');
+            if($customer_id){
+                $getCustomer = Customer::getCustomerById($customer_id);
+                if($getCustomer->email !== $data['email']){
+                    $verifyEmail = Customer::getCustomerByEmail($data['email']);
+                    if($verifyEmail){
+                        return redirect()->route('customer-form', $customer_id)->with('email_error', 'Email already exists');
+                    }
+                }
+            }else{
+                $verifyEmail = Customer::getCustomerByEmail($data['email']);
+                if($verifyEmail){
+                    return redirect()->route('customer-form')->with('email_error', 'Email already exists');
+                }
             }
 
             // Upload image
             $file = $request->file('image'); // get files
             if(null !== $file){
+                // remove image before update
+                $getCustomer = Customer::getCustomerById($customer_id);
+                if($getCustomer && $getCustomer->image){
+                    $image_name = isset($getCustomer->image) ? $getCustomer->image : null;
+                    if($image_name){
+                        if(file_exists(public_path('image/customer/') . $image_name)){
+                            unlink(public_path('image/customer/') . $image_name);
+                        }
+                    }
+                }
                 $folderPath = public_path('image/customer');
                 if (!file_exists($folderPath)) {
                     mkdir($folderPath, 0777, true);
@@ -87,20 +144,47 @@ class CustomerController extends Controller
                     $file->move(public_path('image/customer/'), $imageName);
                 }
                 $data = array_replace($data, ['image' => $imageName]);
-            }    
-    
-            $addCustomer = Customer::addCustomer($data);
+            }   
 
-            if($addCustomer){
-                return redirect()->route('customer')->with('success', 'Customer created successfully!');
+            if($customer_id){
+                Customer::updateCustomer($customer_id, $data);
+                return redirect()->route('customer')->with('success', 'Customer updated successfully!');
             }else{
-                return redirect()->route('customer')->with('error', 'Customer not created successfully!');
+                Customer::addCustomer($data);
+                return redirect()->route('customer')->with('success', 'Customer created successfully!');
             }
-
         }catch(Exception $e){
             dd($e);
-        }
+        }        
+    }
 
-        
+    public function delete($customer_id){
+        $deleteCustomer = Customer::deleteCustomer($customer_id);
+        if($deleteCustomer){
+            return redirect()->route('customer')->with('success', 'Customer deleted successfully!');
+        }else{
+            return redirect()->route('customer')->with('error', 'Customer not deleted successfully!');
+        }
+    }
+
+    public function deleteMultiSelection(Request $request){
+        $customerList = $request->input('customerList');
+        if($customerList){
+            foreach ($customerList as $value) {
+                $customer_id = (int)$value;
+                Customer::deleteCustomer($customer_id);
+            }
+            $json = [
+                'success' => 1,
+                'message' => "Customer deleted successfully"
+            ];
+            return response()->json($json);
+        }else{
+            $json = [
+                'error' => 1,
+                'message' => "You must select a customer to delete."
+            ];
+            return response()->json($json);
+        }
     }
 }

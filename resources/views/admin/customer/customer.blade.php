@@ -53,28 +53,24 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {{-- @foreach ($products as $product)
+                                @foreach ($customers as $customer)
                                     <tr>
-                                        <td class="text-center"><input type="checkbox" class="form-check-input selectBox" name="" data-customer-id="{{$product->product_id}}"></td>
-                                        <td class="text-center"><img height="50" src="{{ ($product->image) ? asset("image/cache/products").'/'.($product->product_id .'/'. str_replace(".jpg",'',$product->image) .'_100x100.jpg') : asset('image/not-image-available.png')}}" alt="{{$product->product_name}}"></td>
-                                        <td>{{$product->product_name}}</td>
-                                        <td>Rs.{{ number_format($product->list_price,2) }}</td>
-                                        <td>{{$product->quantity}}</td>
-                                        <td> @if($product->status) <span class="bg-success rounded p-1 text-white">Enabled</span> @else <span class="bg-warning rounded p-1">Disabled</span> @endif </td>
+                                        <td class="text-center"><input type="checkbox" class="form-check-input selectBox" name="" data-customer-id="{{$customer->id}}"></td>
+                                        <td class="text-center"><img height="50" src="{{ ($customer->image) ? asset("image/customer").'/'.$customer->image : asset('image/not-image-available.png')}}" alt="{{$customer->name}}"></td>
+                                        <td>{{$customer->name}}</td>
+                                        <td>{{ $customer->email }}</td>
+                                        <td> @if($customer->status) <span class="bg-success rounded p-1 text-white">Enabled</span> @else <span class="bg-warning rounded p-1">Disabled</span> @endif </td>
                                         <td>
-                                            <a class="btn btn-primary mb-1" href="{{ route('admin-product-edit', ['product_id' => $product->product_id]) }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit"><i class="fa-solid fa-pencil"></i></a>
-                                            <button type="button" class="btn btn-primary mb-1 addVariation" data-customer-id="{{ $product->product_id }}" data-bs-toggle="modal" data-bs-target="#addVariation">
-                                                <span class="b-block" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add Variation"><i class="fa-solid fa-list"></i></span>
-                                            </button>
-                                            <a class="btn btn-danger deleteRow" href="javascript:void(0)" data-href="{{ route('admin-product-delete', ['product_id' => $product->product_id]) }}" data-name="{{$product->product_name}}" data-row-name="Product" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete"><i class="fa-solid fa-trash"></i></a>
+                                            <a class="btn btn-primary mb-1" href="{{ route('customer-edit', ['customer_id' => $customer->id]) }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit"><i class="fa-solid fa-pencil"></i></a>
+                                            <a class="btn btn-danger deleteRow" href="javascript:void(0)" data-href="{{ route('customer-delete', ['customer_id' => $customer->id]) }}" data-name="{{$customer->name}}" data-row-name="customer" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete"><i class="fa-solid fa-trash"></i></a>
                                         </td>
                                     </tr>
                                     @endforeach
-                                </tbody> --}}
+                                </tbody>
                         </table>
 
                         <!-- Pagination -->
-                        {{-- @include('admin.common.pagination') --}}
+                        @include('admin.common.pagination')
 
                     </div>
                 </div>
@@ -203,7 +199,7 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: '/admin/storefront/deleteMultiSelection',
+                    url: '/admin/customer/deleteMultiSelection',
                     method : 'post',
                     data: {
                         'customerList' : customerList,

@@ -83,7 +83,7 @@
                                                     <label for="customer_name">Customer Name</label>
                                                 </div>
                                                 <div class="col-9">
-                                                    <input type="text" id="customer_name" name="customer_name" class="form-control p-2" value="{{ isset($customer) && property_exists($customer, 'customer_name') ? $customer->customer_name : old('customer_name') }}" placeholder="customer Name">
+                                                    <input type="text" id="customer_name" name="customer_name" class="form-control p-2" value="{{ isset($customer) && property_exists($customer, 'name') ? $customer->name : old('customer_name') }}" placeholder="customer Name">
                                                     <div>
                                                         <span class="text-danger">
                                                             @error('customer_name')
@@ -137,7 +137,7 @@
                                                     <label for="password">Password</label>
                                                 </div>
                                                 <div class="col-9">
-                                                    <input type="password" id="password" name="password" class="form-control p-2" value="{{ isset($customer) && property_exists($customer, 'password') ? $customer->password : old('password') }}" placeholder="Password">
+                                                    <input type="password" id="password" name="password" class="form-control p-2" value="{{ old('password') }}" placeholder="Password">
                                                     <div>
                                                         <span class="text-danger">
                                                             @error('password')
@@ -178,11 +178,11 @@
                                         <div class="col-sm-5">
                                             <div class="row mb-4">
                                                 <div class="col-3 text-end">
-                                                    <label for="image">Image</label>
+                                                    <label for="image">Profile Picture</label>
                                                 </div>
                                                 <div class="col-9">
                                                     <div class="card p-2" style="width: 12rem">
-                                                        <img src="{{ isset($customer->image) ? asset('image/customer/'.$customer->image) : asset('image/not-image-available.png')}}" alt="Customer Image" class="card-img-top" id="imagePreview"  onclick="triggerFileUpload()">
+                                                        <img src="{{ isset($customer) && ($customer->image) ? asset("image/customer").'/'.$customer->image : asset('image/not-image-available.png')}}" alt="Customer Image" class="card-img-top" id="imagePreview"  onclick="triggerFileUpload()">
                                                         <input type="file" name="image" id="imageUpload" accept="image/*" style="display: none;" onchange="previewImage(event)">
                                                         <div class="card-body text-center mt-1"> 
                                                             <button type="button" class="btn btn-danger fs-5 px-3" onclick="removeImage()" data-bs-toggle="tooltip" data-bs-placement="top" title="Clear"><i class="fa-solid fa-trash"></i></button>
