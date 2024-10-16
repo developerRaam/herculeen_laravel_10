@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('address_1');
             $table->string('address_2')->nullable();
             $table->string('city', 50);
+            $table->integer('pincode');
             $table->integer('state_id');
             $table->integer('country_id');
             $table->integer('default');

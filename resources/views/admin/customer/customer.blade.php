@@ -48,25 +48,29 @@
                                     <th width="10%">Image</th>
                                     <th width="30%">Customer Name</th>
                                     <th width="24%">Email</th>
-                                    <th width="11%">Status</th>
-                                    <th width="20%">Action</th>
+                                    <th width="15%">Status</th>
+                                    <th width="16%">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($customers as $customer)
+                                @forelse ($customers as $customer)
                                     <tr>
                                         <td class="text-center"><input type="checkbox" class="form-check-input selectBox" name="" data-customer-id="{{$customer->id}}"></td>
                                         <td class="text-center"><img height="50" src="{{ ($customer->image) ? asset("image/customer").'/'.$customer->image : asset('image/not-image-available.png')}}" alt="{{$customer->name}}"></td>
                                         <td>{{$customer->name}}</td>
                                         <td>{{ $customer->email }}</td>
-                                        <td> @if($customer->status) <span class="bg-success rounded p-1 text-white">Enabled</span> @else <span class="bg-warning rounded p-1">Disabled</span> @endif </td>
+                                        <td> @if($customer->status) <p class="text-success">Enabled</p> @else <p>Disabled</p> @endif </td>
                                         <td>
                                             <a class="btn btn-primary mb-1" href="{{ route('customer-edit', ['customer_id' => $customer->id]) }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit"><i class="fa-solid fa-pencil"></i></a>
                                             <a class="btn btn-danger deleteRow" href="javascript:void(0)" data-href="{{ route('customer-delete', ['customer_id' => $customer->id]) }}" data-name="{{$customer->name}}" data-row-name="customer" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete"><i class="fa-solid fa-trash"></i></a>
                                         </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
+                                    </tr>                                    
+                                @empty
+                                    <caption>
+                                        <p class="text-center">Not found any customers</p>
+                                    </caption>
+                                @endforelse
+                            </tbody>
                         </table>
 
                         <!-- Pagination -->
@@ -101,6 +105,7 @@
                             </div>
                             <div class="mb-3 text-end">
                                 <input id="filter-button"  type="submit" class="btn btn-primary" value="Filter">
+                                <button type="button" class="btn btn-warning" id="clearFilter">Clear</button>
                             </div>
                         </form>
                     </div>
@@ -132,6 +137,11 @@
         // Redirect to the constructed URL
         window.location.href = urlWithParams;
     });
+
+    //================ clear filter button ===================
+    document.getElementById('clearFilter').addEventListener('click', () => {
+        window.location.href = {!! json_encode($page_url) !!}
+    })
 
     // ======================== multi selections ================================
     let customerList = [];
@@ -217,7 +227,7 @@
                                 cancelButtonColor: '#d33',
                                 confirmButtonText: 'Ok'
                             }).then((result) => {
-                                window.location.href = {!! json_encode($product_page_url) !!};
+                                window.location.href = {!! json_encode($page_url) !!};
                             });
                         }
                     }

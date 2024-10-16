@@ -72,7 +72,7 @@ class AdminProductController extends Controller
         $data['colors'] = Color::getAllColor();
         $data['sizes'] = Size::getAllSize();
         $data['product_variation_route'] = route('admin-addVariation');
-        $data['product_page_url'] = URL::to('/admin/storefront/product');
+        $data['page_url'] = URL::to('/admin/storefront/product');
 
         return view('admin.storefront.product', $data);
     }

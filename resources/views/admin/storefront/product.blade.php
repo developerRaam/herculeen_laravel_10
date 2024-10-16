@@ -63,7 +63,7 @@
                                         {{-- <td>{{$product->model}}</td> --}}
                                         <td>Rs.{{ number_format($product->list_price,2) }}</td>
                                         <td>{{$product->quantity}}</td>
-                                        <td> @if($product->status) <span class="bg-success rounded p-1 text-white">Enabled</span> @else <span class="bg-warning rounded p-1">Disabled</span> @endif </td>
+                                        <td> @if($product->status) <p class="text-success">Enabled</p> @else <p>Disabled</p> @endif </td>
                                         <td>
                                             <a class="btn btn-primary mb-1" href="{{ route('admin-product-edit', ['product_id' => $product->product_id]) }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit"><i class="fa-solid fa-pencil"></i></a>
                                             <button type="button" class="btn btn-primary mb-1 addVariation" data-product-id="{{ $product->product_id }}" data-bs-toggle="modal" data-bs-target="#addVariation">
@@ -206,6 +206,7 @@
                             </div>
                             <div class="mb-3 text-end">
                                 <input id="filter-button"  type="submit" class="btn btn-primary" value="Filter">
+                                <button type="button" class="btn btn-warning" id="clearFilter">Clear</button>
                             </div>
                         </form>
                     </div>
@@ -237,6 +238,11 @@
         // Redirect to the constructed URL
         window.location.href = urlWithParams;
     });
+
+        //================ clear filter button ===================
+        document.getElementById('clearFilter').addEventListener('click', () => {
+            window.location.href = {!! json_encode($page_url) !!}
+        })
 
     // start variation
 
@@ -460,7 +466,7 @@
                                 cancelButtonColor: '#d33',
                                 confirmButtonText: 'Ok'
                             }).then((result) => {
-                                window.location.href = {!! json_encode($product_page_url) !!};
+                                window.location.href = {!! json_encode($page_url) !!};
                             });
                         }
                     }

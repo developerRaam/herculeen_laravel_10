@@ -25,7 +25,8 @@ class SiteController extends Controller
 
         $data['action'] = route('site-save');
 
-        $data['site_logo'] = app('settings')['site_logo'] ?? '';
+        $data['site_desktop_logo'] = app('settings')['desktop_logo'] ?? '';
+        $data['site_mobile_logo'] = app('settings')['mobile_logo'] ?? '';
         $data['site_title'] = app('settings')['site_title'] ?? '';
         $data['site_description'] = app('settings')['site_description'] ?? '';
 
@@ -36,12 +37,14 @@ class SiteController extends Controller
         try{
             $data = $request->all();
             // Upload image
-            $file = $request->file('site_logo'); // get files
-            $site_logo = app('settings')['site_logo'] ?? '';
+            $site_desktop_logo = app('settings')['desktop_logo'] ?? '';
+            $site_mobile_logo = app('settings')['mobile_logo'] ?? '';
             $folderPath = public_path('image/setting/site');
-
-            if(null !== $file){
-                $imageName = $file->getClientOriginalName();
+            
+            // For desktop logo
+            $input_desktop_logo = $request->file('desktop_logo'); // get files
+            if(null !== $input_desktop_logo){
+                $imageName = $input_desktop_logo->getClientOriginalName();
                 $imagePath = $folderPath . '/' . $imageName;
 
                 // Check if folder exists, create if not
@@ -50,19 +53,47 @@ class SiteController extends Controller
                 }
 
                // Check if the existing logo needs to be removed
-                if (isset($site_logo) && File::exists($folderPath . '/' . $site_logo)) {
-                    File::delete($folderPath . '/' . $site_logo);
+                if (isset($site_desktop_logo) && File::exists($folderPath . '/' . $site_desktop_logo)) {
+                    File::delete($folderPath . '/' . $site_desktop_logo);
                 }
 
                 // Move the new file if it doesn't already exist
                 if (!File::exists($imagePath)) {
-                    $file->move($folderPath .'/', $imageName);
+                    $input_desktop_logo->move($folderPath .'/', $imageName);
                 }
                   // Get all the form data
-                $data = array_merge($request->all(), ['site_logo' => $imageName]);
+                $data = array_merge($request->all(), ['desktop_logo' => $imageName]);
             }else{
-                $data = array_merge($request->all(), ['site_logo' => NULL]);
+                $data = array_merge($request->all(), ['desktop_logo' => $site_desktop_logo]);
             }
+
+            // for mobile logo
+            $input_mobile_logo = $request->file('mobile_logo'); // get files
+            if(null !== $input_mobile_logo){
+                $imageName = $input_mobile_logo->getClientOriginalName();
+                $imagePath = $folderPath . '/' . $imageName;
+
+                // Check if folder exists, create if not
+                if (!File::exists($folderPath)) {
+                    File::makeDirectory($folderPath, 0777, true);
+                }
+
+               // Check if the existing logo needs to be removed
+                if (isset($site_mobile_logo) && File::exists($folderPath . '/' . $site_mobile_logo)) {
+                    File::delete($folderPath . '/' . $site_mobile_logo);
+                }
+
+                // Move the new file if it doesn't already exist
+                if (!File::exists($imagePath)) {
+                    $input_mobile_logo->move($folderPath .'/', $imageName);
+                }
+                  // Get all the form data
+                $data = array_merge($data, ['mobile_logo' => $imageName]);
+            }else{
+                $data = array_merge($data, ['mobile_logo' => $site_mobile_logo]);
+            }
+
+            // dd($data);
 
             Setting::editSetting('site', $data);
             

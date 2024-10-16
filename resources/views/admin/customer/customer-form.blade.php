@@ -6,6 +6,16 @@
 
 @section('content')
 
+<style>
+    .tabs {
+        display: none;
+    }
+
+    .tabs.active {
+        display: block;
+    }
+</style>
+
 <section class="container-fluid px-0">
     <div class="row">
         <div class="col-sm-12">
@@ -57,7 +67,8 @@
                         <form action="{{$action}}" id="saveForm" method="post" enctype="multipart/form-data" class="pt-3">
                             @csrf
                             <div class="tab-content" id="myTabContent">
-                                <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab">
+                                <!-- Gerenel -->
+                                <div class="tab-pane fade show " id="general" role="tabpanel" aria-labelledby="general-tab">
                                     <div class="row">
                                         <div class="col-sm-7">
                                             <div class="row mb-4">
@@ -200,6 +211,164 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <!-- Address -->
+                                <div class="tab-pane fade show active" id="address" role="tabpanel" aria-labelledby="address-tab">
+                                    <div class="row px-4">
+                                        <div class="col-sm-3" style="background-color: #061a23">
+                                            <div style="line-height: 40px">
+                                                <a class="d-block text-decoration-none text-light" href="javascript:void(0)" onclick="showSection('1')">Address 1</a>
+                                                <a class="d-block btn btn-primary" href="#">Add Address</a>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <div id="1" class="active tabs">
+                                                <input type="hidden" name="address_id" value="">
+                                                <div class="row mb-4">
+                                                    <div class="col-3 text-end">
+                                                        <label for="address_customer_name">Name</label>
+                                                    </div>
+                                                    <div class="col-9">
+                                                        <input type="text" id="address_customer_name" name="address_customer_name" class="form-control p-2" value="{{ isset($customer) && property_exists($customer, 'name') ? $customer->name : old('address_customer_name') }}" placeholder="Name">
+                                                        <div>
+                                                            <span class="text-danger">
+                                                                @error('address_customer_name')
+                                                                    {{$message}}
+                                                                @enderror
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="row mb-4">
+                                                    <div class="col-3 text-end">
+                                                        <label for="address_contact">Contact</label>
+                                                    </div>
+                                                    <div class="col-9">
+                                                        <input type="number" id="address_contact" name="address_contact" class="form-control p-2" value="{{ isset($customer) && property_exists($customer, 'address_contact') ? $customer->name : old('address_contact') }}" placeholder="Contact">
+                                                        <div>
+                                                            <span class="text-danger">
+                                                                @error('address_contact')
+                                                                    {{$message}}
+                                                                @enderror
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row mb-4">
+                                                    <div class="col-3 text-end">
+                                                        <label for="address_1">Address 1</label>
+                                                    </div>
+                                                    <div class="col-9">
+                                                        <input type="text" id="address_1" name="address_1" class="form-control p-2" value="{{ isset($customer) && property_exists($customer, 'address_1') ? $customer->name : old('address_1') }}" placeholder="Address 1">
+                                                        <div>
+                                                            <span class="text-danger">
+                                                                @error('address_1')
+                                                                    {{$message}}
+                                                                @enderror
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row mb-4">
+                                                    <div class="col-3 text-end">
+                                                        <label for="address_2">Address 2</label>
+                                                    </div>
+                                                    <div class="col-9">
+                                                        <input type="text" id="address_2" name="address_2" class="form-control p-2" value="{{ isset($customer) && property_exists($customer, 'address_2') ? $customer->name : old('address_2') }}" placeholder="Address 2">
+                                                        <div>
+                                                            <span class="text-danger">
+                                                                @error('address_2')
+                                                                    {{$message}}
+                                                                @enderror
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row mb-4">
+                                                    <div class="col-3 text-end">
+                                                        <label for="city">City</label>
+                                                    </div>
+                                                    <div class="col-9">
+                                                        <input type="text" id="city" name="city" class="form-control p-2" value="{{ isset($customer) && property_exists($customer, 'city') ? $customer->name : old('city') }}" placeholder="City">
+                                                        <div>
+                                                            <span class="text-danger">
+                                                                @error('city')
+                                                                    {{$message}}
+                                                                @enderror
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row mb-4">
+                                                    <div class="col-3 text-end">
+                                                        <label for="pincode">Pin Code</label>
+                                                    </div>
+                                                    <div class="col-9">
+                                                        <input type="number" id="pincode" name="pincode" class="form-control p-2" value="{{ isset($customer) && property_exists($customer, 'pincode') ? $customer->name : old('pincode') }}" placeholder="Pin Code">
+                                                        <div>
+                                                            <span class="text-danger">
+                                                                @error('pincode')
+                                                                    {{$message}}
+                                                                @enderror
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row mb-4">
+                                                    <div class="col-3 text-end">
+                                                        <label for="state_id">State</label>
+                                                    </div>
+                                                    <div class="col-9">
+                                                        <select name="state_id" id="state_id" class="form-control">
+                                                            <option value="">Select State</option>
+                                                            @if ($states)
+                                                                @foreach ($states as $state)
+                                                                    <option value="{{ $state->id }}">{{ $state->name }}</option>
+                                                                @endforeach
+                                                            @endif
+                                                        </select>
+                                                        <div>
+                                                            <span class="text-danger">
+                                                                @error('state_id')
+                                                                    {{$message}}
+                                                                @enderror
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row mb-4">
+                                                    <div class="col-3 text-end">
+                                                        <label for="country_id">Country</label>
+                                                    </div>
+                                                    <div class="col-9">
+                                                        <select name="country_id" id="country_id" class="form-control">
+                                                            <option value="">Select State</option>
+                                                            @if ($countries)
+                                                                @foreach ($countries as $country)
+                                                                    <option value="{{ $country->id }}">{{ $country->name }}</option>
+                                                                @endforeach
+                                                            @endif
+                                                        </select>
+                                                        <div>
+                                                            <span class="text-danger">
+                                                                @error('country_id')
+                                                                    {{$message}}
+                                                                @enderror
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -241,6 +410,14 @@
             document.getElementById(`imagePreview`).src = "{{ asset('image/not-image-available.png')}}";
         }
 
+
+        function showSection(id) {
+            const sections = document.querySelectorAll('.tabs');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(id).classList.add('active');
+        }
     </script>
 </section>
 @endsection

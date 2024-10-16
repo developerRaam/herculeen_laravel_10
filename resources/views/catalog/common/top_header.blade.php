@@ -20,7 +20,9 @@
     <div class="container">
         <div class="row">
            <div class="col-sm-3">
-            <a href="/"><img height="80" width="150" src="{{ URL::asset('image/setting/site') .'/'. app('settings')['site_logo'] }}" alt="ez lifestyle"></a>
+            @if (app('settings') && isset(app('settings')['desktop_logo']))
+                <a href="/"><img height="80" width="150" src="{{ URL::asset('image/setting/site') .'/'. app('settings')['desktop_logo'] }}" alt="ez lifestyle"></a>
+            @endif
            </div>
            <div class="col-sm-6">
             

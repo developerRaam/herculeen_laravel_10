@@ -61,27 +61,39 @@
 
                             <div class="row mb-4">
                                 <div class="col-2 text-end">
-                                    <label for="site_logo">Site Logo</label>
+                                    <label for="site_desktop_logo">Logo for desktop</label>
                                 </div>
                                 <div class="col-10">
                                     <div class="card p-2" style="width: 12rem">
-                                        @if(isset($site_logo) && $site_logo)
-                                            <img src="{{ asset('image/setting/site/' . $site_logo) }}" alt="Category Image" class="card-img-top" id="imagePreview" onclick="triggerFileUpload()">
+                                        @if(isset($site_desktop_logo) && $site_desktop_logo)
+                                            <img src="{{ asset('image/setting/site/' . $site_desktop_logo) }}" alt="Category Image" class="card-img-top" id="imagePreview" onclick="triggerFileUpload()">
                                         @else
-                                            <img src="{{ asset('image/not-image-available.png') }}" alt="No Image Available" class="card-img-top" id="imagePreview" onclick="triggerFileUpload()">
+                                            <img src="{{ asset('image/not-image-available.png') }}" alt="No Image Available" class="card-img-top bg-light" id="imagePreview" onclick="triggerFileUpload()">
                                         @endif
-                                        <input type="file" name="site_logo" id="imageUpload" accept="image/*" style="display: none;" onchange="previewImage(event)">
+                                        <input type="file" name="desktop_logo" id="imageUpload" accept="image/*" style="display: none;" onchange="previewImage(event)">
                                         <div class="card-body text-center mt-1"> 
                                             <button type="button" class="btn btn-danger fs-5 px-3" onclick="removeImage()" data-bs-toggle="tooltip" data-bs-placement="top" title="Clear"><i class="fa-solid fa-trash"></i></button>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="errors">
-                                    <span class="text-danger">
-                                        @error('site_logo')
-                                            {{$message}}
-                                        @enderror
-                                    </span>
+                            </div>
+
+                            <div class="row mb-4">
+                                <div class="col-2 text-end">
+                                    <label for="site_logo">Logo for Mobile</label>
+                                </div>
+                                <div class="col-10">
+                                    <div class="card p-2" style="width: 12rem">
+                                        @if(isset($site_mobile_logo) && $site_mobile_logo)
+                                            <img src="{{ asset('image/setting/site/' . $site_mobile_logo) }}" alt="Category Image" class="card-img-top bg-light" id="imagePreviewMobile" onclick="triggerFileUploadMobile()">
+                                        @else
+                                            <img src="{{ asset('image/not-image-available.png') }}" alt="No Image Available" class="card-img-top" id="imagePreviewMobile" onclick="triggerFileUploadMobile()">
+                                        @endif
+                                        <input type="file" name="mobile_logo" id="imageUploadMobile" accept="image/*" style="display: none;" onchange="previewImageMobile(event)">
+                                        <div class="card-body text-center mt-1"> 
+                                            <button type="button" class="btn btn-danger fs-5 px-3" onclick="removeImage()" data-bs-toggle="tooltip" data-bs-placement="top" title="Clear"><i class="fa-solid fa-trash"></i></button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -119,6 +131,7 @@
             });
         });
 
+        // for desktop
         function previewImage(event) {
             const input = event.target;
             const file = input.files[0];
@@ -139,6 +152,29 @@
         function removeImage() {
             document.getElementById('imageUpload').value = '';
             document.getElementById(`imagePreview`).src = "{{ asset('image/not-image-available.png')}}";
+        }
+
+        // for mobile
+        function previewImageMobile(event) {
+            const input = event.target;
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.getElementById(`imagePreviewMobile`);
+                    img.src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function triggerFileUploadMobile(index) {
+            document.getElementById(`imageUploadMobile`).click();
+        }
+
+        function removeImageMobile() {
+            document.getElementById('imageUploadMobile').value = '';
+            document.getElementById(`imagePreviewMobile`).src = "{{ asset('image/not-image-available.png')}}";
         }
     </script>
     

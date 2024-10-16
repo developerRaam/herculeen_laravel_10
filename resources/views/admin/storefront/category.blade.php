@@ -60,7 +60,7 @@
                                         <td>{{$category->full_path}}</td>
                                         <td>{{ $category->menu_top }}</td>
                                         <td>{{$category->sort_order }}</td>
-                                        <td>{{$category->status}}</td>
+                                        <td>@if($category->status) <p class="text-dark rounded p-1">Enabled</p> @else <p class="text-dark rounded p-1">Disabled</p> @endif</td>
                                         <td>
                                             <a class="btn btn-primary" href="{{ route('edit-category', ['category_id' => $category->id]) }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit"><i class="fa-solid fa-pencil"></i></a>
                                             <a class="btn btn-danger deleteRow" href="javascript:void(0)" data-href="{{ route('delete-category', ['category_id' => $category->id]) }}" data-name="{{ $category->full_path }}" data-row-name="Category" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete"><i class="fa-solid fa-trash"></i></a>                                        
@@ -81,7 +81,6 @@
                     </div>
                     <div class="card rounded-0 p-3">
                         <form id="product-filter-form" action="{{route('admin-storefront-product')}}" method="get">
-                            @csrf
                             <div class="mb-3">
                                 <label for="product_name" class="form-label fw-bold">Product Name</label>
                                 <input type="text" class="form-control" name="product_name" value="{{old('product_name')}}" id="product_name" placeholder="Product Name">
@@ -107,6 +106,7 @@
                             </div>
                             <div class="mb-3 text-end">
                                 <input id="filter-button"  type="submit" class="btn btn-primary" value="Filter">
+                                <button type="button" class="btn btn-warning" id="clearFilter">Clear</button>
                             </div>
                         </form>
                     </div>

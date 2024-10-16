@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Admin\Customers\Customer;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 
 class CustomerController extends Controller
@@ -32,10 +33,10 @@ class CustomerController extends Controller
         $data['contact'] = $request->query('contact') ?? null;
         $data['status'] = $request->query('status') ?? 1;
 
-        $data['product_page_url'] = URL::to('/admin/customer/customer');
+        $data['page_url'] = route('customer');
 
         // Pagination
-        $results = Customer::getCustomers();
+        $results = Customer::getCustomers($request);
         $perPage = 50;
         $paginator = Pagination::pagination($results, $perPage);
         $data['customers'] = $paginator['items'];
@@ -60,6 +61,9 @@ class CustomerController extends Controller
 
         $data['action'] = route('customer-save');
         $data['back'] = route('customer');
+
+        $data['states'] = DB::table('state')->get();
+        $data['countries'] = DB::table('country')->get();
 
         return view('admin.customer.customer-form', $data);
     }
@@ -88,6 +92,9 @@ class CustomerController extends Controller
         if($customer_id){
             $data['customer'] = Customer::getCustomerById($customer_id);
         }
+
+        $data['states'] = DB::table('state')->get();
+        $data['countries'] = DB::table('country')->get();
 
         return view('admin.customer.customer-form', $data);
     }

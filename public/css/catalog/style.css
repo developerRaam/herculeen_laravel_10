@@ -319,3 +319,62 @@ i.icon.icon-arrow-io {
   font-weight: bold; 
   margin-top: 8px; 
 }
+
+/*============== Other URL link ===================== */
+.custom-title {
+  font-family: 'Arial', sans-serif;
+  font-size: 2.5rem;
+  color: #000;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 700;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  transition: color 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
+}
+
+.custom-title:hover {
+  color: darkcyan;
+  transform: scale(1.05);
+}
+.custom-card {
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  padding: 15px;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.custom-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.custom-card .card-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.custom-card img {
+  border-radius: 50%;
+  background-color: #fff;
+  padding: 5px;
+  border: 1px solid #ddd;
+}
+
+.custom-card p {
+  font-family: 'Arial', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.custom-card .d-flex {
+  gap: 10px;
+  align-items: center;
+}
+/*============== End Other URL link ===================== */

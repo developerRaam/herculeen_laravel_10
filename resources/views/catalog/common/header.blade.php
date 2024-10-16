@@ -3,7 +3,9 @@
     <div class="container">
         <div class="row">
             <div class="col-6">
-                <a href="/"><img height="80" width="150" src="{{ URL::asset('image/setting/site') .'/'. app('settings')['site_logo'] }}" alt="ez lifestyle" class="d-block d-md-none"></a>
+                @if (app('settings') && isset(app('settings')['mobile_logo']))
+                <a href="/"><img height="80" width="150" src="{{ URL::asset('image/setting/site') .'/'. app('settings')['mobile_logo'] }}" alt="ez lifestyle" class="d-block d-md-none"></a>
+                @endif
             </div>
             <div class="col-6 col-md-12">
                 <div class="nav_desktop nav_mobile_view">

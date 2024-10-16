@@ -76,9 +76,28 @@ class Customer extends Model
         return $customer;
     }
 
-    public static function getCustomers(){
-        $customer = DB::table((new self())->getTable())->get();
-        return $customer;
+    public static function getCustomers($request = null){
+        // Start the query using Eloquent
+        $query = self::query();
+
+        // Apply filters based on the request
+        if ($request) {
+            if ($request->filled('customer_name')) {
+                $query->where('name', 'like', '%' . $request->query('customer_name') . '%');
+            }
+            if ($request->filled('email')) {
+                $query->where('email', 'like', '%' . $request->query('email') . '%');
+            }
+            if ($request->filled('contact')) {
+                $query->where('number', 'like', '%' . $request->query('contact') . '%');
+            }
+            if ($request->filled('status')) {
+                $query->where('status', $request->query('status'));
+            }
+        }
+
+        // Execute the query and get the results
+        return $query->get();
     }
 
     public static function deleteCustomer($customer_id){

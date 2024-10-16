@@ -9,18 +9,18 @@
 <section class="container-fluid py-3">
    <div class="container">
         <div class="row">
-            <div class="col-sm-6 mb-3">
-                <div class="row">
+            <div class="col-12 col-sm-6 mb-3">
+                <div class="text-center product overflow-hidden border bg-white">
+                    <img class="mb-3 product_image" src="{{ ($product['product']->image) ? asset("image/products").'/'.($product['product']->id .'/'.$product['product']->image) : asset('image/not-image-available.png')}}" style="max-height: 550px">
+                </div>
+                <div class="d-flex">
                     @if ($product['images'])
-                        <div class="col-sm-2 text-center">
-                            @foreach ($product['images'] as $image)
-                                <img class="mb-3 product_side_image" data-id="1" width="70" height="70" src="{{ asset("image/cache/products").'/'.($product['product']->id .'/'. str_replace(".jpg",'',$image->image) .'_100x100.jpg') }}" data-src="{{ asset("image/products").'/'.($product['product']->id .'/'. $image->image) }}">
-                            @endforeach
+                        @foreach ($product['images'] as $image)
+                        <div class="text-center px-2">
+                            <img class="mb-3 product_side_image border p-1" data-id="1" width="70" height="70" src="{{ asset("image/cache/products").'/'.($product['product']->id .'/'. str_replace(".jpg",'',$image->image) .'_100x100.jpg') }}" data-src="{{ asset("image/products").'/'.($product['product']->id .'/'. $image->image) }}">
                         </div>
+                        @endforeach
                     @endif
-                    <div class="col-sm-10 text-center product overflow-hidden">
-                        <img class="mb-3 product_image" src="{{ ($product['product']->image) ? asset("image/products").'/'.($product['product']->id .'/'.$product['product']->image) : asset('image/not-image-available.png')}}" style="max-height: 550px">
-                    </div>
                 </div>
             </div>
             <div class="col-sm-6">
@@ -28,7 +28,7 @@
                     <h2 style="font-family: 'Arial', sans-serif;">{{ $product['product']->product_name }}</h2>
                     <div class="d-flex mt-4">
                         <h5 class="me-3"><strong>Rs. </strong>{{ number_format($product['product']->list_price,0) }}</h5>
-                        <h5 class="text-danger"><strong>Rs. </strong><del>{{ number_format($product['product']->mrp,0) }}</del></h5>
+                        {{-- <h5 class="text-danger"><strong>Rs. </strong><del>{{ number_format($product['product']->mrp,0) }}</del></h5> --}}
                     </div>
                     {{-- <p>Inclusive of all Taxes</p> --}}
                     <hr>
@@ -82,69 +82,10 @@
 
                 {{-- Other link url --}}
                 @if(app('settings')['ecommerce_other_url_status'])
-                    <style>
-                        .custom-title {
-                            font-family: 'Arial', sans-serif;
-                            font-size: 2.5rem;
-                            color: #000;
-                            text-transform: uppercase;
-                            letter-spacing: 2px;
-                            font-weight: 700;
-                            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-                            transition: color 0.3s ease, transform 0.3s ease;
-                            cursor: pointer;
-                        }
-
-                        .custom-title:hover {
-                            color: darkcyan;
-                            transform: scale(1.05);
-                        }
-                        .custom-card {
-                            background-color: #f8f9fa;
-                            border-radius: 12px;
-                            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                            transition: transform 0.3s ease, box-shadow 0.3s ease;
-                            padding: 15px;
-                            max-width: 100%;
-                            margin: 0 auto;
-                        }
-
-                        .custom-card:hover {
-                            transform: scale(1.05);
-                            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-                        }
-
-                        .custom-card .card-body {
-                            display: flex;
-                            align-items: center;
-                            justify-content: space-between;
-                        }
-
-                        .custom-card img {
-                            border-radius: 50%;
-                            background-color: #fff;
-                            padding: 5px;
-                            border: 1px solid #ddd;
-                        }
-
-                        .custom-card p {
-                            font-family: 'Arial', sans-serif;
-                            font-size: 1.1rem;
-                            font-weight: 600;
-                            color: #333;
-                            margin: 0;
-                        }
-
-                        .custom-card .d-flex {
-                            gap: 10px;
-                            align-items: center;
-                        }
-
-                    </style>
                     @if($ecommerce_url && $ecommerce_url->status)
                         <h2 class="custom-title text-center mb-3">Click To Buy</h2>
                         <p class="text-center text-danger"><i class="fa-solid fa-angles-down"></i></p>
-                        @isset($ecommerce_url->amazon)
+                        @if($ecommerce_url->amazon)
                             <div class="mb-4">
                                 <a target="blank" href="{{ $ecommerce_url->amazon }}" class="text-decoration-none">
                                     <div class="custom-card">
@@ -157,9 +98,9 @@
                                     </div>
                                 </a>
                             </div>
-                        @endisset
+                        @endif
 
-                        @isset($ecommerce_url->flipkart)
+                        @if($ecommerce_url->flipkart)
                             <div class="mb-4">
                                 <a href="{{ $ecommerce_url->flipkart }}" target="blank" class="text-decoration-none">
                                     <div class="custom-card">
@@ -172,9 +113,9 @@
                                     </div>
                                 </a>
                             </div>
-                        @endisset
+                        @endif
 
-                        @isset($ecommerce_url->ajio)
+                        @if($ecommerce_url->ajio)
                             <div class="mb-4">
                                 <a href="{{ $ecommerce_url->ajio }}" target="blank" class="text-decoration-none">
                                     <div class="custom-card">
@@ -187,9 +128,9 @@
                                     </div>
                                 </a>
                             </div>
-                        @endisset
+                        @endif
 
-                        @isset($ecommerce_url->myntra)
+                        @if($ecommerce_url->myntra)
                             <div class="mb-4">
                                 <a href="{{ $ecommerce_url->myntra }}" target="blank" class="text-decoration-none">
                                     <div class="custom-card">
@@ -202,9 +143,9 @@
                                     </div>
                                 </a>
                             </div>
-                        @endisset
+                        @endif
 
-                        @isset($ecommerce_url->meesho)
+                        @if($ecommerce_url->meesho)
                             <div class="mb-4">
                                 <a href="{{ $ecommerce_url->meesho }}" target="blank" class="text-decoration-none">
                                     <div class="custom-card">
@@ -217,7 +158,7 @@
                                     </div>
                                 </a>
                             </div>
-                        @endisset
+                        @endif
                     @endif
                 @endif
 

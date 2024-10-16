@@ -846,7 +846,7 @@ function previewImage(event, index) {
             // create image id element
             let dataImageId = img.getAttribute('data-image-id');
             const input = document.createElement('input');
-            input.type = 'text';
+            input.type = 'hidden';
             input.value = dataImageId
             input.name = `product_image_id[${index}][image_id]`;
             img.insertAdjacentElement('afterend', input);
