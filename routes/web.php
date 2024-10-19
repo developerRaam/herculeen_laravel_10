@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\Setting\SettingController;
 use App\Http\Controllers\Admin\Setting\EcommerceLinkController;
 use App\Http\Controllers\Admin\Design\BannerController;
 use App\Http\Controllers\admin\AdminDemoDataTableController;
+use App\Http\Controllers\Admin\Common\ProfileController;
 use App\Http\Controllers\Admin\Customers\CustomerController;
 use App\Http\Controllers\Admin\Design\AdminMediaController;
 use App\Http\Controllers\Admin\Setting\SiteController;
@@ -108,4 +109,11 @@ Route::middleware(['AdminMiddlewareLogin'])->prefix('admin/customer')->group(fun
     Route::post('customer-save/{customer_id?}', [CustomerController::class, 'save'])->name('customer-save');
     Route::get('customer-delete/{customer_id}', [CustomerController::class, 'delete'])->name('customer-delete');
     Route::post('deleteMultiSelection/', [CustomerController::class, 'deleteMultiSelection']);
+});
+
+Route::middleware(['AdminMiddlewareLogin'])->prefix('admin')->group(function(){
+    Route::get('edit-profile', [ProfileController::class, 'editProfile'])->name('edit-profile');
+    Route::post('save-profile', [ProfileController::class, 'saveProfile'])->name('save-profile');
+    Route::get('change-password', [ProfileController::class, 'changePassword'])->name('change-password');
+    Route::post('save-password', [ProfileController::class, 'savePassword'])->name('save-password');
 });

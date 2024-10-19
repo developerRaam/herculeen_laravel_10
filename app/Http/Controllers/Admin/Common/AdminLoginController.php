@@ -17,21 +17,21 @@ class AdminLoginController extends Controller
     public function adminLogin(Request $request)
     {
 
-        // $hashed=Hash::make($request->password);
-        // dd($hashed);
-        // Hash::check($request->password,$admin->password);
-        $hashedPassword = hash('sha256', $request->password);
-
-        $admin = Admin::where('username', $request->username)
-            ->where('password', $hashedPassword)
-            ->first();
-
+        // $hashed=hash('sha256', $request->password);
+        
+        $admin = Admin::where('username', $request->username)->first();        
         if ($admin) {
-            if ($admin->status) {
-                $request->session()->put('admin_id', $admin->id, 'name',$admin->name);
-                return redirect()->route('admin-dashboard');
-            } else {
-                return redirect()->route('admin-login')->with('error', 'Account disabled. Please contact admin.');
+            $password = $request->get('password');
+            $hashedPassword = Hash::check($password, $admin['password']);
+            if($hashedPassword){
+                if ($admin->status) {
+                    $request->session()->put('admin_id', $admin->id, 'name',$admin->name);
+                    return redirect()->route('admin-dashboard');
+                } else {
+                    return redirect()->route('admin-login')->with('error', 'Account disabled. Please contact admin.');
+                }
+            }else{
+                return redirect()->route('admin-login')->with('error', 'Username and password do not match.');
             }
         } else {
             return redirect()->route('admin-login')->with('error', 'Username and password do not match.');

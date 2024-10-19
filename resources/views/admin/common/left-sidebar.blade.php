@@ -19,8 +19,8 @@
                 </div>
             </li>
             <li>
-                <button class="dropdown-btn left-side-btn" data-dropdown="column_left-2"><span><i class="fas fa-desktop"></i> Design</span> <i class="fa fa-caret-down"></i></button>
-                <div class="dropdown-container" id="dropdown-column_left-2">
+                <button class="dropdown-btn left-side-btn" data-dropdown="column_left-3"><span><i class="fas fa-desktop"></i> Design</span> <i class="fa fa-caret-down"></i></button>
+                <div class="dropdown-container" id="dropdown-column_left-3">
                     <a class="text-decoration-none text-white d-block" style="padding-left:3rem !important" href="{{ route('admin-banner') }}"><i class="fa-solid fa-angles-right"></i> Banner</a>
                     <a class="text-decoration-none text-white d-block" style="padding-left:3rem !important" href="{{ route('admin-media') }}"><i class="fa-solid fa-angles-right"></i> Media</a>
                 </div>

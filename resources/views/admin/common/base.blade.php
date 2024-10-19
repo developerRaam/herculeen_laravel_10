@@ -16,6 +16,7 @@
     <meta charset="UTF-8">
     {{-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> --}}
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" type="image/x-icon" href="{{ URL::asset('herculeen.png'); }}">
     <title>@stack('setTitle')</title>
     <link rel="stylesheet" href="{{ URL::asset('css/admin/admin-style.css'); }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">

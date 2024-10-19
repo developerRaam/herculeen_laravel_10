@@ -517,18 +517,12 @@ class AdminProductController extends Controller
 
                 // product to category
                 if (null !== $request->input('category_ids')) {
+                    ProductCategory::deleteProductCategory($product_id);
                     foreach($request->input('category_ids', []) as $category_id) {
-                        $category = ProductCategory::where('product_id', $product_id)->where('category_id', $category_id)->first();
-                        if($category){
-                            $category->category_id = (int)$category_id;
-                            $category->update();
-                        }else{
-                            $category = new ProductCategory();
-                            $category->product_id = (int)$product_id;
-                            $category->category_id = (int)$category_id;
-                            $category->save();
-                        }
-
+                        $category = new ProductCategory();
+                        $category->product_id = (int)$product_id;
+                        $category->category_id = (int)$category_id;
+                        $category->save();
                     }
                 }else{
                     ProductCategory::where('product_id', $product_id)->delete();

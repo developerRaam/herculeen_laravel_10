@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="{{ URL::asset('herculeen.png'); }}">
     <title>@stack('setTitle')</title>
     <link rel="stylesheet" href="{{ URL::asset('css/catalog/common/common.css'); }}">
     <link rel="stylesheet" href="{{ URL::asset('css/catalog/style.css'); }}">

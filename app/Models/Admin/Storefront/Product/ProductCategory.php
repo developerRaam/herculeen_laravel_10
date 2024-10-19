@@ -20,7 +20,12 @@ class ProductCategory extends Model
     ];
 
     public static function getProductCategory($product_id){
-        $data = DB::table('product_categories')->where('product_id', $product_id)->get();
+        $data = DB::table('product_categories')->where('product_id', (int)$product_id)->get();
         return $data ?: null;
+    }
+
+    public static function deleteProductCategory($product_id){
+        DB::table('product_categories')->where('product_id', $product_id)->delete();
+        return true;
     }
 }

@@ -27,15 +27,24 @@
                                             @endforeach
                                         </ul>
                                     @endif
-                                    {{-- @if ($category->children->isNotEmpty())
-                                        <ul class="navbar_items-link">
-                                            @include('partials.category_list', ['categories' => $category->children])
-                                        </ul>
-                                    @endif --}}
                                 </li>
                             @endif
                         @endforeach
-                    </ul>
+                        <!-- Children menu -->
+                        @foreach ($service_categories as $category)
+                            @if ($category->children->isNotEmpty())
+                                @foreach ($category->children as $child)
+                                @if ($child->menu_top === 1)
+                                    <li class="px-3 fs-5 navbar_items active-link">
+                                        <a class="text-decoration-none text-white" href="{{ route('catalog.product-all', [$child->id, $child->slug]) . '?sort=latest' }}">
+                                            {{ $child->category_name }}
+                                        </a>
+                                    </li>
+                                @endif
+                                    @endforeach
+                                @endif
+                        @endforeach   
+                    </ul>      
                 </div>
                 <div class="nav_mobile text-end column-left-mobile">
                     <button class="btn text-white border" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling"><i class="fa-solid fa-bars fs-3 mt-1"></i></button>
