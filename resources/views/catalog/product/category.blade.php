@@ -18,7 +18,7 @@
                     <div class="col-6 col-sm-3 col-md-2">
                         <a href="{{ route('catalog.product-all', [$category->id, $category->slug]) . '?sort=latest' }}">
                             <div class="p-1 category_image">
-                                <img class="w-100 category-img" src="{{ isset($category->image) ? asset('image/category/' . $category->image) : asset('image/not-image-available.png') }}" alt="{{ $category->category_name }}">
+                                <img class="w-100 category-img" src="{{ isset($category->image) ? asset('image/category/' . $category->image) : asset('not-image-available.png') }}" alt="{{ $category->category_name }}">
                             </div>
                             <p class="text-center mt-2 text-dark">{{ $category->category_name }}</p>
                         </a>

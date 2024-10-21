@@ -117,7 +117,7 @@
                                 </div>
                                 <div class="col-10">
                                     <div class="card p-2" style="width: 12rem">
-                                        <img src="{{ isset($category->image) ? asset('image/category/'.$category->image) : asset('image/not-image-available.png')}}" alt="Category Image" class="card-img-top" id="imagePreview"  onclick="triggerFileUpload()">
+                                        <img src="{{ isset($category->image) ? asset('image/category/'.$category->image) : asset('not-image-available.png')}}" alt="Category Image" class="card-img-top" id="imagePreview"  onclick="triggerFileUpload()">
                                         <input type="file" name="image" id="imageUpload" accept="image/*" style="display: none;" onchange="previewImage(event)">
                                         <div class="card-body text-center mt-1"> 
                                             <button type="button" class="btn btn-danger fs-5 px-3" onclick="removeImage()" data-bs-toggle="tooltip" data-bs-placement="top" title="Clear"><i class="fa-solid fa-trash"></i></button>
@@ -204,7 +204,7 @@
 
         function removeImage() {
             document.getElementById('imageUpload').value = '';
-            document.getElementById(`imagePreview`).src = "{{ asset('image/not-image-available.png')}}";
+            document.getElementById(`imagePreview`).src = "{{ asset('not-image-available.png')}}";
         }
 
     </script>

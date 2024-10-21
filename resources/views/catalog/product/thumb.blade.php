@@ -6,7 +6,7 @@
       <a href="{{ route('catalog.product-detail', ['product_id' => $product->product_id, 'slug' => $product->slug]) }}">
         <div class="product-item">
             <div class="image-holder">
-              <img src="{{ ($product->image) ? asset("image/cache/products").'/'.($product->product_id .'/'. str_replace(".jpg",'',$product->image) .'_700x700.jpg') : asset('image/not-image-available.png')}}" alt="{{$product->product_name}}" class="product-image" style="max-height:500px;object-fit:contain;">
+              <img src="{{ ($product->image) ? asset("image/cache/products").'/'.($product->product_id .'/'. str_replace(".jpg",'',$product->image) .'_700x700.jpg') : asset('not-image-available.png')}}" alt="{{$product->product_name}}" class="product-image" style="max-height:500px;object-fit:contain;">
             </div>
             {{-- <div class="cart-concern">
               <div class="cart-button d-flex justify-content-center align-items-center p-1" style="background-color: #eceef1;">

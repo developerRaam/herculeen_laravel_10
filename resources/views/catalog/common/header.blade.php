@@ -13,14 +13,14 @@
                         @foreach ($service_categories as $category)
                             @if ($category->menu_top === 1)
                                 <li class="px-3 fs-5 navbar_items active-link">
-                                    <a class="text-decoration-none text-white" href="{{ route('catalog.product-all', [$category->id, $category->slug]) . '?sort=latest' }}">
+                                    <a class="text-decoration-none text-white text-uppercase" href="{{ route('catalog.product-all', [$category->id, $category->slug]) . '?sort=latest' }}">
                                         {{ $category->category_name }}
                                     </a>
                                     @if ($category->children->isNotEmpty())
                                         <ul class="navbar_items-link">
                                             @foreach ($category->children as $child)
                                                 <li class="p-0 mb-0">
-                                                    <a class="text-decoration-none d-block ps-2" href="{{ route('catalog.product-all', [$child->id, $child->slug]) }}">
+                                                    <a class="text-decoration-none d-block ps-2 text-uppercase" href="{{ route('catalog.product-all', [$child->id, $child->slug]) }}">
                                                         {{ $child->category_name }}
                                                     </a>
                                                 </li>
@@ -36,7 +36,7 @@
                                 @foreach ($category->children as $child)
                                 @if ($child->menu_top === 1)
                                     <li class="px-3 fs-5 navbar_items active-link">
-                                        <a class="text-decoration-none text-white" href="{{ route('catalog.product-all', [$child->id, $child->slug]) . '?sort=latest' }}">
+                                        <a class="text-decoration-none text-white text-uppercase" href="{{ route('catalog.product-all', [$child->id, $child->slug]) . '?sort=latest' }}">
                                             {{ $child->category_name }}
                                         </a>
                                     </li>

@@ -56,7 +56,7 @@
                                 @foreach ($categories as $category)
                                     <tr>
                                         <td class="text-center"><input type="checkbox" class="form-check-input" name="" id=""></td>
-                                        <td><img width="50" height="50" src="{{ ($category->image) ? asset("image/category").'/'.($category->image) : asset('image/not-image-available.png')}}" alt="{{$category->category_name}}"></td>
+                                        <td><img width="50" height="50" src="{{ ($category->image) ? asset("image/category").'/'.($category->image) : asset('not-image-available.png')}}" alt="{{$category->category_name}}"></td>
                                         <td>{{$category->full_path}}</td>
                                         <td>{{ $category->menu_top }}</td>
                                         <td>{{$category->sort_order }}</td>

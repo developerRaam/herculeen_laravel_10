@@ -11,7 +11,7 @@
         <div class="row">
             <div class="col-12 col-sm-6 mb-3">
                 <div class="text-center product overflow-hidden border bg-white">
-                    <img class="mb-3 product_image" src="{{ ($product['product']->image) ? asset("image/products").'/'.($product['product']->id .'/'.$product['product']->image) : asset('image/not-image-available.png')}}" style="max-height: 550px">
+                    <img class="mb-3 product_image" src="{{ ($product['product']->image) ? asset("image/products").'/'.($product['product']->id .'/'.$product['product']->image) : asset('not-image-available.png')}}" style="max-height: 550px">
                 </div>
                 <div class="d-flex">
                     @if ($product['images'])
@@ -176,11 +176,13 @@
             </ul>
             <!-- Description -->
             <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
-                {{ strip_tags($product['product']->product_description) }}
+                <div>
+                    {!! $product['product']->product_description !!}
+                </div>
             </div>
 
             <!-- Review -->
-            <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
+            <div class="tab-pane fade show" id="description" role="tabpanel" aria-labelledby="description-tab">
                 
             </div>
         </div>

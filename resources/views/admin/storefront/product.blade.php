@@ -58,7 +58,7 @@
                                 @foreach ($products as $product)
                                     <tr>
                                         <td class="text-center"><input type="checkbox" class="form-check-input selectBox" name="" data-product-id="{{$product->product_id}}"></td>
-                                        <td class="text-center"><img height="50" src="{{ ($product->image) ? asset("image/cache/products").'/'.($product->product_id .'/'. str_replace(".jpg",'',$product->image) .'_100x100.jpg') : asset('image/not-image-available.png')}}" alt="{{$product->product_name}}"></td>
+                                        <td class="text-center"><img height="50" src="{{ ($product->image) ? asset("image/cache/products").'/'.($product->product_id .'/'. str_replace(".jpg",'',$product->image) .'_100x100.jpg') : asset('not-image-available.png')}}" alt="{{$product->product_name}}"></td>
                                         <td>{{$product->product_name}}</td>
                                         {{-- <td>{{$product->model}}</td> --}}
                                         <td>Rs.{{ number_format($product->list_price,2) }}</td>

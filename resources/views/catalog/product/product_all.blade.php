@@ -143,7 +143,7 @@
                                 <a href="{{ route('catalog.product-detail', ['product_id' => $product->product_id, 'slug' => $product->slug]) }}">
                                     <div class="product-item">
                                         <div class="image-holder">
-                                            <img src="{{ $product->image ? asset('image/cache/products') . '/' . ($product->product_id . '/' . str_replace('.jpg', '', $product->image) . '_500x500.jpg') : asset('image/not-image-available.png') }}"
+                                            <img src="{{ $product->image ? asset('image/cache/products') . '/' . ($product->product_id . '/' . str_replace('.jpg', '', $product->image) . '_500x500.jpg') : asset('not-image-available.png') }}"
                                                 alt="{{ $product->product_name }}" class="product-image"
                                                 style="max-height:300px;object-fit:contain;">
                                         </div>

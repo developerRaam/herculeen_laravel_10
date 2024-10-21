@@ -566,7 +566,7 @@
                                         <div class="d-flex justify-content-between align-items-center mb-4">
                                             <div class="col-sm-4 col-md-3">
                                                 <div class="card p-2" style="width: 12rem">
-                                                    <img src="{{ isset($product['product']->image) ? asset("image/cache/products").'/'.($product['product']->product_id .'/'. str_replace(".jpg",'',$product['product']->image) .'_300x300.jpg') : asset('image/not-image-available.png')}}" alt="Product Image" class="card-img-top" id="productReviewImage">
+                                                    <img src="{{ isset($product['product']->image) ? asset("image/cache/products").'/'.($product['product']->product_id .'/'. str_replace(".jpg",'',$product['product']->image) .'_300x300.jpg') : asset('not-image-available.png')}}" alt="Product Image" class="card-img-top" id="productReviewImage">
                                                     <input type="file" name="image" id="productImageUpload" accept="image/*" style="display: none;" onchange="productPreviewImage(event)">
                                                     <div class="card-body text-center mt-2"> 
                                                         <button type="button" class="btn btn-primary fs-5 px-3" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit" onclick="productTriggerFileUpload()"><i class="fa-solid fa-pencil"></i></button>
@@ -594,7 +594,7 @@
                                                             <td>
                                                                 <div class="col-sm-4 col-md-3">
                                                                     <div class="card p-2" style="width: 12rem">
-                                                                        <img src="{{ isset($image->image) ? asset("image/cache/products").'/'.($image->product_id .'/'. str_replace(".jpg",'',$image->image) .'_300x300.jpg') : asset('image/not-image-available.png')}}" data-image-id="{{$image->id}}" alt="Product Image" class="card-img-top" id="imagePreview_{{$i}}">
+                                                                        <img src="{{ isset($image->image) ? asset("image/cache/products").'/'.($image->product_id .'/'. str_replace(".jpg",'',$image->image) .'_300x300.jpg') : asset('not-image-available.png')}}" data-image-id="{{$image->id}}" alt="Product Image" class="card-img-top" id="imagePreview_{{$i}}">
                                                                         <input type="file" class="product_images" name="product_image[{{$i}}][image]" id="imageUpload_{{$i}}" accept="image/*" style="display: none;" onchange="previewImage(event, {{$i}})">
                                                                         <div class="card-body text-center mt-2"> 
                                                                             <button type="button" class="btn btn-primary fs-5 px-3" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit" onclick="triggerFileUpload({{$i}})"><i class="fa-solid fa-pencil"></i></button>
@@ -813,7 +813,7 @@
             <td>
                 <div class="col-sm-4 col-md-3">
                     <div class="card p-2" style="width: 12rem">
-                        <img src="{{ asset('image/not-image-available.png')}}" alt="Product Image" class="card-img-top" id="imagePreview_${rowCount}">
+                        <img src="{{ asset('not-image-available.png')}}" alt="Product Image" class="card-img-top" id="imagePreview_${rowCount}">
                         <input type="file" name="product_image[${rowCount}][image]" id="imageUpload_${rowCount}" accept="image/*" style="display: none;" onchange="previewImage(event, ${rowCount})">
                         <div class="card-body text-center mt-2"> 
                             <button type="button" class="btn btn-primary fs-5 px-3" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit" onclick="triggerFileUpload(${rowCount})"><i class="fa-solid fa-pencil"></i></button>
@@ -885,7 +885,7 @@ function productTriggerFileUpload(index) {
 
 function productRemoveImageRow(button) {
     document.getElementById('productImageUpload').value = '';
-    document.getElementById(`productReviewImage`).src = "{{ asset('image/not-image-available.png')}}";
+    document.getElementById(`productReviewImage`).src = "{{ asset('not-image-available.png')}}";
 }
 // end product image
 

@@ -118,7 +118,7 @@
                                     <div class="col-10">
                                         <input type="file" id="image" name="image" class="form-control p-2">
 
-                                        <img class="mt-3" id="banner_image" width="100" height="100" src="{{asset('image/not-image-available.png')}}" >
+                                        <img class="mt-3" id="banner_image" width="100" height="100" src="{{asset('not-image-available.png')}}" >
                                     </div>
                                 </div>
                                 <div class="row mb-3">

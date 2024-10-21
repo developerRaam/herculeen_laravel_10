@@ -56,7 +56,7 @@
                                 @forelse ($customers as $customer)
                                     <tr>
                                         <td class="text-center"><input type="checkbox" class="form-check-input selectBox" name="" data-customer-id="{{$customer->id}}"></td>
-                                        <td class="text-center"><img height="50" src="{{ ($customer->image) ? asset("image/customer").'/'.$customer->image : asset('image/not-image-available.png')}}" alt="{{$customer->name}}"></td>
+                                        <td class="text-center"><img height="50" src="{{ ($customer->image) ? asset("image/customer").'/'.$customer->image : asset('not-image-available.png')}}" alt="{{$customer->name}}"></td>
                                         <td>{{$customer->name}}</td>
                                         <td>{{ $customer->email }}</td>
                                         <td> @if($customer->status) <p class="text-success">Enabled</p> @else <p>Disabled</p> @endif </td>

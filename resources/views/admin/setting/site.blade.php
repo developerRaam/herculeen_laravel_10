@@ -68,7 +68,7 @@
                                         @if(isset($site_desktop_logo) && $site_desktop_logo)
                                             <img src="{{ asset('image/setting/site/' . $site_desktop_logo) }}" alt="Category Image" class="card-img-top" id="imagePreview" onclick="triggerFileUpload()">
                                         @else
-                                            <img src="{{ asset('image/not-image-available.png') }}" alt="No Image Available" class="card-img-top bg-light" id="imagePreview" onclick="triggerFileUpload()">
+                                            <img src="{{ asset('not-image-available.png') }}" alt="No Image Available" class="card-img-top bg-light" id="imagePreview" onclick="triggerFileUpload()">
                                         @endif
                                         <input type="file" name="desktop_logo" id="imageUpload" accept="image/*" style="display: none;" onchange="previewImage(event)">
                                         <div class="card-body text-center mt-1"> 
@@ -87,7 +87,7 @@
                                         @if(isset($site_mobile_logo) && $site_mobile_logo)
                                             <img src="{{ asset('image/setting/site/' . $site_mobile_logo) }}" alt="Category Image" class="card-img-top bg-light" id="imagePreviewMobile" onclick="triggerFileUploadMobile()">
                                         @else
-                                            <img src="{{ asset('image/not-image-available.png') }}" alt="No Image Available" class="card-img-top" id="imagePreviewMobile" onclick="triggerFileUploadMobile()">
+                                            <img src="{{ asset('not-image-available.png') }}" alt="No Image Available" class="card-img-top" id="imagePreviewMobile" onclick="triggerFileUploadMobile()">
                                         @endif
                                         <input type="file" name="mobile_logo" id="imageUploadMobile" accept="image/*" style="display: none;" onchange="previewImageMobile(event)">
                                         <div class="card-body text-center mt-1"> 
@@ -151,7 +151,7 @@
 
         function removeImage() {
             document.getElementById('imageUpload').value = '';
-            document.getElementById(`imagePreview`).src = "{{ asset('image/not-image-available.png')}}";
+            document.getElementById(`imagePreview`).src = "{{ asset('not-image-available.png')}}";
         }
 
         // for mobile
@@ -174,7 +174,7 @@
 
         function removeImageMobile() {
             document.getElementById('imageUploadMobile').value = '';
-            document.getElementById(`imagePreviewMobile`).src = "{{ asset('image/not-image-available.png')}}";
+            document.getElementById(`imagePreviewMobile`).src = "{{ asset('not-image-available.png')}}";
         }
     </script>
     
