@@ -13,11 +13,11 @@
                 <div class="text-center product overflow-hidden border bg-white">
                     <img class="mb-3 product_image" src="{{ ($product['product']->image) ? asset("image/products").'/'.($product['product']->id .'/'.$product['product']->image) : asset('not-image-available.png')}}" style="max-height: 550px">
                 </div>
-                <div class="d-flex">
+                <div class="d-flex flex-wrap">
                     @if ($product['images'])
                         @foreach ($product['images'] as $image)
-                        <div class="text-center px-2">
-                            <img class="mb-3 product_side_image border p-1" data-id="1" width="70" height="70" src="{{ asset("image/cache/products").'/'.($product['product']->id .'/'. str_replace(".jpg",'',$image->image) .'_100x100.jpg') }}" data-src="{{ asset("image/products").'/'.($product['product']->id .'/'. $image->image) }}">
+                        <div class="text-center pe-2">
+                            <img class="product_side_image border p-1" data-id="1" width="70" height="70" src="{{ asset("image/cache/products").'/'.($product['product']->id .'/'. str_replace(".jpg",'',$image->image) .'_100x100.jpg') }}" data-src="{{ asset("image/cache/products").'/'.($product['product']->id .'/'. str_replace(".jpg",'',$image->image) .'_700x700.jpg') }}">
                         </div>
                         @endforeach
                     @endif
@@ -91,7 +91,7 @@
                                     <div class="custom-card">
                                         <div class="card-body">
                                             <div class="d-flex align-items-center">
-                                                <p class="me-2 mb-0"><img height="30" src="{{ URL::asset('image/icon/amazon.png') }}" alt="Amazon"></i></p>
+                                                <p class="me-2 mb-0"><img height="30" src="{{ URL::asset('icon/amazon.png') }}" alt="Amazon"></i></p>
                                                 <p class="mb-0">Amazon</p>
                                             </div>
                                         </div>
@@ -106,7 +106,7 @@
                                     <div class="custom-card">
                                         <div class="card-body">
                                             <div class="d-flex align-items-center">
-                                                <p class="me-2 mb-0"><img src="{{ URL::asset('image/icon/flipkart.png') }}" width="30" height="30" alt="Flpkart"></p>
+                                                <p class="me-2 mb-0"><img src="{{ URL::asset('icon/flipkart.png') }}" width="30" height="30" alt="Flpkart"></p>
                                                 <p class="mb-0">Flpkart</p>
                                             </div>
                                         </div>
@@ -121,7 +121,7 @@
                                     <div class="custom-card">
                                         <div class="card-body">
                                             <div class="d-flex align-items-center">
-                                                <p class="me-2 mb-0"><img height="30" src="{{ URL::asset('image/icon/ajio.png') }}" alt="Ajio"></p>
+                                                <p class="me-2 mb-0"><img height="30" src="{{ URL::asset('icon/ajio.png') }}" alt="Ajio"></p>
                                                 <p class="mb-0">Ajio</p>
                                             </div>
                                         </div>
@@ -136,7 +136,7 @@
                                     <div class="custom-card">
                                         <div class="card-body">
                                             <div class="d-flex align-items-center">
-                                                <p class="me-2 mb-0"><img width="30" src="{{ URL::asset('image/icon/myntra.png') }}" alt="Myntra"></p>
+                                                <p class="me-2 mb-0"><img width="30" src="{{ URL::asset('icon/myntra.png') }}" alt="Myntra"></p>
                                                 <p class="mb-0">Myntra</p>
                                             </div>
                                         </div>
@@ -151,7 +151,7 @@
                                     <div class="custom-card">
                                         <div class="card-body">
                                             <div class="d-flex align-items-center">
-                                                <p class="me-2 mb-0"><img height="30" src="{{ URL::asset('image/icon/meesho.png') }}" alt="Meesho"></p>
+                                                <p class="me-2 mb-0"><img height="30" src="{{ URL::asset('icon/meesho.png') }}" alt="Meesho"></p>
                                                 <p class="mb-0">Meesho</p>
                                             </div>
                                         </div>

@@ -44,10 +44,10 @@
                             <thead>
                                 <tr>
                                     <th width="5%" class="text-center"><input type="checkbox" class="form-check-input" name="" id=""></th>
-                                    <th width="15%" height="50">Image</th>
+                                    <th width="10%" height="50">Image</th>
                                     <th width="40%">Category Name</th>
-                                    <th width="8">Top</th>
-                                    <th width="9%">Sort</th>
+                                    <th width="12">Top</th>
+                                    <th width="12%">Sort</th>
                                     <th width="7%">Status</th>
                                     <th width="15%">Action</th>
                                 </tr>
@@ -56,7 +56,11 @@
                                 @foreach ($categories as $category)
                                     <tr>
                                         <td class="text-center"><input type="checkbox" class="form-check-input" name="" id=""></td>
-                                        <td><img width="50" height="50" src="{{ ($category->image) ? asset("image/category").'/'.($category->image) : asset('not-image-available.png')}}" alt="{{$category->category_name}}"></td>
+                                        <td class="text-center p-1">
+                                            <div class="bg-white p-1">
+                                                <img height="50" width="50" src="{{ ($category->image) ? asset("image/category").'/'.($category->image) : asset('not-image-available.png')}}" alt="{{$category->category_name}}">
+                                            </div>
+                                        </td>
                                         <td>{{$category->full_path}}</td>
                                         <td>{{ $category->menu_top }}</td>
                                         <td>{{$category->sort_order }}</td>
@@ -80,22 +84,10 @@
                         <p class="mb-0"><i class="fa-solid fa-filter"></i> Filter</p>
                     </div>
                     <div class="card rounded-0 p-3">
-                        <form id="product-filter-form" action="{{route('admin-storefront-product')}}" method="get">
+                        <form id="product-filter-form" action="{{route('category')}}" method="get">
                             <div class="mb-3">
-                                <label for="product_name" class="form-label fw-bold">Product Name</label>
-                                <input type="text" class="form-control" name="product_name" value="{{old('product_name')}}" id="product_name" placeholder="Product Name">
-                            </div>
-                            <div class="mb-3">
-                                <label for="model" class="form-label fw-bold">Model</label>
-                                <input type="text" class="form-control" name="model" id="model" placeholder="Model">
-                            </div>
-                            <div class="mb-3">
-                                <label for="price" class="form-label fw-bold">Price</label>
-                                <input type="text" class="form-control" name="price" id="price" placeholder="Price">
-                            </div>
-                            <div class="mb-3">
-                                <label for="quantity" class="form-label fw-bold">Quantity</label>
-                                <input type="text" class="form-control" name="quantity" id="quantity" placeholder="Quantity">
+                                <label for="category_name" class="form-label fw-bold">Category Name</label>
+                                <input type="text" class="form-control" name="category_name" value="{{ $category_name ?? '' }}" id="category_name" placeholder="Category Name">
                             </div>
                             <div class="mb-3">
                                 <label for="status" class="form-label fw-bold">Status</label>
@@ -115,4 +107,11 @@
         </div>
     </div>
 </section>
+
+<script>
+    //================ clear filter button ===================
+    document.getElementById('clearFilter').addEventListener('click', () => {
+        window.location.href = {!! json_encode($page_url) !!}
+    })
+</script>
 @endsection

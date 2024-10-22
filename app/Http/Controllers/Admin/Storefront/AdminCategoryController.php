@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Admin\Storefront;
 
+use App\Http\Controllers\Admin\Common\Pagination;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use App\Models\Admin\Storefront\Category\Category;
@@ -13,11 +12,9 @@ use App\Models\Admin\Storefront\Category\CategoryPath;
 use Exception;
 use Illuminate\Support\Str;
 
-use App\Providers\SettingProvider;
-
 class AdminCategoryController extends Controller
 {
-    public function index(){
+    public function index(Request $request){
 
         $data['heading_title'] = "Category";
 
@@ -33,22 +30,17 @@ class AdminCategoryController extends Controller
 
         $data['add'] = URL::to('/admin/storefront/category-form');
 
-        // Pagination
-        $perPage = 50;
-        $currentPage = request()->query('page', 1);
-        $results = Category::getCategory();
-        $products = collect($results);
-        $totalCount = $products->count();
-        $paginator = new LengthAwarePaginator(
-            $products->forPage($currentPage, $perPage),
-            $totalCount,
-            $perPage,
-            $currentPage,
-            ['path' => request()->url(), 'query' => request()->query()]
-        );
-        $data['categories'] = $paginator;
+        // Filter
+        $data['category_name'] = $request->query('category_name') ?? null;
+        $data['status'] = $request->query('status') ?? 1;
 
-        $data['pagination'] = $paginator;
+        // Pagination
+        $results = Category::getCategory(null, $request);
+        $perPage = 25;
+        $paginator = Pagination::pagination($results, $perPage);
+        $data['categories'] = $paginator['items'];
+        $data['pagination'] =  $paginator['pagination'];
+        $data['page_url'] = URL::route('category');
 
         return view('admin.storefront.category', $data);
     }

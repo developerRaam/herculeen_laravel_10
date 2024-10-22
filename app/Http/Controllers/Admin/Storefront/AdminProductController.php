@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Storefront;
 
+use App\Http\Controllers\Admin\Common\Pagination;
 use App\Http\Controllers\Controller;
 use App\Models\Admin\Storefront\Category\Category;
 use App\Models\Admin\Storefront\Color\Color;
@@ -54,21 +55,12 @@ class AdminProductController extends Controller
         $data['status'] = $request->query('status') ?? 1;
 
         // Pagination
-        $perPage = 20;
-        $currentPage = request()->query('page', 1);
         $results = Product::getProducts($request);
-        $products = collect($results);
-        $totalCount = $products->count();
-        $paginator = new LengthAwarePaginator(
-            $products->forPage($currentPage, $perPage),
-            $totalCount,
-            $perPage,
-            $currentPage,
-            ['path' => request()->url(), 'query' => request()->query()]
-        );
+        $perPage = 20;
+        $paginator = Pagination::pagination($results, $perPage);
+        $data['products'] = $paginator['items'];
+        $data['pagination'] =  $paginator['pagination'];
 
-        $data['products'] = $paginator;
-        $data['pagination'] = $paginator;
         $data['colors'] = Color::getAllColor();
         $data['sizes'] = Size::getAllSize();
         $data['product_variation_route'] = route('admin-addVariation');

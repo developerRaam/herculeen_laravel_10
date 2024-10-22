@@ -1,8 +1,8 @@
 <div class="dashboard-header">
     <div class="d-flex justify-content-between align-items-center p-3">
-        <h2>DEMO</h2>
+        <h2>Herculeen</h2>
         <div class="d-flex">
-            <a target="blank" href="/" class="text-decoration-none text-dark fs-4 me-3">View Stotefront </a>
+            <a target="blank" href="/" class="text-decoration-none text-dark fs-4 me-3">View Storefront </a>
             <div class="dropdown pe-3">
                 <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   Profile

@@ -60,7 +60,7 @@
           <div class="offcanvas-body px-0">
             <ul class="list-unstyled mb-0">                
                 @foreach ($service_categories as $category)
-                    @if ($category->menu_top === 1)
+                    @if ($category->menu_top === 1 || $category->menu_top === 0)
                         <li class="fs-5 mb-0" style="border-bottom: 1px solid #fff">
                             <a class="text-decoration-none sidebar_link_menu text-dark d-block d-flex justify-content-between px-3" data-category-id="{{ $category->id }}" style="background-color:#ddd" href="javascript:void(0)">
                                 <span>{{ $category->category_name }}</span>
