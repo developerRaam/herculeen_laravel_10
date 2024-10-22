@@ -65,7 +65,7 @@
                                         </td>
                                         <td>{{$product->product_name}}</td>
                                         {{-- <td>{{$product->model}}</td> --}}
-                                        <td>Rs.{{ number_format($product->list_price,2) }}</td>
+                                        <td>Rs.{{ number_format($product->price,2) }}</td>
                                         <td>{{$product->quantity}}</td>
                                         <td> @if($product->status) <p class="text-success">Enabled</p> @else <p>Disabled</p> @endif </td>
                                         <td>

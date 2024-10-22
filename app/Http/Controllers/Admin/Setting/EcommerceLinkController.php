@@ -18,6 +18,10 @@ class EcommerceLinkController extends Controller{
             'href' => URL::to('/admin/dashboard')
         ];
         $data['breadcrumbs'][] = [
+			'text' => 'Setting',
+			'href' => URL::to('/admin/setting')
+		];
+        $data['breadcrumbs'][] = [
 			'text' => 'E-commerce Links',
 			'href' => URL::to('/admin/setting/ecommerce-links')
 		];

@@ -19,6 +19,10 @@ class SiteController extends Controller
             'href' => URL::to('/admin/dashboard')
         ];
         $data['breadcrumbs'][] = [
+			'text' => 'Setting',
+			'href' => URL::to('/admin/setting')
+		];
+        $data['breadcrumbs'][] = [
 			'text' => 'Site',
 			'href' => URL::to('/admin/setting/site')
 		];

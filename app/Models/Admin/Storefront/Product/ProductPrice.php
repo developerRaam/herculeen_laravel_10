@@ -15,7 +15,7 @@ class ProductPrice extends Model
 
     protected $fillable = [
         'product_id',
-        'list_price',
+        'price',
         'mrp'
     ];
 }

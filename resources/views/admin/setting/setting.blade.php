@@ -65,6 +65,19 @@
                                     </div>
                                 </a>
                             </div>
+
+                            <div class="col-sm-3">
+                                <a href="{{ $api_url }}" class="text-decoration-none">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center">
+                                                <p class="me-2 mb-0"><i class="fa-solid fa-globe"></i></p>
+                                                <p class="mb-0">API Setting</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
                             
                         </div>
                     </div>

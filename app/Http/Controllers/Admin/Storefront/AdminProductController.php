@@ -129,7 +129,7 @@ class AdminProductController extends Controller
             'weight_class_id' => 'nullable|integer',
             'status' => 'nullable|boolean',
             'sort_order' => 'nullable|integer',
-            'list_price' => 'required|nullable|numeric',
+            'retail_price' => 'required|nullable|numeric',
             'mrp' => 'required|nullable|numeric'
         ]);
 
@@ -225,10 +225,10 @@ class AdminProductController extends Controller
                 }
 
                 // product price 
-                if (!empty($validatedData['list_price']) && !empty($validatedData['mrp'])) {
+                if (!empty($validatedData['retail_price']) && !empty($validatedData['mrp'])) {
                     $price = new ProductPrice();
                     $price->product_id = $product_id;
-                    $price->list_price = $data->get('list_price') ?? '';;
+                    $price->price = $data->get('retail_price') ?? '';;
                     $price->mrp = $data->get('mrp') ?? '';;
                     $price->save();
                 }
@@ -413,7 +413,7 @@ class AdminProductController extends Controller
             'weight_class_id' => 'nullable|integer',
             'status' => 'nullable|boolean',
             'sort_order' => 'nullable|integer',
-            'list_price' => 'required|nullable|numeric',
+            'retail_price' => 'required|nullable|numeric',
             'mrp' => 'required|nullable|numeric'
         ]);
 
@@ -521,16 +521,16 @@ class AdminProductController extends Controller
                 }
 
                 // Product price
-                if (!empty($validatedData['list_price']) && !empty($validatedData['mrp'])) {
+                if (!empty($validatedData['retail_price']) && !empty($validatedData['mrp'])) {
                     $price = ProductPrice::where('product_id', $product_id)->first();
                     if ($price) {
-                        $price->list_price = $data->get('list_price') ?? '';
+                        $price->price = $data->get('retail_price') ?? '';
                         $price->mrp = $data->get('mrp') ?? '';
                         $price->update();
                     }else{
                         $price = new ProductPrice();
                         $price->product_id = (int) $product_id;
-                        $price->list_price = $data->get('list_price') ?? '';
+                        $price->price = $data->get('retail_price') ?? '';
                         $price->mrp = $data->get('mrp') ?? '';
                         $price->save();
                     }

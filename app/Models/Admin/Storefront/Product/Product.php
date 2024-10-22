@@ -59,7 +59,7 @@ class Product extends Model
     }
 
     public static function getProducts($request = null){
-        $query = 'SELECT p.id as product_id, p.image, p.product_name, p.model, pp.list_price, pp.mrp, p.quantity, p.status FROM  products p LEFT JOIN  product_prices pp ON pp.product_id = p.id  WHERE 1=1';
+        $query = 'SELECT p.id as product_id, p.image, p.product_name, p.model, pp.price, pp.mrp, p.quantity, p.status FROM  products p LEFT JOIN  product_prices pp ON pp.product_id = p.id  WHERE 1=1';
         // Filter
         if($request){
             if (null !== $request->query('product_name')) {
@@ -69,7 +69,7 @@ class Product extends Model
                 $query .= ' AND p.model like ' . '\'%'. $request->query('model') .'%\'';
             }
             if (null !== $request->query('price')) {
-                $query .= ' AND pp.list_price like ' . '\'%'. $request->query('price') .'%\'';
+                $query .= ' AND pp.price like ' . '\'%'. $request->query('price') .'%\'';
             }
             if (null !== $request->query('quantity')) {
                 $query .= ' AND  p.quantity like ' . '\'%'. $request->query('quantity') .'%\'';

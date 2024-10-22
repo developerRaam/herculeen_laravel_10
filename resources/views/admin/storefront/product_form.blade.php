@@ -352,14 +352,14 @@
                                     <div class="mt-4"></div>
                                     <div class="row mb-4">
                                         <div class="col-2 text-end">
-                                            <label for="list_price">List Price</label>
+                                            <label for="retail_price">Price</label>
                                         </div>
                                         <div class="col-10">
-                                            <input type="text" id="list_price" name="list_price" class="form-control p-2" value="{{ isset($product) ? $product['product']->list_price :  old('list_price') }}" placeholder="List Price">
+                                            <input type="text" id="retail_price" name="retail_price" class="form-control p-2" value="{{ isset($product) ? $product['product']->price :  old('retail_price') }}" placeholder="List Price">
                                         </div>
                                         <div class="errors">
                                             <span class="text-danger">
-                                                @error('list_price')
+                                                @error('retail_price')
                                                     {{$message}}
                                                 @enderror
                                             </span>

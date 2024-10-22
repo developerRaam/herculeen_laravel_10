@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -16,7 +15,7 @@ class AdminSeeder extends Seeder
         // Insert default values into the admins table
         DB::table('admins')->insert([
             'username' => 'admin',
-            'password' => '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918',
+            'password' => '$2y$10$Q6fxG6K5Lr1QTxMzJOucC.dm7Ma1nrS2NRdIOm6JdJpaOGpPQ/R1S',
             'firstname' => 'admin',
             'lastname' => 'admin',
             'email' => 'admin@gmail.com',

@@ -18,6 +18,7 @@ use App\Http\Controllers\admin\AdminDemoDataTableController;
 use App\Http\Controllers\Admin\Common\ProfileController;
 use App\Http\Controllers\Admin\Customers\CustomerController;
 use App\Http\Controllers\Admin\Design\AdminMediaController;
+use App\Http\Controllers\Admin\Setting\ApiController;
 use App\Http\Controllers\Admin\Setting\SiteController;
 use App\Http\Controllers\Admin\Storefront\AdminProductController;
 use App\Http\Controllers\Admin\Storefront\AdminCategoryController;
@@ -53,6 +54,8 @@ Route::middleware(['AdminMiddlewareLogin'])->prefix('admin/setting')->group(func
     Route::post('/ecommerce-links-save', [EcommerceLinkController::class, 'save'])->name('ecommerce-links-save');
     Route::get('/site', [SiteController::class, 'index'])->name('site');
     Route::post('/site-save', [SiteController::class, 'save'])->name('site-save');
+    Route::get('/api', [ApiController::class, 'index'])->name('api');
+    Route::post('/api-save', [ApiController::class, 'save'])->name('api-save');
 });
 
 Route::get('/admin/banner', [BannerController::class, 'index'])->name('admin-banner')->middleware('AdminMiddlewareLogin');

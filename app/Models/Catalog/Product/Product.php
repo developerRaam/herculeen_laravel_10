@@ -16,7 +16,7 @@ class Product extends Model
         // products
         $product = DB::table('products')
                     ->leftJoin('product_prices', 'products.id', '=', 'product_prices.product_id')
-                    ->select('products.*', 'product_prices.list_price','product_prices.mrp')
+                    ->select('products.*', 'product_prices.price','product_prices.mrp')
                     ->where('products.id', $product_id)->first();
 
         $images = DB::table('product_images')->where('product_id', $product_id)->get();
@@ -28,7 +28,7 @@ class Product extends Model
     }
 
     public static function getProducts($filter = array()){
-        $query = 'SELECT p.id as product_id,p.image, p.product_name, p.tag, p.model, pp.list_price, pp.mrp, p.quantity,p.slug FROM  products p LEFT JOIN  product_prices pp ON pp.product_id = p.id  WHERE p.status=1';
+        $query = 'SELECT p.id as product_id, p.product_description, p.image, p.product_name, p.tag, p.model, pp.price, pp.mrp, p.quantity,p.slug FROM  products p LEFT JOIN  product_prices pp ON pp.product_id = p.id  WHERE p.status=1';
 
         $size_product_ids = [];
         $color_product_ids = [];
@@ -141,10 +141,10 @@ class Product extends Model
                 $query .= " order by p.created_at "  . $filter['latest'] . "";
             }
             if (isset($filter['low_to_high']) && null !== $filter['low_to_high']) {
-                $query .= " order by pp.list_price "  . $filter['low_to_high'] . "";
+                $query .= " order by pp.price "  . $filter['low_to_high'] . "";
             }
             if (isset($filter['high_to_low']) && null !== $filter['high_to_low']) {
-                $query .= " order by pp.list_price "  . $filter['high_to_low'] . "";
+                $query .= " order by pp.price "  . $filter['high_to_low'] . "";
             }
         }
         

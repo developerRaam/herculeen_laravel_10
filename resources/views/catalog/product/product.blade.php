@@ -27,7 +27,7 @@
                 <div class="header">
                     <h2 style="font-family: 'Arial', sans-serif;">{{ $product['product']->product_name }}</h2>
                     <div class="d-flex mt-4">
-                        <h5 class="me-3"><strong>Rs. </strong>{{ number_format($product['product']->list_price,0) }}</h5>
+                        <h5 class="me-3"><strong>Rs. </strong>{{ number_format($product['product']->price,0) }}</h5>
                         {{-- <h5 class="text-danger"><strong>Rs. </strong><del>{{ number_format($product['product']->mrp,0) }}</del></h5> --}}
                     </div>
                     {{-- <p>Inclusive of all Taxes</p> --}}
@@ -174,16 +174,17 @@
                     <button class="nav-link" id="review-tab" data-bs-toggle="tab" data-bs-target="#review" type="button" role="tab" aria-controls="review" aria-selected="false">Review</button>
                 </li>
             </ul>
-            <!-- Description -->
-            <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
-                <div>
-                    {!! $product['product']->product_description !!}
+            <div class="tab-content" id="myTabContent">
+                <!-- Description -->
+                <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
+                    <div>
+                        {!! $product['product']->product_description !!}
+                    </div>
                 </div>
-            </div>
 
-            <!-- Review -->
-            <div class="tab-pane fade show" id="description" role="tabpanel" aria-labelledby="description-tab">
-                
+                <!-- Review -->
+                <div class="tab-pane fade show" id="review" role="tabpanel" aria-labelledby="review-tab">
+                </div>
             </div>
         </div>
    </div>

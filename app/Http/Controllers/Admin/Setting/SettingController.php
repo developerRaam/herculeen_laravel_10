@@ -25,6 +25,7 @@ class SettingController extends Controller{
 
         $data['ecommerce_links'] = route('ecommerce-links');
         $data['site_url'] = route('site');
+        $data['api_url'] = route('api');
 
         return view('admin.setting.setting',$data);
     }

@@ -25,7 +25,7 @@
             <div class="product-detail">
               <h3 class="product-title fs-6 truncate-lines mb-0"><small>{{$product->product_name}}</small></h3>
               <p class="mb-0 text-muted truncate-lines" style="color:teal;font-size:13px">{{ $product->tag }}</p>
-              <span class="text-dark fs-6"><strong>Rs.{{ number_format($product->list_price, 0) }}</strong></span>
+              <span class="text-dark fs-6"><strong>Rs.{{ number_format($product->price, 0) }}</strong></span>
             </div>
         </div>
       </a>
