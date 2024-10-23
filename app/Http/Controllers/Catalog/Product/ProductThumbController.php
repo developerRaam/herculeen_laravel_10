@@ -11,8 +11,8 @@ class ProductThumbController extends Controller
     public static function index()
     {
         $filter = [
-            'sort' => 'desc',
-            'limit' => '4'
+            'latest' => 'desc',
+            'limit' => '8'
         ];
         $data['products'] = Product::getProducts($filter);
         return view('catalog.product.thumb', $data);

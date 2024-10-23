@@ -293,14 +293,14 @@ i.icon.icon-arrow-io {
 .category_image {
   overflow: hidden;
   border-radius: 50%; 
-  width: 215; 
-  height: 215px; 
+  max-width: 180px; 
+  max-height: 180px; 
   display: flex; 
   align-items: center;
   justify-content: center;
   margin: 0 auto; 
   transition: transform 0.3s; 
-  background-color: #f7f7f7; 
+  background-color: #fff; 
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
 }
 

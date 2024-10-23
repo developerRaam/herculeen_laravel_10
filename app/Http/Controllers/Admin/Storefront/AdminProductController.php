@@ -20,7 +20,6 @@ use App\Models\Admin\Storefront\Product\ProductVariation;
 use App\Models\Admin\Storefront\Size\Size;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;

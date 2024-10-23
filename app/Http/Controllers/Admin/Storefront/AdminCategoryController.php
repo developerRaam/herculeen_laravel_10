@@ -10,7 +10,10 @@ use Illuminate\Support\Facades\URL;
 use App\Models\Admin\Storefront\Category\Category;
 use App\Models\Admin\Storefront\Category\CategoryPath;
 use Exception;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+// create new manager instance with desired driver
+use Intervention\Image\ImageManager;
 
 class AdminCategoryController extends Controller
 {
@@ -94,13 +97,24 @@ class AdminCategoryController extends Controller
                 $file = $request->file('image'); // get files
                 if(null !== $file){
                     $folderPath = public_path('image/category');
-                    if (!file_exists($folderPath)) {
-                        mkdir($folderPath, 0777, true);
+                    // Check if folder exists, create if not
+                    if (!File::exists($folderPath)) {
+                        File::makeDirectory($folderPath, 0777, true);
                     }
-                    $imageName = time() . '_' . $file->getClientOriginalName();
-                    $imagePath = public_path('image/category') . $imageName;
-                    if (!file_exists($imagePath)) {
-                        $file->move(public_path('image/category/'), $imageName);
+                    $imageName = time() . '_' . Str::uuid() . '.jpg';
+                    $imagePath = $folderPath . '/' . $imageName;
+                    $size = 500;
+
+                    if (!File::exists($imagePath)) {
+                        $file->move($folderPath . '/', $imageName);
+                    }
+
+                    $compressImage = $folderPath . '/' . $imageName;
+                    $imageManager = ImageManager::imagick()->read($imagePath);
+                    if (File::exists($compressImage)) {
+                        // resize to 300 x 200 pixel
+                        $imageManager->scaleDown(height: $size);
+                        $imageManager->save($folderPath . '/'. $imageName);
                     }
                 }
 
@@ -183,21 +197,40 @@ class AdminCategoryController extends Controller
             
             if (null !== $data->get('category_name')) {
 
+                $category = Category::where('id',$category_id)->first();
+
                 // Upload image
                 $file = $request->file('image'); // get files
                 if(null !== $file){
                     $folderPath = public_path('image/category');
-                    if (!file_exists($folderPath)) {
-                        mkdir($folderPath, 0777, true);
+                    // Check if folder exists, create if not
+                    if (!File::exists($folderPath)) {
+                        File::makeDirectory($folderPath, 0777, true);
                     }
-                    $imageName = time() . '_' . $file->getClientOriginalName();
-                    $imagePath = public_path('image/category') . $imageName;
-                    if (!file_exists($imagePath)) {
-                        $file->move(public_path('image/category/'), $imageName);
+                    $imageName = time() . '_' . Str::uuid() . '.jpg';
+                    $imagePath = $folderPath . '/' . $imageName;
+                    $size = 500;
+
+                    // remove image before update
+                    $image_name = isset($category->image) ? $category->image : null;
+                    if($image_name){
+                        if(File::exists($folderPath . '/' . $image_name)){
+                            unlink($folderPath . '/' . $image_name);
+                        }
+                    }
+
+                    if (!File::exists($imagePath)) {
+                        $file->move($folderPath . '/', $imageName);
+                    }
+
+                    $compressImage = $folderPath . '/' . $imageName;
+                    $imageManager = ImageManager::imagick()->read($imagePath);
+                    if (File::exists($compressImage)) {
+                        // resize to 300 x 200 pixel
+                        $imageManager->scaleDown(height: $size);
+                        $imageManager->save($folderPath . '/'. $imageName);
                     }
                 }
-
-                $category = Category::where('id',$category_id)->first();
 
                 if ($category) {
                     $category->category_name = $data->get('category_name');
@@ -237,7 +270,7 @@ class AdminCategoryController extends Controller
                 return redirect('admin/storefront/category')->with('success', 'Category not updated successfully.');
             }
         } catch (Exception $e) {
-            dd($e->getMessage());
+            dd($e);
         }
     }
 

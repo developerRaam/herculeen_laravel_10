@@ -134,9 +134,6 @@ class Product extends Model
             if (isset($filter['asc']) && null !== $filter['asc']) {
                 $query .= " order by p.product_name " . $filter['asc'] . "";
             }
-            if (isset($filter['limit']) && null !== $filter['limit']) {
-                $query .= " limit "  . $filter['limit'] . "";
-            }
             if (isset($filter['latest']) && null !== $filter['latest']) {
                 $query .= " order by p.created_at "  . $filter['latest'] . "";
             }
@@ -145,6 +142,9 @@ class Product extends Model
             }
             if (isset($filter['high_to_low']) && null !== $filter['high_to_low']) {
                 $query .= " order by pp.price "  . $filter['high_to_low'] . "";
+            }
+            if (isset($filter['limit']) && null !== $filter['limit']) {
+                $query .= " limit "  . $filter['limit'] . "";
             }
         }
         
