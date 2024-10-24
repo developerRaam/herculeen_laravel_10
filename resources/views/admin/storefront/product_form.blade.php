@@ -111,10 +111,10 @@
                                         </div>
                                         <div class="row mb-4">
                                             <div class="col-2 text-end">
-                                                <label for="meta_tag_title">Meta Tag Title</label>
+                                                <label for="meta_description">Meta description</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="text" id="meta_tag_title" name="meta_tag_title" class="form-control p-2" value="{{ isset($product) ? $product['product']->tag : old('meta_tag_title') }}" placeholder="Meta Tag Title">
+                                                <textarea type="text" id="meta_description" name="meta_description" class="form-control p-2" rows="3">{{ isset($product) ? $product['product']->meta_description : old('meta_description') }}</textarea>
                                             </div>
                                         </div>
                                         <div class="row mb-4">

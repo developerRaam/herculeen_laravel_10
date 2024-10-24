@@ -10,7 +10,7 @@
     <!-- products -->
     <section class="bg-light">
         <div class="container-fluid px-4">
-            <div class="py-5">
+            <div class="py-4">
                 <div class="section-header d-flex flex-wrap align-items-center justify-content-between">
                     <h2 class="section-title fs-3">Featured Products</h2>            
                     <div class="btn-wrap">
@@ -22,7 +22,7 @@
             </div>
 
             <!-- categories -->
-            <div class="pb-5">
+            <div class="pb-4">
                 <div class="section-header d-flex flex-wrap align-items-center justify-content-between">
                     <h2 class="section-title fs-3">Categories</h2>            
                     <div class="btn-wrap">

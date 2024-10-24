@@ -17,7 +17,7 @@ return new class extends Migration
             $table->text('product_description')->nullable();
             $table->text('tag')->nullable();
             $table->string('meta_title', 255)->nullable();
-            $table->string('meta_description', 255)->nullable();
+            $table->text('meta_description')->nullable();
             $table->string('meta_keyword', 255)->nullable();
             $table->string('model', 255)->nullable();
             $table->string('sku', 20)->nullable();

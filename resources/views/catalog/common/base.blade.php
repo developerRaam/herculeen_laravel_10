@@ -5,9 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="{{ URL::asset('herculeen.png'); }}">
     <title>@stack('setTitle')</title>
+    <meta name="description" content="@stack('setDescription')">
+    <meta name="keywords" content="@stack('setKeyword')">
+    <meta name="author" content="@if (app('settings') && isset(app('settings')['site_title'])){{ app('settings')['site_title'] }} @endif">
+
+    <!-- Additional Meta Tags -->
+    <meta name="robots" content="index, follow"> <!-- or "noindex, nofollow" -->
+    <link rel="canonical" href="@stack('setCanonicalURL')"> <!-- Canonical URL -->
+
     <link rel="stylesheet" href="{{ URL::asset('css/catalog/common/common.css'); }}">
     <link rel="stylesheet" href="{{ URL::asset('css/catalog/style.css'); }}">
+
+    <!-- Add additional css link -->
     @stack('addStyle')
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>

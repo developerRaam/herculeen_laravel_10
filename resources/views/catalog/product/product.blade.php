@@ -1,10 +1,12 @@
 @extends('catalog.common.base')
 
-@push('setTitle') Product @endpush
+<!-- meta tags -->
+@push('setTitle'){{ $product['product']->product_name }} @if (app('settings') && isset(app('settings')['site_title']))| {{ app('settings')['site_title'] }}@endif @endpush
+@push('setDescription'){{ $product['product']->meta_description }}@endpush
+@push('setKeyword'){{ $product['product']->tag }}@endpush
+@push('setCanonicalURL'){{ route('catalog.product-detail', ['product_id' => $product['product']->id, 'slug' => $product['product']->slug]) }}@endpush
 
 @section('content')
-
-
 @if (null !== $product)
 <section class="container-fluid py-3">
    <div class="container">
