@@ -1,6 +1,11 @@
 @extends('catalog.common.base')
 
-@push('setTitle') Herculeen Activewear @endpush
+<!-- meta tags -->
+@push('setTitle')@if (app('settings') && isset(app('settings')['site_title'])){{ app('settings')['site_title'] }}@endif @endpush
+@push('setDescription')@if (app('settings') && isset(app('settings')['site_description'])){{ strip_tags(app('settings')['site_description']) }}@endif @endpush
+@push('setKeyword')Noida best sports wear clothing manufacturer, Herculeen Activewear online brands, Herculeen Activewear @endpush
+@push('setCanonicalURL')https://herculeen.com/@endpush
+
 
 @section('content')
 
