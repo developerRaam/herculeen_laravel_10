@@ -29,7 +29,7 @@
                 <div class="header">
                     <h2 style="font-family: 'Arial', sans-serif;">{{ $product['product']->product_name }}</h2>
                     <div class="d-flex mt-4">
-                        <h5 class="me-3"><strong>Rs. </strong>{{ number_format($product['product']->price,0) }}</h5>
+                        <h5 class="me-3"><strong>Rs. </strong>{{ number_format($product['product']->mrp,0) }}</h5>
                         {{-- <h5 class="text-danger"><strong>Rs. </strong><del>{{ number_format($product['product']->mrp,0) }}</del></h5> --}}
                     </div>
                     {{-- <p>Inclusive of all Taxes</p> --}}
