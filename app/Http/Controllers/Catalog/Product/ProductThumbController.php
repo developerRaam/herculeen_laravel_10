@@ -44,6 +44,7 @@ class ProductThumbController extends Controller
                             if (!isset($uniqueCategories[$category->id])) {
                                 $data['categories'][] = [
                                     'category_id' => $category->id,
+                                    'sort_order' => $category->sort_order,
                                     'category_name' => $category->category_name,
                                 ];
                                 $uniqueCategories[$category->id] = true; // Mark this category_id as seen
@@ -53,6 +54,19 @@ class ProductThumbController extends Controller
                 }
             }
         }
+        // Sort the categories by sort_order in ascending order
+        usort($data['categories'], function ($a, $b) {
+            if ($a['sort_order'] === 0 && $b['sort_order'] === 0) {
+                return 0; // Both are 0, so they are equal
+            }
+            if ($a['sort_order'] === 0) {
+                return 1; // Move $a (sort_order 0) to the end
+            }
+            if ($b['sort_order'] === 0) {
+                return -1; // Move $b (sort_order 0) to the end
+            }
+            return $a['sort_order'] <=> $b['sort_order'];
+        });
 
         return view('catalog.product.thumb',$data);
     }

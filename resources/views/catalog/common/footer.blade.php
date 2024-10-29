@@ -33,8 +33,9 @@
                     “AN AGELESS ADVENTURE”</p> --}}
             </div>
             <div class="col-md-4 py-3">
-                <div class="row">
-                    <div class="col-md-6">
+               <div class="row">
+                    <div class="col-sm-4"></div>
+                    <div class="col-sm-8">
                         <h2 class="fs-5 mb-3">QUICK LINKS</h2>
                         <ul class="list-unstyled">
                             @foreach ($service_categories as $category)
@@ -42,6 +43,20 @@
                                     <li><a class="text-dark" href="{{ route('catalog.product-all', [$category->id, $category->slug]) }}">{{ $category->category_name }}</a></li>
                                 @endif
                             @endforeach
+                            <!-- Children menu -->
+                            @foreach ($service_categories as $category)
+                            @if ($category->children->isNotEmpty())
+                                @foreach ($category->children as $child)
+                                @if ($child->menu_top === 1)
+                                    <li>
+                                        <a class="text-dark" href="{{ route('catalog.product-all', [$child->id, $child->slug]) . '?sort=latest' }}">
+                                            {{ $child->category_name }}
+                                        </a>
+                                    </li>
+                                @endif
+                                    @endforeach
+                                @endif
+                            @endforeach  
                         </ul>
                     </div>
                 </div>

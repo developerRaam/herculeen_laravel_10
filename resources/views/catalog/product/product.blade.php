@@ -7,13 +7,14 @@
 @push('setCanonicalURL'){{ route('catalog.product-detail', ['product_id' => $product['product']->id, 'slug' => $product['product']->slug]) }}@endpush
 
 @section('content')
+<style></style>
 @if (null !== $product)
 <section class="container-fluid py-3">
    <div class="container">
         <div class="row">
             <div class="col-12 col-sm-6 mb-3">
                 <div class="text-center product overflow-hidden border bg-white">
-                    <img class="mb-3 product_image" src="{{ ($product['product']->image) ? asset("image/products").'/'.($product['product']->id .'/'.$product['product']->image) : asset('not-image-available.png')}}" style="max-height: 550px">
+                    <img class="mb-3 product_image" src="{{ ($product['product']->image) ? asset("image/cache/products").'/'.($product['product']->id .'/'. str_replace(".jpg",'',$product['product']->image) .'_700x700.jpg') : asset('not-image-available.png')}}" style="max-height: 550px">
                 </div>
                 <div class="d-flex flex-wrap">
                     @if ($product['images'])
@@ -56,12 +57,12 @@
                         <a class="border text-dark text-center py-2" style="width: 50px;" href="#">L</a>
                         <a class="border text-dark text-center py-2" style="width: 50px;" href="#">XL</a>
                     </div>
-                </div> --}}
-                {{-- <div class="mb-4">
+                </div>
+                <div class="mb-4">
                     <h2 class="fs-6">Quantity</h2>
                     <div class="d-flex" style="column-gap: 15px">
                         <button class="border py-2" style="width: 50px;"><i class="fa-solid fa-minus"></i></button>
-                        <input class="border py-2 text-center" style="width: 50px;" type="text" name="quantity" value="1">
+                        <input class="border py-2 text-center mt-0" style="width: 50px;" type="text" name="quantity" value="1">
                         <button class="border py-2" style="width: 50px;"><i class="fa-solid fa-plus"></i></button>
                     </div>
                 </div>
@@ -71,8 +72,8 @@
                         <input class="w-50 rounded-0 border border-dark px-2 py-2" type="text" name="" id="" placeholder="Enter your pincode">
                         <button class="btn btn-dark rounded-0 py-2">CHECK</button>
                     </div>
-                </div> --}}
-                {{-- <div class="mb-4">
+                </div>
+                <div class="mb-4">
                     <div class="d-flex" style="column-gap: 15px">
                         <input class="btn btn-white rounded-0 border border-dark py-2" style="width:35%" type="submit" value="ADD TO CART">
                         <input class="btn btn-dark rounded-0 border border-dark py-2" style="width:35%" type="submit" value="BUY IT NOW">

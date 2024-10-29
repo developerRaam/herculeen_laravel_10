@@ -1,12 +1,12 @@
 <aside class="left-sidebar">
-    <div style="height: 100vh">
+    <div style="max-height: 300vh; min-height:100vh">
         <ul class="list-unstyled">
             <li class="py-2"><strong class="text-white"><i class="fa-solid fa-bars"></i> Navigation</strong></li>
             <li><a class="text-decoration-none text-white d-block" href="{{ route('admin-dashboard') }}"><i class="fa-solid fa-house"></i> Dashboard</a></li>
             <li>
                 <button class="dropdown-btn left-side-btn" data-dropdown="column_left-1"><span><i class="fa-solid fa-store"></i> Storefront</span> <i class="fa fa-caret-down"></i></button>
                 <div class="dropdown-container" id="dropdown-column_left-1">
-                    <a class="text-decoration-none text-white d-block" style="padding-left:3rem !important" href="{{ route('category') }}"><i class="fa-solid fa-angles-right"></i> Categoreis</a>
+                    <a class="text-decoration-none text-white d-block" style="padding-left:3rem !important" href="{{ route('category') }}"><i class="fa-solid fa-angles-right"></i> Categories</a>
                     <a class="text-decoration-none text-white d-block" style="padding-left:3rem !important" href="{{ route('admin-storefront-product') }}"><i class="fa-solid fa-angles-right"></i> Products</a>
                     <a class="text-decoration-none text-white d-block" style="padding-left:3rem !important" href="{{ route('colors') }}"><i class="fa-solid fa-angles-right"></i> Colors</a>
                     <a class="text-decoration-none text-white d-block" style="padding-left:3rem !important" href="{{ route('size') }}"><i class="fa-solid fa-angles-right"></i> Size</a>

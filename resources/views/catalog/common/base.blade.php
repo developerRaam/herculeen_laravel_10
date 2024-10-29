@@ -38,6 +38,9 @@
     @yield('content')
     @include('catalog.common.footer')
 
+     <!-- Add additional js link -->
+     @stack('addScript')
+
     <script>
         // if(navigator.geolocation){
         //     navigator.geolocation.getCurrentPosition((position) => {

@@ -43,12 +43,13 @@
                     <div class="card rounded-0 p-3 mb-3 ">
                         <form id="saveForm" action="{{$action}}" method="post" enctype="multipart/form-data">
                             @csrf
+                            <input type="hidden" name="api_id" value="{{ $api_id }}">
                             <div class="row mb-4">
                                 <div class="col-2 text-end">
                                     <label for="api_apiKey">API Key</label>
                                 </div>
                                 <div class="col-10">
-                                    <input type="text" id="api_apiKey" name="api_apiKey" class="form-control p-2" value="{{ isset($apiKey) ? $apiKey: old('api_apiKey') }}" placeholder="API Key">
+                                    <input type="text" id="api_apiKey" name="apiKey" class="form-control p-2" value="{{ isset($apiKey) ? $apiKey: old('api_apiKey') }}" placeholder="API Key">
                                 </div>
                                 <div class="errors">
                                     <span class="text-danger">
@@ -64,7 +65,7 @@
                                     <label for="api_apiPassword">API Password</label>
                                 </div>
                                 <div class="col-10">
-                                    <input type="text" id="api_apiPassword" name="api_apiPassword" class="form-control p-2" value="{{ isset($apiPassword) ? $apiPassword: old('api_apiPassword') }}" placeholder="API Password">
+                                    <input type="text" id="api_apiPassword" name="apiPassword" class="form-control p-2" value="{{ isset($apiPassword) ? $apiPassword: old('api_apiPassword') }}" placeholder="API Password">
                                 </div>
                                 <div class="errors">
                                     <span class="text-danger">

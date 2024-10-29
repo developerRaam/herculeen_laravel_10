@@ -4,10 +4,14 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Catalog\Product\Product;
+use App\Models\Api\ApiAuth;
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Http\Request;
+use Auth;
+
 use Illuminate\Support\Facades\DB;
 
-class CommonController extends Controller
+class ApiAuthController extends Controller
 {
     public static function shartSession($apiKey, $apiPassword) {
         $api_apiKey = app('settings')['api_apiKey'] ?? '';
@@ -16,7 +20,7 @@ class CommonController extends Controller
 
         if (!$api_status) {
             return [
-                "status" => false,
+                "success" => false,
                 "message" => "We are unable to start API session because API is disabled!"
             ];
         }
@@ -26,13 +30,13 @@ class CommonController extends Controller
             session_start();
             $_SESSION['api_token'] = $token;
             return [
-                "status" => true,
+                "success" => true,
                 // "api_token" => $_SESSION['api_token'],
                 "message" => "API logged in successfully"
             ];
         }else{
             $array = [
-                "status" => false,
+                "success" => false,
                 "message" => "Invalid API Key and Password!"
             ];
             return $array;
@@ -43,14 +47,14 @@ class CommonController extends Controller
         session_start();
         if(isset($_SESSION['api_token']) && $_SESSION['api_token']){
             $array = [
-                "status" => true,
+                "success" => true,
                 "api_token" => $_SESSION['api_token']
             ];
             return $array;
         }
         
         return [
-            "status" => false,
+            "success" => false,
             "message" => "The API session has expired."
         ];
     }
@@ -60,12 +64,14 @@ class CommonController extends Controller
         $apiKey = $request->get('apiKey');
         $apiPassword = $request->get('apiPassword');
         
+        return response()->json($apiPassword);
+
         $startSession = self::shartSession($apiKey, $apiPassword);
-        if($startSession['status']){
+        if($startSession['success']){
             return response()->json($startSession);
         }else{
             $array = [
-                "error" => 1,
+                "success" => false,
                 "message" => $startSession['message']
             ];
             return response()->json($array);
@@ -74,7 +80,7 @@ class CommonController extends Controller
 
     public function getProducts(Request $request){
         $checkSession = self::checkSession();
-        if(!$checkSession['status']){
+        if(!$checkSession['success']){
             return response()->json($checkSession);
         }
 

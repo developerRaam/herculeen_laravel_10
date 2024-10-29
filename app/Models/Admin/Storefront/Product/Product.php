@@ -78,6 +78,8 @@ class Product extends Model
                 $query .= ' AND status=' . "'" . $request->query('status') . "'";
             }
         }
+
+        $query .= ' order by created_at desc';
         
         return  DB::select($query);
         // dd($query);

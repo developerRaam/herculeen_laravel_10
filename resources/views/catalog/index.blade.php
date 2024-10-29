@@ -37,6 +37,7 @@
                 <!-- All category  -->
                 <div class="row">
                     @foreach ($categories as $category)
+                    @if ($category->parent_id !== null)
                         <div class="col-6 col-sm-3 col-md-2">
                             <a href="{{ route('catalog.product-all', [$category->id, $category->slug]) . '?sort=latest' }}">
                                 <div class="p-1 category_image">
@@ -45,6 +46,7 @@
                                 <p class="text-center mt-2 text-dark">{{ $category->category_name }}</p>
                             </a>
                         </div>
+                    @endif
                     @endforeach
                 </div>
             </div>

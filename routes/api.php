@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\CommonController;
+use App\Http\Controllers\Api\ApiAuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,5 +19,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/common/apiLogin', [CommonController::class, 'apiLogin']);
-Route::post('/common/getProducts', [CommonController::class, 'getProducts']);
+Route::group(['middleware' => 'auth:sanctum'],function(){
+    Route::post('/apiauth/apiLogin', [ApiAuthController::class, 'apiLogin']);
+});
+// Route::post('/common/getProducts', [CommonController::class, 'getProducts']);
