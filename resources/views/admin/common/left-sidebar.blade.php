@@ -25,7 +25,6 @@
                     <a class="text-decoration-none text-white d-block" style="padding-left:3rem !important" href="{{ route('admin-media') }}"><i class="fa-solid fa-angles-right"></i> Media</a>
                 </div>
             </li>
-            <li><a class="text-decoration-none text-white d-block" href="{{ route('admin-contact') }}"><i class="fa-solid fa-address-book"></i> Enquiry</a></li>
             <li><a class="text-decoration-none text-white d-block" href="{{ route('admin-setting') }}"><i class="fa-solid fa-gear"></i> Setting</a></li>
         </ul>
     </div>

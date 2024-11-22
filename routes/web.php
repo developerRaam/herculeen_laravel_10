@@ -10,7 +10,6 @@ use App\Http\Controllers\Catalog\Product\CategoryController;
 //admin
 use App\Http\Controllers\Admin\Common\AdminLoginController;
 use App\Http\Controllers\Admin\Common\AdminDashboardController;
-use App\Http\Controllers\Admin\AdminContactController;
 use App\Http\Controllers\Admin\Setting\SettingController;
 use App\Http\Controllers\Admin\Setting\EcommerceLinkController;
 use App\Http\Controllers\Admin\Design\BannerController;
@@ -24,7 +23,6 @@ use App\Http\Controllers\Admin\Storefront\AdminProductController;
 use App\Http\Controllers\Admin\Storefront\AdminCategoryController;
 use App\Http\Controllers\Admin\Storefront\ColorController;
 use App\Http\Controllers\Admin\Storefront\SizeController;
-use App\Http\Controllers\Catalog\Product\SearchController;
 
 // Catalog
 Route::name('catalog.')->group(function () {
@@ -44,9 +42,6 @@ Route::post('/admin/login', [AdminLoginController::class, 'AdminLogin'])->name('
 Route::post('/admin/logout', [AdminLoginController::class, 'adminLogout'])->name('admin-logout');
 
 Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin-dashboard')->middleware('AdminMiddlewareLogin');
-
-Route::get('/admin/contact-us', [AdminContactController::class, 'index'])->name('admin-contact')->middleware('AdminMiddlewareLogin');
-Route::post('/admin/contact-us', [AdminContactController::class, 'saveContact'])->name('admin-contact')->middleware('AdminMiddlewareLogin');
 
 Route::middleware(['AdminMiddlewareLogin'])->prefix('admin/setting')->group(function () {
     Route::get('/', [SettingController::class, 'index'])->name('admin-setting');
