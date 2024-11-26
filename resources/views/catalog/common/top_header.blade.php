@@ -1,18 +1,17 @@
 <style>
     .user-dropdown{
-        margin-top: 10px !important;
+        margin-top: 15px !important;
     }
 
-    .user-dropdown::before{
-        position: relative;
-        content: '';
-        width: 0; 
-        height: 0; 
+    /* .user-dropdown::before{
+        position: absolute;
+        content: ''; 
         border-left: 20px solid transparent;
         border-right: 20px solid transparent;
-        
-        border-bottom: 10px solid #f00;
-    }
+        top: -10px;
+        left: 116px;
+        border-bottom: 10px solid #ddd;
+    } */
 
 </style>
 
@@ -33,21 +32,36 @@
             <ul class="h-100 d-flex align-items-center p-2 mx-3 list-unstyled">
                 <li class="mx-2">
                     <a href="#" class="text-decoration-none text-white">
-                        <i class="fa-regular fa-heart p-2 rounded-circle" style="background-color: #000;"></i>
+                        <i class="fa-regular fa-heart p-2 rounded-circle" style="background-color: #000; transition: background-color 0.3s;"></i>
                     </a>
                 </li>
                 <li class="mx-2">
                     <a href="#" class="text-decoration-none text-white">
-                        <i class="fa-solid fa-cart-plus p-2 rounded-circle" style="background-color: #000;"></i>
+                        <i class="fa-solid fa-cart-plus p-2 rounded-circle" style="background-color: #000; transition: background-color 0.3s;"></i>
                     </a>
                 </li>
                 <li class="dropdown mx-2">
                     <a href="#" class="text-decoration-none text-white " data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fa-solid fa-user p-2 rounded-circle" style="background-color: #000;"></i>
+                        @if (session('isCustomer'))
+                            <span class="rounded-circle px-2 fs-4 fw-bold" style="background-color: #000; transition: background-color 0.3s;">{{ substr(session('customer_name'), 0, 1) }}</span>
+                        @else
+                            <i class="fa-solid fa-user p-2 rounded-circle" style="background-color: #000; transition: background-color 0.3s;"></i>
+                        @endif
+
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end user-dropdown" style="z-index: 1500">
-                        <li><a class="dropdown-item" href="#">Register</a></li>
-                        <li><a class="dropdown-item" href="#">Login</a></li>
+                    <ul class="dropdown-menu dropdown-menu-end user-dropdown" style="z-index: 1500; line-height: 25px;">
+                        @if (session('isCustomer'))
+                            <li class="mb-0"><a class="dropdown-item" href="{{ route('catalog.front-user-dashboard') }}"><i class="fa-solid fa-dashboard"></i> Dashboard</a></li>
+                            <li class="mb-0"><a class="dropdown-item" href="{{ route('catalog.profile') }}"><i class="fa-solid fa-user"></i> Profile</a></li>
+                            <li class="mb-0"><a class="dropdown-item" href="#"><i class="fa-brands fa-jedi-order"></i> My Order</a></li>
+                            <li class="mb-0"><a class="dropdown-item" href="#"><i class="fa-solid fa-cart-shopping"></i> Cart</a></li>
+                            <li class="mb-0"><a class="dropdown-item" href="#"><i class="fa-solid fa-clock-rotate-left"></i> Order History</a></li>
+                            <li class="mb-0"><a class="dropdown-item" href="#"><i class="fa-solid fa-address-book"></i> Address</a></li>
+                            <li class="mb-0"><a class="dropdown-item" href="{{ route('catalog.viewChangePassword') }}"><i class="fa-solid fa-lock"></i> Change Password</a></li>
+                            <li class="mb-0"><a class="dropdown-item" href="{{ route('catalog.logout') }}"><i class="fa-solid fa-power-off text-danger"></i> Logout</a></li>
+                        @else
+                            <li><a class="dropdown-item" href="{{ route('catalog.user-login') }}">Login Account</a></li>
+                        @endif
                     </ul>
                 </li>
             </ul>

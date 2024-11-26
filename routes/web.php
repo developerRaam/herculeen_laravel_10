@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Catalog\HomeController;
 use App\Http\Controllers\Catalog\Product\ProductController;
 use App\Http\Controllers\Catalog\Product\CategoryController;
+use App\Http\Controllers\Catalog\Account\AccountController;
 
 //admin
 use App\Http\Controllers\Admin\Common\AdminLoginController;
@@ -13,7 +14,6 @@ use App\Http\Controllers\Admin\Common\AdminDashboardController;
 use App\Http\Controllers\Admin\Setting\SettingController;
 use App\Http\Controllers\Admin\Setting\EcommerceLinkController;
 use App\Http\Controllers\Admin\Design\BannerController;
-use App\Http\Controllers\admin\AdminDemoDataTableController;
 use App\Http\Controllers\Admin\Common\ProfileController;
 use App\Http\Controllers\Admin\Customers\CustomerController;
 use App\Http\Controllers\Admin\Design\AdminMediaController;
@@ -23,6 +23,8 @@ use App\Http\Controllers\Admin\Storefront\AdminProductController;
 use App\Http\Controllers\Admin\Storefront\AdminCategoryController;
 use App\Http\Controllers\Admin\Storefront\ColorController;
 use App\Http\Controllers\Admin\Storefront\SizeController;
+use App\Http\Controllers\Catalog\Account\DashboardController;
+use App\Http\Controllers\Catalog\Account\ProfileController as AccountProfileController;
 
 // Catalog
 Route::name('catalog.')->group(function () {
@@ -30,6 +32,32 @@ Route::name('catalog.')->group(function () {
     Route::get('/product/{product_id}/{slug?}', [ProductController::class, 'productDetail'])->name('product-detail');
     Route::get('/products/{category_id?}/{category_slug?}', [ProductController::class, 'getAllProduct'])->name('product-all');
     Route::get('/category', [CategoryController::class, 'getAllCategories'])->name('getAllCategories');
+
+    Route::get('/account', function () {
+        return redirect()->route('catalog.user-login');
+    });
+
+    Route::middleware('CatalogMiddlewareLogout')->group(function (){
+        Route::prefix('account')->group(function (){
+            Route::get('/login', [AccountController::class, 'index'])->name('user-login');
+            Route::post('/login', [AccountController::class, 'login'])->name('user-login-account');
+            Route::post('/register', [AccountController::class, 'register'])->name('user-register');
+            Route::get('/verify-otp', [AccountController::class, 'verifyOtpPage'])->name('verifyOtpPage');
+            Route::post('/verify-otp', [AccountController::class, 'verifyOTP'])->name('verifyOTP');
+        });
+    });
+    
+    Route::middleware('CatalogMiddlewareLogin')->group(function () {
+        Route::get('/account/logout', [AccountController::class, 'logout'])->name('logout');
+
+        Route::prefix('account')->group(function (){ 
+            Route::get('/dashboard', [DashboardController::class, 'index'])->name('front-user-dashboard');
+            Route::get('/profile', [AccountProfileController::class, 'index'])->name('profile');
+            Route::post('/profile', [AccountProfileController::class, 'update'])->name('update-profile');
+            Route::get('/change-password', [AccountProfileController::class, 'viewChangePassword'])->name('viewChangePassword');
+            Route::post('/change-password', [AccountProfileController::class, 'changePassword'])->name('changePassword');
+        });
+    });
 
 });
 
@@ -58,8 +86,6 @@ Route::post('/admin/banner', [BannerController::class, 'saveBanner'])->name('adm
 Route::get('/admin/banner/getallbanner', [BannerController::class, 'getBanner'])->middleware('AdminMiddlewareLogin');
 Route::get('/admin/banner/{banner_id}', [BannerController::class, 'getBannerById'])->middleware('AdminMiddlewareLogin');
 Route::get('/admin/banner/delete/{banner_id}', [BannerController::class, 'deleteBanner'])->middleware('AdminMiddlewareLogin');
-
-Route::get('/admin/admin-demo-data-table', [AdminDemoDataTableController::class, 'index'])->name('admin-demo-data-table')->middleware('AdminMiddlewareLogin');
 
 Route::middleware(['AdminMiddlewareLogin'])->prefix('admin/storefront')->group(function () {
     Route::get('product', [AdminProductController::class, 'index'])->name('admin-storefront-product');
