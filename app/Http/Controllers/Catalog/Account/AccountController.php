@@ -7,53 +7,73 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
-
-use Illuminate\Support\Facades\Mail;
-use App\Mail\Email;
 
 class AccountController extends Controller
 {
     public function index(){
-        $data['login'] = route('catalog.user-login-account');
-        $data['register'] = route('catalog.user-register');
-        return view('catalog.account.login', $data);
+        $data['route_profile'] = route('catalog.profile');
+        $data['route_change_password'] = route('catalog.viewChangePassword');
+        $data['route_cart'] = route('catalog.cart');
+        return view('catalog.account.account', $data);
     }
 
-    public function login(Request $request){
-        $customer = DB::table('customers')->where('email', $request->request->get('email'))->first();
-        if ($customer) {
-            $password = $request->request->get('password');
-            $hashedPassword = Hash::check($password, $customer->password);
-            if($hashedPassword){
-                if ($customer->status) {
-                    $request->session()->put('isCustomer', $customer->id);
-                    $request->session()->put('customer_name',$customer->name);
-                    return redirect()->route('catalog.front-user-dashboard');
-                } else {
-                    return redirect()->route('catalog.user-login')->with('error', 'Account disabled. Please contact Admin.');
-                }
-            }else{
-                return redirect()->route('catalog.user-login')->with('error', 'Username and password do not match.');
-            }
-        } else {
-            return redirect()->route('catalog.user-login')->with('error', 'Username and password do not match.');
-        }
+    public function profile(){
+        $data['action'] = route('catalog.update-profile');
+        $data['profile'] = DB::table('customers')->where('id', session('isCustomer'))->first();
+        return view('catalog.account.profile', $data);
     }
 
-    public function register(Request $request){
+    public function update(Request $request){
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|min:3|max:50',
-            'email' => 'required|email|max:100',
-            'password' => 'required|string|min:4|max:20',
-            'confirm_password' => 'required|string|min:4|max:20'
+            'number' => 'required|numeric|digits:10'
+        ],[
+            'name.required' => 'The name field is required.',
+            'name.min' => 'The name must be at least 3 characters.',
+            'number.required' => 'The phone number field is required.',
+            'number.numeric' => 'The phone number must be numeric.',
+            'number.digits' => 'The phone number must be exactly 10 digits.',
         ]);
         if ($validator->fails()) {
-            return redirect('/account/login#register')
+            return redirect()->route('catalog.profile')
             ->withErrors($validator)
-            ->withInput()
-            ->with('registerError', 'registerError');
+            ->withInput();
+        }
+
+        try{
+            $data = $request->request;
+            
+            DB::table('customers')->where('id', session('isCustomer'))->update([
+                "name" => $data->get('name') ?? null,
+                "number" => $data->get('number') ?? null
+            ]);
+
+            return redirect()->route('catalog.profile')->with('success', "Profile updated successfully!");
+
+        }catch(Exception $e){
+            dd($e->getMessage());
+        }
+
+    }
+
+    public function viewChangePassword(){
+        $data['action'] = route('catalog.changePassword');
+        return view('catalog.account.change-password', $data);
+    }
+
+    public function changePassword(Request $request){
+        $validator = Validator::make($request->all(), [
+            'password' => 'required|string|min:4|max:20',
+            'confirm_password' => 'required|string|min:4|max:20',
+        ],[
+            'password.required' => 'The password field is required.',
+            'password.min' => 'The password must be at least 4 characters.',
+            'confirm_password.required' => 'The confirm password field is required.',
+            'confirm_password.min' => 'The confirm password must be at least 4 characters.',
+        ]);
+        if ($validator->fails()) {
+            return redirect()->route('catalog.viewChangePassword')->withErrors($validator);
         }
 
         try{
@@ -61,84 +81,29 @@ class AccountController extends Controller
 
             // checking password
             if($data->get('password') !== $data->get('confirm_password')){
-                return redirect('/account/login#register')->with('password_not_match', 'The password does not match.');
+                return redirect()->route('catalog.viewChangePassword')->with('password_not_match', 'The password does not match.');
             }
 
-            // checking email
-            $getRegister = DB::table("customers")->where('email', $data->get('email'))->first();
-            if($getRegister){
-                return redirect()->route('catalog.user-login')->with('email_error', 'Email already exists.')->with('registerError', 'registerError');;
-            }
+            DB::table('customers')->where('id', session('isCustomer'))->update([
+                "password" => Hash::make($data->get('password'))
+            ]);
 
-            // send mail for otp
-            self::sendOTP($data->get('email'));
+            return redirect()->route('catalog.viewChangePassword')->with('success', "Password updated successfully!");
 
-            Session::put('register_data', $data);
-
-            return redirect()->route('catalog.verifyOtpPage');
-        
         }catch(Exception $e){
             dd($e->getMessage());
         }
-
     }
 
-    public function verifyOtpPage(){ 
-        $data['action'] = route('catalog.verifyOTP');
-
-        $getSessionOtp = Session::get('email_otp');
-
-        if($getSessionOtp){
-            return view('catalog.account.verify_otp', $data);
-        }else{
-            return redirect()->route('catalog.user-login');
-        }
+    public function order(){
+        return view('catalog.account.order');
     }
 
-    public function sendOTP($email){
-        $otp = rand(100000, 999999);
-
-        // send mail
-        $emailArray = [
-            "subject" => "Registration OTP",
-            "email_otp" => $otp
-        ];
-        Mail::to($email)->send(new Email($emailArray));
-
-        Session::put('email_otp', $otp);
+    public function wishlist(){
+        return view('catalog.account.wishlist');
     }
 
-    public function verifyOTP(Request $request){
-        $getSessionOtp = Session::get('email_otp');
-        $getOtp = (int) $request->request->get('otp');
-
-        // verifying otp
-        if($getOtp !== $getSessionOtp){
-            return redirect()->route('catalog.verifyOtpPage')->with('error', 'The OTP you entered is incorrect. Please check your email and try again.');
-        }
-
-        $data = Session::get('register_data');
-
-        $register = DB::table('customers')->insert([
-            "name" => $data->get('name'),
-            "email" => $data->get('email'),
-            "password" => Hash::make($data->get('password')),
-            "status" => 1
-        ]);
-
-        session()->forget('email_otp');
-        session()->forget('register_data');
-
-        if($register){
-            return redirect()->route('catalog.user-login')->with('success', 'Congratulations! Your registration was successful. You can now log in to your account.!');
-        }else{
-            return redirect()->route('catalog.user-login')->with('success', 'Oops! Something went wrong. Please check the form and try again.');
-        }
-    }
-
-    public function logout(){
-        session()->forget('isCustomer');
-        session()->forget('customer_name');
-        return redirect()->route('catalog.user-login')->with('success', 'Logout');
+    public function address(){
+        return view('catalog.account.address');
     }
 }

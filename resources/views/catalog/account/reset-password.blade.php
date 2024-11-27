@@ -1,7 +1,7 @@
 @extends('catalog.common.base')
 
 @push('setTitle')
-    Change Password
+    Reset Password
 @endpush
 
 @section('content')
@@ -10,7 +10,7 @@
     <div class="col-6">
        <div class="card shadow">
             <div class="card-body">
-                <h4 class="text-center">Change Password</h4>
+                <h4 class="text-center">Reset Password</h4>
                 <!-- alert message -->
                 @include('catalog.common.alert')
 

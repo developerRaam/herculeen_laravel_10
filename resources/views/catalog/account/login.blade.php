@@ -33,7 +33,7 @@
         }
 
         .login_btn {
-            background-color: #4e73df;
+            background-color: #000;
             color: white;
             border: none;
             cursor: pointer;
@@ -41,7 +41,7 @@
         }
 
         .login_btn:hover {
-            background-color: #3e59c6;
+            background-color: #000;
         }
 
         .login-form-toggle {
@@ -99,6 +99,7 @@
                     </label>
                   </div>
                 <button type="submit" class="login_btn">Login</button>
+                <a href="{{ $forgot_password }}">Forgot Password?</a>
             </form>
             <div class="login-form-toggle">
                 <p>Don't have an account? <a href="#register" onclick="toggleForm()">Sign up</a></p>

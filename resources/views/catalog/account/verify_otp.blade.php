@@ -1,7 +1,7 @@
 @extends('catalog.common.base')
 
 @push('setTitle')
-    User Login
+    Verify OTP
 @endpush
 
 @section('content')
@@ -31,7 +31,7 @@
                                 @enderror
                             </span>
                         </div>
-                        <button class="btn btn-success " type="submit">Verify</button>
+                        <button class="btn btn-dark " type="submit">Verify</button>
                     </div>
                 </form>
                 

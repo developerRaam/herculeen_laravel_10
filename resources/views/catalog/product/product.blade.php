@@ -37,7 +37,7 @@
                     <hr>
                 </div>
                 
-                {{-- <div class="colors mb-4">
+                <div class="colors mb-4">
                     <h2 class="fs-6">Colors</h2>
                     <div class="d-flex" style="column-gap: 15px">
                         <a class="border" href="#"><img width="50" height="50" src="{{ asset('image/product/product-item1.jpg') }}"></a>
@@ -62,7 +62,7 @@
                     <h2 class="fs-6">Quantity</h2>
                     <div class="d-flex" style="column-gap: 15px">
                         <button class="border py-2" style="width: 50px;"><i class="fa-solid fa-minus"></i></button>
-                        <input class="border py-2 text-center mt-0" style="width: 50px;" type="text" name="quantity" value="1">
+                        <input class="border py-2 text-center mt-0" style="width: 50px;" type="text" name="quantity" value="1" id="quantity">
                         <button class="border py-2" style="width: 50px;"><i class="fa-solid fa-plus"></i></button>
                     </div>
                 </div>
@@ -75,13 +75,13 @@
                 </div>
                 <div class="mb-4">
                     <div class="d-flex" style="column-gap: 15px">
-                        <input class="btn btn-white rounded-0 border border-dark py-2" style="width:35%" type="submit" value="ADD TO CART">
-                        <input class="btn btn-dark rounded-0 border border-dark py-2" style="width:35%" type="submit" value="BUY IT NOW">
+                        <button class="btn btn-white rounded-0 border border-dark py-2" style="width:35%" type="button" id="addToCart">ADD TO CART</button>
+                        <button class="btn btn-dark rounded-0 border border-dark py-2" style="width:35%" type="submit">BUY IT NOW</button>
                     </div>
                     <div class="mt-3">
                         <a href="#" class="text-dark"><i class="fa-regular fa-heart"></i> ADD TO WISHLIST</a>
                     </div>
-                </div> --}}
+                </div> 
 
                 {{-- Other link url --}}
                 @if(app('settings')['ecommerce_other_url_status'])
@@ -200,6 +200,38 @@
             document.querySelector('.product_image').src = side_image.getAttribute('data-src');
         });
     });
+
+    // add cart
+    const addCart = document.getElementById('addToCart')
+    addCart.addEventListener('click', () => {
+        let product_id = {!! json_encode($product['product']->id) !!}
+        let customer_id = {!! json_encode(session('isCustomer')) !!}
+        let action = {!! json_encode(route('catalog.addCart')) !!}
+        let quantity = document.getElementById('quantity').value;
+        
+        $.ajax({
+            url: action,
+            method: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                customer_id: customer_id,
+                product_id: product_id,
+                quantity: quantity
+            },
+            success: function(response) {
+                if (response.success) {
+                    alert(response.message);
+                }else {
+                    alert(response.message);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+                alert('An error occurred while adding to cart.');
+            }
+        });
+        
+    })
 
 </script>
 

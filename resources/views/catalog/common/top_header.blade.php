@@ -51,10 +51,11 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end user-dropdown" style="z-index: 1500; line-height: 25px;">
                         @if (session('isCustomer'))
-                            <li class="mb-0"><a class="dropdown-item" href="{{ route('catalog.front-user-dashboard') }}"><i class="fa-solid fa-dashboard"></i> Dashboard</a></li>
+                            <li class="mb-0"><a class="dropdown-item" href="{{ route('catalog.front-user-account') }}"><i class="fa-solid fa-dashboard"></i> My Account</a></li>
                             <li class="mb-0"><a class="dropdown-item" href="{{ route('catalog.profile') }}"><i class="fa-solid fa-user"></i> Profile</a></li>
-                            <li class="mb-0"><a class="dropdown-item" href="#"><i class="fa-brands fa-jedi-order"></i> My Order</a></li>
-                            <li class="mb-0"><a class="dropdown-item" href="#"><i class="fa-solid fa-cart-shopping"></i> Cart</a></li>
+                            <li class="mb-0"><a class="dropdown-item" href="{{ route('catalog.order') }}"><i class="fa-brands fa-jedi-order"></i> My Order</a></li>
+                            <li class="mb-0"><a class="dropdown-item" href="{{ route('catalog.cart') }}"><i class="fa-solid fa-cart-shopping"></i> Cart</a></li>
+                            <li class="mb-0"><a class="dropdown-item" href="{{ route('catalog.wishlist') }}"><i class="fa-solid fa-heart"></i> Wishlist</a></li>
                             <li class="mb-0"><a class="dropdown-item" href="#"><i class="fa-solid fa-clock-rotate-left"></i> Order History</a></li>
                             <li class="mb-0"><a class="dropdown-item" href="#"><i class="fa-solid fa-address-book"></i> Address</a></li>
                             <li class="mb-0"><a class="dropdown-item" href="{{ route('catalog.viewChangePassword') }}"><i class="fa-solid fa-lock"></i> Change Password</a></li>

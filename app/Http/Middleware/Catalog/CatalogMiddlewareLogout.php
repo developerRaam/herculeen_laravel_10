@@ -16,7 +16,7 @@ class CatalogMiddlewareLogout
     public function handle(Request $request, Closure $next): Response
     {
         if ($request->session()->has('isCustomer')) {
-            return redirect()->route('catalog.front-user-dashboard');
+            return redirect()->route('catalog.front-user-account');
         }
         return $next($request);
     }

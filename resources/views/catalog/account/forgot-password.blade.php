@@ -1,7 +1,7 @@
 @extends('catalog.common.base')
 
 @push('setTitle')
-    Change Password
+    Forgot Your Password
 @endpush
 
 @section('content')
@@ -10,42 +10,29 @@
     <div class="col-6">
        <div class="card shadow">
             <div class="card-body">
-                <h4 class="text-center">Change Password</h4>
+                <h4 class="text-center">Forgot Your Password</h4>
                 <!-- alert message -->
                 @include('catalog.common.alert')
 
                 <form action="{{$action}}" method="POST">
                     @csrf
-                    <!-- password Input -->
+                    <!-- email Input -->
                     <div class="mb-4">
-                        <label for="password" class="form-label"><strong>Password</strong></label>
-                        <input type="password" class="form-control p-3 bg-light" id="password" name="password" placeholder="Password">
+                        <label for="email" class="form-label"><strong>Email</strong></label>
+                        <input type="email" class="form-control p-3 bg-light" id="email" name="email" placeholder="email">
                         <div class="errors">
                             <span class="text-danger">
-                                @error('password')
-                                {{$message}}
-                                @enderror
-                            </span>
-                        </div>
-                    </div>
-            
-                    <!-- password Input -->
-                    <div class="mb-4">
-                        <label for="confirm_password" class="form-label"><strong>Confirm Password</strong></label>
-                        <input type="text" class="form-control p-3 bg-light" id="confirm_password" name="confirm_password" placeholder="Confirm Password">
-                        <div class="errors">
-                            <span class="text-danger">
-                                @error('confirm_password')
+                                @error('email')
                                 {{$message}}
                                 @enderror
                             </span>
                         </div>
                     </div>
 
-                    @if(session('password_not_match'))
+                    @if(session('email_not_match'))
                         <div class="mb-4">
                             <span class="text-danger">
-                            {{ session('password_not_match') }}
+                            {{ session('email_not_match') }}
                             </span>
                         </div>
                     @endif

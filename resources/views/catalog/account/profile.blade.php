@@ -1,7 +1,7 @@
 @extends('catalog.common.base')
 
 @push('setTitle')
-    User Login
+    Account Profile
 @endpush
 
 @section('content')

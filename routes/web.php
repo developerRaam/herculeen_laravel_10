@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Catalog\HomeController;
 use App\Http\Controllers\Catalog\Product\ProductController;
 use App\Http\Controllers\Catalog\Product\CategoryController;
-use App\Http\Controllers\Catalog\Account\AccountController;
+use App\Http\Controllers\Catalog\Account\LoginController;
 
 //admin
 use App\Http\Controllers\Admin\Common\AdminLoginController;
@@ -23,8 +23,8 @@ use App\Http\Controllers\Admin\Storefront\AdminProductController;
 use App\Http\Controllers\Admin\Storefront\AdminCategoryController;
 use App\Http\Controllers\Admin\Storefront\ColorController;
 use App\Http\Controllers\Admin\Storefront\SizeController;
-use App\Http\Controllers\Catalog\Account\DashboardController;
-use App\Http\Controllers\Catalog\Account\ProfileController as AccountProfileController;
+use App\Http\Controllers\Catalog\Account\AccountController;
+use App\Http\Controllers\Catalog\Checkout\CartController;
 
 // Catalog
 Route::name('catalog.')->group(function () {
@@ -39,23 +39,34 @@ Route::name('catalog.')->group(function () {
 
     Route::middleware('CatalogMiddlewareLogout')->group(function (){
         Route::prefix('account')->group(function (){
-            Route::get('/login', [AccountController::class, 'index'])->name('user-login');
-            Route::post('/login', [AccountController::class, 'login'])->name('user-login-account');
-            Route::post('/register', [AccountController::class, 'register'])->name('user-register');
-            Route::get('/verify-otp', [AccountController::class, 'verifyOtpPage'])->name('verifyOtpPage');
-            Route::post('/verify-otp', [AccountController::class, 'verifyOTP'])->name('verifyOTP');
+            Route::get('/login', [LoginController::class, 'index'])->name('user-login');
+            Route::post('/login', [LoginController::class, 'login'])->name('user-login-account');
+            Route::post('/register', [LoginController::class, 'register'])->name('user-register');
+            Route::get('/verify-otp', [LoginController::class, 'verifyOtpPage'])->name('verifyOtpPage');
+            Route::post('/registered-user-data', [LoginController::class, 'registeredUserData'])->name('registeredUserData');
+            Route::get('/forgot-password', [LoginController::class, 'viewForgotPassword'])->name('viewForgotPassword');
+            Route::post('/forgot-password', [LoginController::class, 'forgotPassword'])->name('forgotPassword');
+            Route::get('/reset-password/{user_token?}', [LoginController::class, 'viewResetPassword'])->name('viewResetPassword');
+            Route::post('/reset-password', [LoginController::class, 'resetPassword'])->name('resetPassword');
         });
     });
     
     Route::middleware('CatalogMiddlewareLogin')->group(function () {
-        Route::get('/account/logout', [AccountController::class, 'logout'])->name('logout');
+        Route::get('/account/logout', [LoginController::class, 'logout'])->name('logout');
 
         Route::prefix('account')->group(function (){ 
-            Route::get('/dashboard', [DashboardController::class, 'index'])->name('front-user-dashboard');
-            Route::get('/profile', [AccountProfileController::class, 'index'])->name('profile');
-            Route::post('/profile', [AccountProfileController::class, 'update'])->name('update-profile');
-            Route::get('/change-password', [AccountProfileController::class, 'viewChangePassword'])->name('viewChangePassword');
-            Route::post('/change-password', [AccountProfileController::class, 'changePassword'])->name('changePassword');
+            Route::get('/', [AccountController::class, 'index'])->name('front-user-account');
+            Route::get('/profile', [AccountController::class, 'profile'])->name('profile');
+            Route::post('/profile', [AccountController::class, 'update'])->name('update-profile');
+            Route::get('/change-password', [AccountController::class, 'viewChangePassword'])->name('viewChangePassword');
+            Route::post('/change-password', [AccountController::class, 'changePassword'])->name('changePassword');
+            Route::get('/order', [AccountController::class, 'order'])->name('order');
+            Route::get('/wishlist', [AccountController::class, 'wishlist'])->name('wishlist');
+        });
+
+        Route::prefix('checkout')->group(function (){
+            Route::get('/cart',[CartController::class, 'index'])->name('cart');
+            Route::post('/add-cart', [CartController::class, 'addCart'])->name('addCart');
         });
     });
 

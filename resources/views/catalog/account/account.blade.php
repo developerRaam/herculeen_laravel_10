@@ -1,7 +1,7 @@
 @extends('catalog.common.base')
 
 @push('setTitle')
-    Account Dashboard
+    Account
 @endpush
 
 @section('content')
@@ -24,7 +24,7 @@
 
             <div class="col-6 col-sm-2 col-md-3">
                 <div class="card shadow-lg rounded-3" style="background-color: #f8f9fa;">
-                    <a href="#">
+                    <a href="{{ route('catalog.order') }}">
                         <div class="card-body text-center">
                             <h2 class="text-secondary" style="font-size: 6rem; margin-bottom: 20px;">
                                 <i class="fa-brands fa-jedi-order"></i>
@@ -37,7 +37,7 @@
 
             <div class="col-6 col-sm-2 col-md-3">
                 <div class="card shadow-lg rounded-3" style="background-color: #f8f9fa;">
-                    <a href="#">
+                    <a href="{{ route('catalog.wishlist') }}">
                         <div class="card-body text-center">
                             <h2 class="text-secondary" style="font-size: 6rem; margin-bottom: 20px;">
                                 <i class="fa-solid fa-heart"></i>
@@ -50,7 +50,7 @@
 
             <div class="col-6 col-sm-2 col-md-3">
                 <div class="card shadow-lg rounded-3" style="background-color: #f8f9fa;">
-                    <a href="#">
+                    <a href="{{ $route_cart }}">
                         <div class="card-body text-center">
                             <h2 class="text-secondary" style="font-size: 6rem; margin-bottom: 20px;">
                                 <i class="fa-solid fa-cart-shopping"></i>
