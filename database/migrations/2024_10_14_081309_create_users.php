@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('customers', function (Blueprint $table) {
+        Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
@@ -19,7 +19,7 @@ return new class extends Migration
             $table->bigInteger('number')->nullable();
             $table->timestamp('number_verified_at')->nullable();
             $table->string('password');
-            $table->integer('customer_group_id')->nullable();
+            $table->integer('user_group_id')->nullable();
             $table->boolean('status')->default(0);
             $table->string('ip',50)->nullable();
             $table->string('image')->nullable();
@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('customers');
+        Schema::dropIfExists('users');
     }
 };

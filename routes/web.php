@@ -15,7 +15,7 @@ use App\Http\Controllers\Admin\Setting\SettingController;
 use App\Http\Controllers\Admin\Setting\EcommerceLinkController;
 use App\Http\Controllers\Admin\Design\BannerController;
 use App\Http\Controllers\Admin\Common\ProfileController;
-use App\Http\Controllers\Admin\Customers\CustomerController;
+use App\Http\Controllers\Admin\Users\UserController;
 use App\Http\Controllers\Admin\Design\AdminMediaController;
 use App\Http\Controllers\Admin\Setting\ApiController;
 use App\Http\Controllers\Admin\Setting\SiteController;
@@ -67,6 +67,9 @@ Route::name('catalog.')->group(function () {
         Route::prefix('checkout')->group(function (){
             Route::get('/cart',[CartController::class, 'index'])->name('cart');
             Route::post('/add-cart', [CartController::class, 'addCart'])->name('addCart');
+            Route::get('/remove-cart/{product_id}/{product_name}', [CartController::class, 'removeCartProduct'])->name('removeCartProduct');
+            Route::post('/increase-quantity', [CartController::class, 'increaseQunatity'])->name('increaseQunatity');
+            Route::post('/decrease-quantity', [CartController::class, 'decreaseQunatity'])->name('decreaseQunatity');
         });
     });
 
@@ -137,13 +140,13 @@ Route::get('/admin/media/getFiles', [AdminMediaController::class, 'getFiles'])->
 Route::post('/admin/media/createFolder', [AdminMediaController::class, 'createFolder'])->middleware('AdminMiddlewareLogin');
 Route::post('/admin/media/delete', [AdminMediaController::class, 'delete'])->middleware('AdminMiddlewareLogin');
 
-Route::middleware(['AdminMiddlewareLogin'])->prefix('admin/customer')->group(function () {
-    Route::get('customer', [CustomerController::class, 'index'])->name('customer');
-    Route::get('customer-form', [CustomerController::class, 'form'])->name('customer-form');
-    Route::get('customer-edit/customer_id={customer_id}', [CustomerController::class, 'edit'])->name('customer-edit');
-    Route::post('customer-save/{customer_id?}', [CustomerController::class, 'save'])->name('customer-save');
-    Route::get('customer-delete/{customer_id}', [CustomerController::class, 'delete'])->name('customer-delete');
-    Route::post('deleteMultiSelection/', [CustomerController::class, 'deleteMultiSelection']);
+Route::middleware(['AdminMiddlewareLogin'])->prefix('admin/user')->group(function () {
+    Route::get('user', [UserController::class, 'index'])->name('user');
+    Route::get('user-form', [UserController::class, 'form'])->name('user-form');
+    Route::get('user-edit/user_id={user_id}', [UserController::class, 'edit'])->name('user-edit');
+    Route::post('user-save/{user_id?}', [UserController::class, 'save'])->name('user-save');
+    Route::get('user-delete/{user_id}', [UserController::class, 'delete'])->name('user-delete');
+    Route::post('deleteMultiSelection/', [UserController::class, 'deleteMultiSelection']);
 });
 
 Route::middleware(['AdminMiddlewareLogin'])->prefix('admin')->group(function(){

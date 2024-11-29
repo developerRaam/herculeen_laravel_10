@@ -27,8 +27,8 @@
                         </div>
                     </div>
                     <div>
-                        <a class="btn btn-primary fs-4 px-3" href="{{$add}}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add Customer"><i class="fa-solid fa-plus"></i></a>
-                        <a class="btn btn-danger fs-4 px-3" data-name="Selected Customers" href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete Customer" id="multi-selection-delete-button"><i class="fa-solid fa-trash"></i></a>
+                        <a class="btn btn-primary fs-4 px-3" href="{{$add}}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add user"><i class="fa-solid fa-plus"></i></a>
+                        <a class="btn btn-danger fs-4 px-3" data-name="Selected Users" href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete user" id="multi-selection-delete-button"><i class="fa-solid fa-trash"></i></a>
                     </div>
                 </div>
             </div>
@@ -38,7 +38,7 @@
                     @include('admin.common.alert')
 
                     <div class="px-3 py-2 title-list">
-                        <p class="mb-0"><i class="fa-solid fa-list"></i> Customer List</p>
+                        <p class="mb-0"><i class="fa-solid fa-list"></i> user List</p>
                     </div>
                     <div class="card rounded-0 p-3">
                         <table class="table table-bordered table-striped">
@@ -46,28 +46,28 @@
                                 <tr>
                                     <th width="5%" class="text-center"><input type="checkbox" class="form-check-input" name="" id="multiselections"></th>
                                     <th width="10%">Image</th>
-                                    <th width="30%">Customer Name</th>
+                                    <th width="30%">user Name</th>
                                     <th width="24%">Email</th>
                                     <th width="15%">Status</th>
                                     <th width="16%">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse ($customers as $customer)
+                                @forelse ($users as $user)
                                     <tr>
-                                        <td class="text-center"><input type="checkbox" class="form-check-input selectBox" name="" data-customer-id="{{$customer->id}}"></td>
-                                        <td class="text-center"><img height="50" src="{{ ($customer->image) ? asset("image/customer").'/'.$customer->image : asset('not-image-available.png')}}" alt="{{$customer->name}}"></td>
-                                        <td>{{$customer->name}}</td>
-                                        <td>{{ $customer->email }}</td>
-                                        <td> @if($customer->status) <p class="text-success">Enabled</p> @else <p>Disabled</p> @endif </td>
+                                        <td class="text-center"><input type="checkbox" class="form-check-input selectBox" name="" data-user-id="{{$user->id}}"></td>
+                                        <td class="text-center"><img height="50" src="{{ ($user->image) ? asset("image/user").'/'.$user->image : asset('not-image-available.png')}}" alt="{{$user->name}}"></td>
+                                        <td>{{$user->name}}</td>
+                                        <td>{{ $user->email }}</td>
+                                        <td> @if($user->status) <p class="text-success">Enabled</p> @else <p>Disabled</p> @endif </td>
                                         <td>
-                                            <a class="btn btn-primary mb-1" href="{{ route('customer-edit', ['customer_id' => $customer->id]) }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit"><i class="fa-solid fa-pencil"></i></a>
-                                            <a class="btn btn-danger deleteRow" href="javascript:void(0)" data-href="{{ route('customer-delete', ['customer_id' => $customer->id]) }}" data-name="{{$customer->name}}" data-row-name="customer" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete"><i class="fa-solid fa-trash"></i></a>
+                                            <a class="btn btn-primary mb-1" href="{{ route('user-edit', ['user_id' => $user->id]) }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit"><i class="fa-solid fa-pencil"></i></a>
+                                            <a class="btn btn-danger deleteRow" href="javascript:void(0)" data-href="{{ route('user-delete', ['user_id' => $user->id]) }}" data-name="{{$user->name}}" data-row-name="user" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete"><i class="fa-solid fa-trash"></i></a>
                                         </td>
                                     </tr>                                    
                                 @empty
                                     <caption>
-                                        <p class="text-center">Not found any customers</p>
+                                        <p class="text-center">Not found any users</p>
                                     </caption>
                                 @endforelse
                             </tbody>
@@ -85,8 +85,8 @@
                     <div class="card rounded-0 p-3">
                         <form id="filter-form" action="" method="get">
                             <div class="mb-3">
-                                <label for="customer_name" class="form-label fw-bold">Customer Name</label>
-                                <input type="text" class="form-control" name="customer_name" value="{{ $customer_name ?? '' }}" id="customer_name" placeholder="Customer Name">
+                                <label for="user_name" class="form-label fw-bold">user Name</label>
+                                <input type="text" class="form-control" name="user_name" value="{{ $user_name ?? '' }}" id="user_name" placeholder="user Name">
                             </div>
                             <div class="mb-3">
                                 <label for="email" class="form-label fw-bold">Email</label>
@@ -144,21 +144,21 @@
     })
 
     // ======================== multi selections ================================
-    let customerList = [];
+    let userList = [];
     const multiSelection = document.getElementById('multiselections');
     const selectBox = document.querySelectorAll('.selectBox');
 
     multiSelection.addEventListener('click', () => {
-        customerList = [];
+        userList = [];
         
         selectBox.forEach(element => {
-            let productId = element.getAttribute('data-customer-id')
+            let productId = element.getAttribute('data-user-id')
             if(productId){
                 if(multiSelection.checked){
-                    customerList.push(productId)
+                    userList.push(productId)
                     element.checked = true
                 }else{
-                    customerList.pop(productId)
+                    userList.pop(productId)
                     element.checked = false
                 }
             }
@@ -166,21 +166,21 @@
     })
 
     selectBox.forEach(element => {
-        customerList = [];
+        userList = [];
         element.addEventListener('click', () => {
-            let productId = element.getAttribute('data-customer-id')
+            let productId = element.getAttribute('data-user-id')
             if(productId){
                 if(element.checked){
-                    customerList.push(productId)
+                    userList.push(productId)
                     element.checked = true
                 }else{
-                    customerList.pop(productId)
+                    userList.pop(productId)
                     element.checked = false
                 }
             }
 
             // unchecked multiselection when rest product
-            if(selectBox.length !== customerList.length){
+            if(selectBox.length !== userList.length){
                 multiSelection.checked = false
             }else{
                 multiSelection.checked = true
@@ -192,8 +192,8 @@
     document.getElementById('multi-selection-delete-button').addEventListener('click', function(e) {
         e.preventDefault(); // Prevent the default action
         let name = document.getElementById('multi-selection-delete-button').getAttribute('data-name')
-        if(customerList.length < 1){
-            dataName = "<span style='color:red'>You must select a customer to delete</span>"
+        if(userList.length < 1){
+            dataName = "<span style='color:red'>You must select a user to delete</span>"
         }else{
             dataName = `<span>Do you want delete this ${name}</span>`
         }
@@ -209,10 +209,10 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: '/admin/customer/deleteMultiSelection',
+                    url: '/admin/user/deleteMultiSelection',
                     method : 'post',
                     data: {
-                        'customerList' : customerList,
+                        'userList' : userList,
                         '_token': '{{ csrf_token() }}',
                     },
                     dataType: 'json',

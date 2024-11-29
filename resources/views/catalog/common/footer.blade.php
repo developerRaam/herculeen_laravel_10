@@ -24,7 +24,7 @@
                 {{-- <h2 class="fs-5 mb-4"><img height="80" width="150" src="{{ URL::asset('image/logo.png') }}" alt="ez lifestyle"></h2> --}}
                 <p class="fs-6">Fitness and Strength have power to transform you and make you different from others. Driven by our passion for fitness and our instinct for innovation, we want to bring the best out of you. We want to stand on the same place where you are trying to strengthen yourself, and to achieve that Herculeen brand runs by <strong>Ez LifeStyle</strong> is based on very true values that promises a premium range of activewear, footwear and accessories.</p>
 
-                {{-- <p>At Herculeen, we always offer a diversity of design for our customers that definitely sets the trend among others and you always find yourself confident and different from crowd.
+                {{-- <p>At Herculeen, we always offer a diversity of design for our users that definitely sets the trend among others and you always find yourself confident and different from crowd.
 
                     We believe in fitness. We believe that each and everyone of you should be fit. We believe in every men, women and kid, regardless of the age, because pursuit for perfect fitness is “AN AGELESS ADVENTURE” and for this we offer you a complete range of activewear, footwear and accessories that will offer you a great comfort, premiumness and a variety of designs for you.
                     

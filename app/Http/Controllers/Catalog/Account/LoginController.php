@@ -24,7 +24,7 @@ class LoginController extends Controller
     }
 
     public function login(Request $request){
-        $customer = DB::table('customers')->where('email', $request->request->get('email'))->first();
+        $customer = DB::table('users')->where('email', $request->request->get('email'))->first();
         if ($customer) {
             $password = $request->request->get('password');
             $hashedPassword = Hash::check($password, $customer->password);
@@ -67,7 +67,7 @@ class LoginController extends Controller
             }
 
             // checking email
-            $getRegister = DB::table("customers")->where('email', $data->get('email'))->first();
+            $getRegister = DB::table("users")->where('email', $data->get('email'))->first();
             if($getRegister){
                 return redirect()->route('catalog.user-login')->with('email_error', 'Email already exists.')->with('registerError', 'registerError');;
             }
@@ -104,7 +104,7 @@ class LoginController extends Controller
         try{
             $data = $request->request;
             // verify email
-            $getEmail = DB::table('customers')->where('email', $data->get('email'))->first();
+            $getEmail = DB::table('users')->where('email', $data->get('email'))->first();
             if($getEmail){
                 $user_token = Str::random(60);    
                 // send mail for otp
@@ -161,7 +161,7 @@ class LoginController extends Controller
                 return redirect()->route('catalog.viewResetPassword',['user_token' => session('user_token')])->with('password_not_match', 'The password does not match.');
             }
 
-            DB::table('customers')->where('email', session('user_email'))->update([
+            DB::table('users')->where('email', session('user_email'))->update([
                 "password" => Hash::make($data->get('password'))
             ]);
 
@@ -218,7 +218,7 @@ class LoginController extends Controller
 
         $data = Session::get('register_data');
 
-        $register = DB::table('customers')->insert([
+        $register = DB::table('users')->insert([
             "name" => $data->get('name'),
             "email" => $data->get('email'),
             "email_verified_at" => now(),

@@ -18,6 +18,7 @@ class CartController extends Controller
                                         ->leftJoin('product_prices', 'products.id', '=', 'product_prices.product_id')
                                         ->select('products.*', 'product_prices.price','product_prices.mrp')
                                         ->where('products.id', $cart->product_id)->first();
+            $stock = DB::table('stock_status')->where('id', $product->stock_status_id)->first();
             $data['carts'][] = [
                 "product_id" => $cart->product_id,
                 "customer_id" => $cart->customer_id,
@@ -25,8 +26,8 @@ class CartController extends Controller
                 "slug" => $product->slug,
                 "image" => ($product->image) ? asset("image/cache/products").'/'.($cart->product_id .'/'. str_replace(".jpg",'',$product->image) .'_700x700.jpg') : asset('not-image-available.png'),
                 "quantity" => $cart->quantity,
-                "stock_status_id" => $product->stock_status_id,
-                "price" => $product->price,
+                "stock_status" => $stock->name ?? '',
+                "price" => $product->price * $cart->quantity,
             ];
         }
         $data['total'] = $cart_product->count();
@@ -74,6 +75,31 @@ class CartController extends Controller
                 return response()->json($array);
             }
             
+        }catch(Exception $e){
+            dd($e->getMessage());
+        }
+    }
+
+    public function removeCartProduct($product_id, $product_name){
+        try{
+            DB::table('cart')->where('customer_id', session('isCustomer'))->where('product_id', $product_id)->delete();
+            return redirect()->route('catalog.cart')->with('success', 'Your "'.$product_name.'" has been successfully removed from the cart!');
+        }catch(Exception $e){
+            dd($e->getMessage());
+        }
+    }
+
+    public function increaseQunatity(){
+        try{
+
+        }catch(Exception $e){
+            dd($e->getMessage());
+        }
+    }
+
+    public function decreaseQunatity(){
+        try{
+
         }catch(Exception $e){
             dd($e->getMessage());
         }

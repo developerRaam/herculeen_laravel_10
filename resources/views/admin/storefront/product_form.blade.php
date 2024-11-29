@@ -258,10 +258,11 @@
                                             </div>
                                             <div class="col-10">
                                                 <select name="stock_status_id" id="input-stock-status" class="form-select">
-                                                    <option value="6" selected="">2-3 Days</option>
-                                                    <option value="7">In Stock</option>
-                                                    <option value="5">Out Of Stock</option>
-                                                    <option value="8">Pre-Order</option>
+                                                    @if (isset($stock_status) && $stock_status->count() > 0)
+                                                        @foreach ($stock_status as $item)
+                                                            <option value="{{ $item->id }}" @if(isset($product) && $item->id === ($product['product']->stock_status_id)) selected  @endif>{{ $item->name }}</option>
+                                                        @endforeach
+                                                    @endif
                                                 </select>
                                             </div>
                                         </div>

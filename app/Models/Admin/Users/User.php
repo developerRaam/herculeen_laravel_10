@@ -1,25 +1,27 @@
 <?php
 
-namespace App\Models\Admin\Customers;
+namespace App\Models\Admin\Users;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Sanctum\HasApiTokens;
 
-class Customer extends Model
+class User extends Model
 {
-    use HasFactory;
+    use HasApiTokens, HasFactory, Notifiable;
     
-    protected $table = 'customers';
+    protected $table = 'users';
     
-    protected $fillable = ['name','email','email_verified_at','number','number_verified_at','password','customer_group_id','status','ip'];
+    protected $fillable = ['name','email','email_verified_at','number','number_verified_at','password','user_group_id','status','ip'];
 
-    public static function addCustomer($data = array()){
+    public static function addUser($data = array()){
         if($data){
-            $customer = DB::table((new self())->getTable())->insert([
-                "customer_group_id" => $data['customer_group_id'] ?? 0,
-                "name" => $data['customer_name'] ?? '',
+            $user = DB::table((new self())->getTable())->insert([
+                "user_group_id" => $data['user_group_id'] ?? 0,
+                "name" => $data['user_name'] ?? '',
                 "email" => $data['email'] ?? '',
                 "number" => $data['number'] ?? '',
                 "password" => Hash::make($data['password']) ?? null,
@@ -31,7 +33,7 @@ class Customer extends Model
                 "updated_at" => now()
             ]);
 
-            if($customer){
+            if($user){
                 return true;
             }else{
                 return false;
@@ -39,11 +41,11 @@ class Customer extends Model
         }
     }
 
-    public static function updateCustomer(int $customer_id, $data = array()){
+    public static function updateUser(int $user_id, $data = array()){
         if (!empty($data)) {
             $updateData = [
-                "customer_group_id" => $data['customer_group_id'] ?? 0,
-                "name" => $data['customer_name'] ?? '',
+                "user_group_id" => $data['user_group_id'] ?? 0,
+                "name" => $data['user_name'] ?? '',
                 "email" => $data['email'] ?? '',
                 "number" => $data['number'] ?? '',
                 "status" => $data['status'] ?? 0,
@@ -59,31 +61,31 @@ class Customer extends Model
             }
     
             // Perform the update
-            DB::table((new self())->getTable())->where('id', $customer_id)->update($updateData);
+            DB::table((new self())->getTable())->where('id', $user_id)->update($updateData);
     
             return true;
         }
         return false;
     }
 
-    public static function getCustomerByEmail($email = null){
-        $customer = DB::table((new self())->getTable())->where('email', $email)->get()->first();
-        return $customer;
+    public static function getUserByEmail($email = null){
+        $user = DB::table((new self())->getTable())->where('email', $email)->get()->first();
+        return $user;
     }
 
-    public static function getCustomerById($customer_id = null){
-        $customer = DB::table((new self())->getTable())->where('id', $customer_id)->get()->first();
-        return $customer;
+    public static function getUserById($user_id = null){
+        $user = DB::table((new self())->getTable())->where('id', $user_id)->get()->first();
+        return $user;
     }
 
-    public static function getCustomers($request = null){
+    public static function getUsers($request = null){
         // Start the query using Eloquent
         $query = self::query();
 
         // Apply filters based on the request
         if ($request) {
-            if ($request->filled('customer_name')) {
-                $query->where('name', 'like', '%' . $request->query('customer_name') . '%');
+            if ($request->filled('user_name')) {
+                $query->where('name', 'like', '%' . $request->query('user_name') . '%');
             }
             if ($request->filled('email')) {
                 $query->where('email', 'like', '%' . $request->query('email') . '%');
@@ -100,16 +102,16 @@ class Customer extends Model
         return $query->get();
     }
 
-    public static function deleteCustomer($customer_id){
-        $customer = DB::table((new self())->getTable())->where('id', $customer_id)->get()->first();
-        if($customer && $customer->image){
-            $imageName = $customer->image;
-            $imagePath = public_path('image/customer/') . $imageName;
+    public static function deleteUser($user_id){
+        $user = DB::table((new self())->getTable())->where('id', $user_id)->get()->first();
+        if($user && $user->image){
+            $imageName = $user->image;
+            $imagePath = public_path('image/user/') . $imageName;
             if (file_exists($imagePath)) {
                 unlink($imagePath);
             }
         }
-        DB::table((new self())->getTable())->where('id', $customer_id)->delete();
+        DB::table((new self())->getTable())->where('id', $user_id)->delete();
         return true;
     }
 

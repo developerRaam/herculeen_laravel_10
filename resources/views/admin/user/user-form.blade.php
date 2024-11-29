@@ -49,7 +49,7 @@
                     @include('admin.common.alert')
 
                     <div class="px-3 py-2 title-list">
-                        <p class="mb-0"><i class="fa-solid fa-pencil"></i> Add Customer</p>
+                        <p class="mb-0"><i class="fa-solid fa-pencil"></i> Add Users</p>
                     </div>
 
                     <div class="card rounded-0 p-3 mb-3">
@@ -73,15 +73,15 @@
                                         <div class="col-sm-7">
                                             <div class="row mb-4">
                                                 <div class="col-3 text-end">
-                                                    <label for="customer_group_id">Customer Group</label>
+                                                    <label for="user_group_id">Users Group</label>
                                                 </div>
                                                 <div class="col-9">
-                                                    <select id="customer-dropdown" name="customer_group_id" class="form-control">
+                                                    <select id="user-dropdown" name="user_group_id" class="form-control">
                                                         <option value="0">Default</option>
                                                     </select> 
                                                     <div>
                                                         <span class="text-danger">
-                                                            @error('customer_group_id')
+                                                            @error('user_group_id')
                                                                 {{$message}}
                                                             @enderror
                                                         </span>
@@ -91,13 +91,13 @@
 
                                             <div class="row mb-4">
                                                 <div class="col-3 text-end">
-                                                    <label for="customer_name">Customer Name</label>
+                                                    <label for="user_name">User Name</label>
                                                 </div>
                                                 <div class="col-9">
-                                                    <input type="text" id="customer_name" name="customer_name" class="form-control p-2" value="{{ isset($customer) && property_exists($customer, 'name') ? $customer->name : old('customer_name') }}" placeholder="customer Name">
+                                                    <input type="text" id="user_name" name="user_name" class="form-control p-2" value="{{ isset($user) && property_exists($user, 'name') ? $user->name : old('user_name') }}" placeholder="user Name">
                                                     <div>
                                                         <span class="text-danger">
-                                                            @error('customer_name')
+                                                            @error('user_name')
                                                                 {{$message}}
                                                             @enderror
                                                         </span>
@@ -110,7 +110,7 @@
                                                     <label for="email">Email</label>
                                                 </div>
                                                 <div class="col-9">
-                                                    <input type="email" id="email" name="email" class="form-control p-2" value="{{ isset($customer) && property_exists($customer, 'email') ? $customer->email : old('email') }}" placeholder="Email">
+                                                    <input type="email" id="email" name="email" class="form-control p-2" value="{{ isset($user) && property_exists($user, 'email') ? $user->email : old('email') }}" placeholder="Email">
                                                     <div>
                                                         @if(Session::has('email_error'))
                                                             <div id="flash-message" class="alert alert-danger alert-dismissible fade show mt-2 p-1" role="alert">
@@ -132,7 +132,7 @@
                                                     <label for="number">Contact</label>
                                                 </div>
                                                 <div class="col-9">
-                                                    <input type="number" id="number" name="number" class="form-control p-2" value="{{ isset($customer) && property_exists($customer, 'number') ? $customer->number : old('number') }}" placeholder="Number">
+                                                    <input type="number" id="number" name="number" class="form-control p-2" value="{{ isset($user) && property_exists($user, 'number') ? $user->number : old('number') }}" placeholder="Number">
                                                     <div>
                                                         <span class="text-danger">
                                                             @error('number')
@@ -164,7 +164,7 @@
                                                     <label for="confirm_password">Confirm Password</label>
                                                 </div>
                                                 <div class="col-9">
-                                                    <input type="text" id="confirm_password" name="confirm_password" class="form-control p-2" value="{{ isset($customer) && property_exists($customer, 'confirm_password') ? $customer->confirm_password : old('confirm_password') }}" placeholder="Confirm Password">
+                                                    <input type="text" id="confirm_password" name="confirm_password" class="form-control p-2" value="{{ isset($user) && property_exists($user, 'confirm_password') ? $user->confirm_password : old('confirm_password') }}" placeholder="Confirm Password">
                                                     <div>
                                                         <span class="text-danger">
                                                             @error('confirm_password')
@@ -181,7 +181,7 @@
                                                 </div>
                                                 <div class="col-9 form-check form-switch">
                                                     <input type="hidden" name="status" value="0">
-                                                    <input class="form-check-input fs-3 m-0" id="status" name="status" type="checkbox" role="switch" value="1" {{ isset($customer) && property_exists($customer, 'status') ? (($customer->status) ? 'checked': '') : old('status') }}>
+                                                    <input class="form-check-input fs-3 m-0" id="status" name="status" type="checkbox" role="switch" value="1" {{ isset($user) && property_exists($user, 'status') ? (($user->status) ? 'checked': '') : old('status') }}>
                                                 </div>
                                             </div>
                                         </div>
@@ -193,7 +193,7 @@
                                                 </div>
                                                 <div class="col-9">
                                                     <div class="card p-2" style="width: 12rem">
-                                                        <img src="{{ isset($customer) && ($customer->image) ? asset("image/customer").'/'.$customer->image : asset('not-image-available.png')}}" alt="Customer Image" class="card-img-top" id="imagePreview"  onclick="triggerFileUpload()">
+                                                        <img src="{{ isset($user) && ($user->image) ? asset("image/user").'/'.$user->image : asset('not-image-available.png')}}" alt="user Image" class="card-img-top" id="imagePreview"  onclick="triggerFileUpload()">
                                                         <input type="file" name="image" id="imageUpload" accept="image/*" style="display: none;" onchange="previewImage(event)">
                                                         <div class="card-body text-center mt-1"> 
                                                             <button type="button" class="btn btn-danger fs-5 px-3" onclick="removeImage()" data-bs-toggle="tooltip" data-bs-placement="top" title="Clear"><i class="fa-solid fa-trash"></i></button>
@@ -226,13 +226,13 @@
                                                 <input type="hidden" name="address_id" value="">
                                                 <div class="row mb-4">
                                                     <div class="col-3 text-end">
-                                                        <label for="address_customer_name">Name</label>
+                                                        <label for="address_user_name">Name</label>
                                                     </div>
                                                     <div class="col-9">
-                                                        <input type="text" id="address_customer_name" name="address_customer_name" class="form-control p-2" value="{{ isset($customer) && property_exists($customer, 'name') ? $customer->name : old('address_customer_name') }}" placeholder="Name">
+                                                        <input type="text" id="address_user_name" name="address_user_name" class="form-control p-2" value="{{ isset($user) && property_exists($user, 'name') ? $user->name : old('address_user_name') }}" placeholder="Name">
                                                         <div>
                                                             <span class="text-danger">
-                                                                @error('address_customer_name')
+                                                                @error('address_user_name')
                                                                     {{$message}}
                                                                 @enderror
                                                             </span>
@@ -245,7 +245,7 @@
                                                         <label for="address_contact">Contact</label>
                                                     </div>
                                                     <div class="col-9">
-                                                        <input type="number" id="address_contact" name="address_contact" class="form-control p-2" value="{{ isset($customer) && property_exists($customer, 'address_contact') ? $customer->name : old('address_contact') }}" placeholder="Contact">
+                                                        <input type="number" id="address_contact" name="address_contact" class="form-control p-2" value="{{ isset($user) && property_exists($user, 'address_contact') ? $user->name : old('address_contact') }}" placeholder="Contact">
                                                         <div>
                                                             <span class="text-danger">
                                                                 @error('address_contact')
@@ -261,7 +261,7 @@
                                                         <label for="address_1">Address 1</label>
                                                     </div>
                                                     <div class="col-9">
-                                                        <input type="text" id="address_1" name="address_1" class="form-control p-2" value="{{ isset($customer) && property_exists($customer, 'address_1') ? $customer->name : old('address_1') }}" placeholder="Address 1">
+                                                        <input type="text" id="address_1" name="address_1" class="form-control p-2" value="{{ isset($user) && property_exists($user, 'address_1') ? $user->name : old('address_1') }}" placeholder="Address 1">
                                                         <div>
                                                             <span class="text-danger">
                                                                 @error('address_1')
@@ -277,7 +277,7 @@
                                                         <label for="address_2">Address 2</label>
                                                     </div>
                                                     <div class="col-9">
-                                                        <input type="text" id="address_2" name="address_2" class="form-control p-2" value="{{ isset($customer) && property_exists($customer, 'address_2') ? $customer->name : old('address_2') }}" placeholder="Address 2">
+                                                        <input type="text" id="address_2" name="address_2" class="form-control p-2" value="{{ isset($user) && property_exists($user, 'address_2') ? $user->name : old('address_2') }}" placeholder="Address 2">
                                                         <div>
                                                             <span class="text-danger">
                                                                 @error('address_2')
@@ -293,7 +293,7 @@
                                                         <label for="city">City</label>
                                                     </div>
                                                     <div class="col-9">
-                                                        <input type="text" id="city" name="city" class="form-control p-2" value="{{ isset($customer) && property_exists($customer, 'city') ? $customer->name : old('city') }}" placeholder="City">
+                                                        <input type="text" id="city" name="city" class="form-control p-2" value="{{ isset($user) && property_exists($user, 'city') ? $user->name : old('city') }}" placeholder="City">
                                                         <div>
                                                             <span class="text-danger">
                                                                 @error('city')
@@ -309,7 +309,7 @@
                                                         <label for="pincode">Pin Code</label>
                                                     </div>
                                                     <div class="col-9">
-                                                        <input type="number" id="pincode" name="pincode" class="form-control p-2" value="{{ isset($customer) && property_exists($customer, 'pincode') ? $customer->name : old('pincode') }}" placeholder="Pin Code">
+                                                        <input type="number" id="pincode" name="pincode" class="form-control p-2" value="{{ isset($user) && property_exists($user, 'pincode') ? $user->name : old('pincode') }}" placeholder="Pin Code">
                                                         <div>
                                                             <span class="text-danger">
                                                                 @error('pincode')

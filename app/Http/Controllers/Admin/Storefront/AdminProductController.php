@@ -88,6 +88,7 @@ class AdminProductController extends Controller
         ];
 
         $data['categories'] = Category::getCategory();
+        $data['stock_status'] = DB::table('stock_status')->get();
 
         $data['action'] = route('admin-product-save');
         $data['back'] = URL::to('/admin/storefront/product');
@@ -373,6 +374,8 @@ class AdminProductController extends Controller
         $data['categories'] = Category::getCategory(); 
 
         $data['getProductCategory'] = ProductCategory::getProductCategory($product_id);
+
+        $data['stock_status'] = DB::table('stock_status')->get();
 
         $data['other_links'] = DB::table('product_other_links')->where('product_id', $product_id)->first();
 
