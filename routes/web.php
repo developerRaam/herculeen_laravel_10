@@ -4,27 +4,30 @@ use Illuminate\Support\Facades\Route;
 
 // Catalog
 use App\Http\Controllers\Catalog\HomeController;
-use App\Http\Controllers\Catalog\Product\ProductController;
-use App\Http\Controllers\Catalog\Product\CategoryController;
-use App\Http\Controllers\Catalog\Account\LoginController;
-
-//admin
-use App\Http\Controllers\Admin\Common\AdminLoginController;
-use App\Http\Controllers\Admin\Common\AdminDashboardController;
-use App\Http\Controllers\Admin\Setting\SettingController;
-use App\Http\Controllers\Admin\Setting\EcommerceLinkController;
-use App\Http\Controllers\Admin\Design\BannerController;
-use App\Http\Controllers\Admin\Common\ProfileController;
 use App\Http\Controllers\Admin\Users\UserController;
-use App\Http\Controllers\Admin\Design\AdminMediaController;
 use App\Http\Controllers\Admin\Setting\ApiController;
 use App\Http\Controllers\Admin\Setting\SiteController;
+use App\Http\Controllers\Admin\Design\BannerController;
+use App\Http\Controllers\Catalog\Account\WishlistController;
+
+//admin
+use App\Http\Controllers\Admin\Common\ProfileController;
+use App\Http\Controllers\Admin\Setting\SettingController;
+use App\Http\Controllers\Admin\Storefront\SizeController;
+use App\Http\Controllers\Catalog\Account\LoginController;
+use App\Http\Controllers\Catalog\Checkout\CartController;
+use App\Http\Controllers\Admin\Storefront\ColorController;
+use App\Http\Controllers\Admin\Common\AdminLoginController;
+use App\Http\Controllers\Admin\Design\AdminMediaController;
+use App\Http\Controllers\Catalog\Account\AccountController;
+use App\Http\Controllers\Catalog\Product\ProductController;
+use App\Http\Controllers\Catalog\Product\CategoryController;
+use App\Http\Controllers\Admin\Common\AdminDashboardController;
+use App\Http\Controllers\Admin\Setting\EcommerceLinkController;
 use App\Http\Controllers\Admin\Storefront\AdminProductController;
 use App\Http\Controllers\Admin\Storefront\AdminCategoryController;
-use App\Http\Controllers\Admin\Storefront\ColorController;
-use App\Http\Controllers\Admin\Storefront\SizeController;
-use App\Http\Controllers\Catalog\Account\AccountController;
-use App\Http\Controllers\Catalog\Checkout\CartController;
+use App\Http\Controllers\Catalog\Information\InformationController;
+use App\Http\Controllers\Admin\Storefront\ProductVariationController;
 
 // Catalog
 Route::name('catalog.')->group(function () {
@@ -61,7 +64,7 @@ Route::name('catalog.')->group(function () {
             Route::get('/change-password', [AccountController::class, 'viewChangePassword'])->name('viewChangePassword');
             Route::post('/change-password', [AccountController::class, 'changePassword'])->name('changePassword');
             Route::get('/order', [AccountController::class, 'order'])->name('order');
-            Route::get('/wishlist', [AccountController::class, 'wishlist'])->name('wishlist');
+            Route::resource('/wishlist', WishlistController::class)->name('index','wishlist')->only('index', 'store', 'destroy');
         });
 
         Route::prefix('checkout')->group(function (){
@@ -73,6 +76,8 @@ Route::name('catalog.')->group(function () {
         });
     });
 
+    Route::get('return-replacement-policy', [InformationController::class, 'privacyPolicy'])->name('privacyPolicy');
+    
 });
 
 // Admin
@@ -108,8 +113,8 @@ Route::middleware(['AdminMiddlewareLogin'])->prefix('admin/storefront')->group(f
     Route::get('product-edit/product_id={product_id}', [AdminProductController::class, 'editProduct'])->name("admin-product-edit");
     Route::post('product-update/product_id={product_id}', [AdminProductController::class, 'updateProduct'])->name("admin-product-update");
     Route::get('product-delete/product_id={product_id}', [AdminProductController::class, 'delete'])->name('admin-product-delete');
-    Route::post('product-variation/', [AdminProductController::class, 'addVariation'])->name('admin-addVariation');
-    Route::get('product-get-variation/{product_id}', [AdminProductController::class, 'getVariation'])->name('admin-getVariation');
+    Route::post('product-variation/', [ProductVariationController::class, 'addVariation'])->name('admin-addVariation');
+    Route::get('product-get-variation/{product_id}', [ProductVariationController::class, 'getVariation'])->name('admin-getVariation');
     Route::post('deleteMultiSelection/', [AdminProductController::class, 'deleteMultiSelection']);
     
     Route::get('category/', [AdminCategoryController::class, 'index'])->name('category');

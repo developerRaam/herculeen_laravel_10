@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('combination', 20);
             $table->decimal('price', 15,4)->nullable();
             $table->integer('quantity')->nullable();
+            $table->string('sku', 20)->nullable();
             $table->timestamps();
         });
     }

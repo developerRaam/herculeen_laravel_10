@@ -136,6 +136,14 @@
                                                         <div class="col-10">
                                                             <input type="number" id="variation_price" name="variation_price" class="form-control" value="" placeholder="Price">
                                                         </div>
+                                                    </div>
+                                                    <div class="row mb-4">
+                                                        <div class="col-2 text-end">
+                                                            <label for="variation_sku">SKU</label>
+                                                        </div>
+                                                        <div class="col-10">
+                                                            <input type="text" id="variation_sku" name="variation_sku" class="form-control" value="" placeholder="SKU">
+                                                        </div>
                                                     </div> 
                                                     <div class="text-end">
                                                         <button type="button" class="btn btn-outline-success" id="addVariationBtn">Add Variation</button>
@@ -151,6 +159,7 @@
                                                                     <th>Quantity</th>
                                                                     <th>Price</th>
                                                                     <th>Combination</th>
+                                                                    <th>SKU</th>
                                                                     <th>Action</th>
                                                                 </tr>
                                                                 <tbody id="variationsList">
@@ -269,7 +278,8 @@
                 const variationsList = document.getElementById('variationsList');
                 variationsList.innerHTML = '';
                 if(response.success){
-                    response.variationData.forEach(data => {     
+                    response.variationData.forEach(data => {   
+                        console  
                         // Create a new table row for the variation
                         let row = document.createElement('tr');
     
@@ -289,7 +299,11 @@
                                 <input type="hidden" name="color_id[]" value="${data['color_id']}">
                                 <input type="hidden" name="size_id[]" value="${data['size_id']}">
                                 <input type="hidden" name="combinations[]" value="${data['color_id']}_${data['size_id']}">
-                                <span>${data['color_name']}_${data['size_name']}</span>    
+                                <span>${data['color_name']}_${data['size_name']}</span> 
+                                </td>
+                            <td>
+                                <input type="hidden" name="variation_sku[]" value="${data['sku']}">
+                                <span>${data['sku']}</span>
                             </td>
                             <td>
                                 <button type="button" class="btn btn-danger btn-sm" onclick="removeVariation(this)">Remove</button>
@@ -319,6 +333,7 @@
         const sizeSelect = document.getElementById('size');
         const variationQty = document.getElementById('variation_qty').value;
         const variationPrice = document.getElementById('variation_price').value;
+        const variationSku = document.getElementById('variation_sku').value;
 
         const colorId = colorSelect.value;
         const colorName = colorSelect.options[colorSelect.selectedIndex].text;
@@ -349,6 +364,7 @@
                     <input type="hidden" name="color_id[]" value="${colorId}">
                     <input type="hidden" name="size_id[]" value="${sizeId}">
                     <input type="hidden" name="combinations[]" value="${colorId}_${sizeId}">
+                    <input type="hidden" name="variation_sku[]" value="${variationSku}">
                     <span>${colorName}_${sizeName}</span>    
                 </td>
                 <td>

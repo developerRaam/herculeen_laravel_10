@@ -20,7 +20,7 @@ class AccountController extends Controller
 
     public function profile(){
         $data['action'] = route('catalog.update-profile');
-        $data['profile'] = DB::table('users')->where('id', session('isCustomer'))->first();
+        $data['profile'] = DB::table('users')->where('id', session('isUser'))->first();
         return view('catalog.account.profile', $data);
     }
 
@@ -44,7 +44,7 @@ class AccountController extends Controller
         try{
             $data = $request->request;
             
-            DB::table('users')->where('id', session('isCustomer'))->update([
+            DB::table('users')->where('id', session('isUser'))->update([
                 "name" => $data->get('name') ?? null,
                 "number" => $data->get('number') ?? null
             ]);
@@ -84,7 +84,7 @@ class AccountController extends Controller
                 return redirect()->route('catalog.viewChangePassword')->with('password_not_match', 'The password does not match.');
             }
 
-            DB::table('users')->where('id', session('isCustomer'))->update([
+            DB::table('users')->where('id', session('isUser'))->update([
                 "password" => Hash::make($data->get('password'))
             ]);
 
@@ -97,10 +97,6 @@ class AccountController extends Controller
 
     public function order(){
         return view('catalog.account.order');
-    }
-
-    public function wishlist(){
-        return view('catalog.account.wishlist');
     }
 
     public function address(){

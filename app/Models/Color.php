@@ -1,40 +1,40 @@
 <?php
 
-namespace App\Models\Admin\Storefront\Size;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class Size extends Model
+class Color extends Model
 {
     use HasFactory;
 
-    protected $table = 'size';
+    protected $table = 'colors';
 
     public $timestamps = false;
 
     protected $fillable = [
-        'size_name',
+        'color_name',
+        'code',
         'sort'
     ];
 
-    public static function addSize($data){
-        $query = DB::table('size')->insert([
-            'size_name' => $data['size_name'],
+    public static function addColor($data){
+        $query = DB::table('colors')->insert([
+            'color_name' => $data['color_name'],
+            'code' => $data['hex_code'],
             'sort' => $data['sort']
         ]);
         return $query ? true : false;
     }
 
-    public static function getAllSize(){
-        $query = DB::table('size')->get();
+    public static function getAllColor(){
+        $query = DB::table('colors')->get();
         return $query;
     }
 
     public static function getColor(){
         
     }
-
-    
 }

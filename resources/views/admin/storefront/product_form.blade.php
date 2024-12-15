@@ -156,67 +156,6 @@
                                                 </span>
                                             </div>
                                         </div>
-                                        <div class="row mb-4">
-                                            <div class="col-2 text-end">
-                                                <label for="sku">SKU</label>
-                                            </div>
-                                            <div class="col-10">
-                                                <input type="text" id="sku" name="sku" class="form-control p-2" value="{{ isset($product) ? $product['product']->sku : old('sku') }}" placeholder="SKU">
-                                                <span class="form-text">Stock Keeping Unit</span>
-                                            </div>
-                                            <div class="errors">
-                                                <span class="text-danger">
-                                                    @error('sku')
-                                                        {{$message}}
-                                                    @enderror
-                                                </span>
-                                            </div>
-                                        </div>
-                                        {{-- <div class="row mb-4">
-                                            <div class="col-2 text-end">
-                                                <label for="upc">UPC</label>
-                                            </div>
-                                            <div class="col-10">
-                                                <input type="text" id="upc" name="upc" class="form-control p-2" value="{{ isset($product) ? $product['product']->upc : old('upc') }}" placeholder="UPC">
-                                                <span class="form-text">Universal Product Code</span>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-4">
-                                            <div class="col-2 text-end">
-                                                <label for="ean">EAN</label>
-                                            </div>
-                                            <div class="col-10">
-                                                <input type="text" id="ean" name="ean" class="form-control p-2" value="{{ isset($product) ? $product['product']->ean : old('ean') }}" placeholder="EAN">
-                                                <span class="form-text">European Article Number</span>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-4">
-                                            <div class="col-2 text-end">
-                                                <label for="jan">JAN</label>
-                                            </div>
-                                            <div class="col-10">
-                                                <input type="text" id="jan" name="jan" class="form-control p-2" value="{{ isset($product) ? $product['product']->jan : old('jan') }}" placeholder="JAN">
-                                                <span class="form-text">Japanese Article Number</span>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-4">
-                                            <div class="col-2 text-end">
-                                                <label for="isbn">ISBN</label>
-                                            </div>
-                                            <div class="col-10">
-                                                <input type="text" id="isbn" name="isbn" class="form-control p-2" value="{{ isset($product) ? $product['product']->isbn : old('isbn') }}" placeholder="ISBN">
-                                                <span class="form-text">International Standard Book Number</span>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-4">
-                                            <div class="col-2 text-end">
-                                                <label for="mpn">MPN</label>
-                                            </div>
-                                            <div class="col-10">
-                                                <input type="text" id="mpn" name="mpn" class="form-control p-2" value="{{ isset($product) ? $product['product']->mpn : old('mpn') }}" placeholder="mpn">
-                                                <span class="form-text">Manufacturer Part Number</span>
-                                            </div>
-                                        </div> --}}
                                     </section>
                                     <!-- Stock -->
                                     <section class="stock">

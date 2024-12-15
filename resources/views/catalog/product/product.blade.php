@@ -7,10 +7,13 @@
 @push('setCanonicalURL'){{ route('catalog.product-detail', ['product_id' => $product['product']->id, 'slug' => $product['product']->slug]) }}@endpush
 
 @section('content')
-<style></style>
 @if (null !== $product)
 <section class="container-fluid py-3">
    <div class="container">
+
+        <!-- Alert message -->
+        @include('catalog.common.ajax_alert')
+
         <div class="row">
             <div class="col-12 col-sm-6 mb-3">
                 <div class="text-center product overflow-hidden border bg-white">
@@ -30,8 +33,12 @@
                 <div class="header">
                     <h2 style="font-family: 'Arial', sans-serif;">{{ $product['product']->product_name }}</h2>
                     <div class="d-flex mt-4">
-                        <h5 class="me-3"><strong>Rs. </strong>{{ number_format($product['product']->mrp,0) }}</h5>
-                        {{-- <h5 class="text-danger"><strong>Rs. </strong><del>{{ number_format($product['product']->mrp,0) }}</del></h5> --}}
+                        @if ($product['product']->stock_status == 'In Stock')
+                            <h5 class="me-3"><strong>Rs. </strong>{{ number_format($product['product']->mrp,0) }}</h5>
+                            {{-- <h5 class="text-danger"><strong>Rs. </strong><del>{{ number_format($product['product']->mrp,0) }}</del></h5> --}}
+                        @else
+                            <p class="text-warning fw-bold">{{ $product['product']->stock_status }}</p>
+                        @endif
                     </div>
                     {{-- <p>Inclusive of all Taxes</p> --}}
                     <hr>
@@ -61,9 +68,9 @@
                 <div class="mb-4">
                     <h2 class="fs-6">Quantity</h2>
                     <div class="d-flex" style="column-gap: 15px">
-                        <button class="border py-2" style="width: 50px;"><i class="fa-solid fa-minus"></i></button>
-                        <input class="border py-2 text-center mt-0" style="width: 50px;" type="text" name="quantity" value="1" id="quantity">
-                        <button class="border py-2" style="width: 50px;"><i class="fa-solid fa-plus"></i></button>
+                        <button class="border py-2" style="width: 50px;" onclick="decreaseQunatity()"><i class="fa-solid fa-minus"></i></button>
+                        <input class="border py-2 text-center mt-0" style="width: 50px;" readonly type="text" name="quantity" value="@if ($updated_qty) {{$updated_qty->quantity}} @else {{1}} @endif" id="quantity">
+                        <button class="border py-2" style="width: 50px;" onclick="increaseQunatity()"><i class="fa-solid fa-plus"></i></button>
                     </div>
                 </div>
                 <div class="mb-4">
@@ -79,7 +86,7 @@
                         <button class="btn btn-dark rounded-0 border border-dark py-2" style="width:35%" type="submit">BUY IT NOW</button>
                     </div>
                     <div class="mt-3">
-                        <a href="#" class="text-dark"><i class="fa-regular fa-heart"></i> ADD TO WISHLIST</a>
+                        <span id="addWishlist" class="text-dark" style="cursor: pointer"><i class="fa-regular fa-heart"></i> ADD TO WISHLIST</span>
                     </div>
                 </div> 
 
@@ -205,35 +212,86 @@
     const addCart = document.getElementById('addToCart')
     addCart.addEventListener('click', () => {
         let product_id = {!! json_encode($product['product']->id) !!}
-        let customer_id = {!! json_encode(session('isCustomer')) !!}
+        let user_id = {!! json_encode(session('isUser')) !!}
         let action = {!! json_encode(route('catalog.addCart')) !!}
         let quantity = document.getElementById('quantity').value;
-        
-        $.ajax({
-            url: action,
-            method: 'POST',
-            data: {
-                _token: '{{ csrf_token() }}',
-                customer_id: customer_id,
-                product_id: product_id,
-                quantity: quantity
-            },
-            success: function(response) {
-                if (response.success) {
-                    alert(response.message);
-                }else {
-                    alert(response.message);
+
+        if(user_id){
+            $.ajax({
+                url: action,
+                method: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    user_id: user_id,
+                    product_id: product_id,
+                    quantity: quantity
+                },
+                success: function(response) {
+                    if (response.success) {
+                        showFlashMessage('success',response.message)
+                    }else {
+                        showFlashMessage('error',response.message)
+                    }
+                },
+                error: function(xhr, status, error) {
+                    showFlashMessage('error','An error occurred while adding to cart.')
                 }
-            },
-            error: function(xhr, status, error) {
-                console.error('Error:', error);
-                alert('An error occurred while adding to cart.');
-            }
-        });
+            });
+        }else{
+            window.location.href =  {!! json_encode(route('catalog.user-login')) !!}
+        }
         
     })
 
-</script>
+    // add wishlist
+    const addWishlist = document.getElementById('addWishlist')
+    addWishlist.addEventListener('click', () => {
+        let product_id = {!! json_encode($product['product']->id) !!}
+        let user_id = {!! json_encode(session('isUser')) !!}
+        let action = {!! json_encode(route('catalog.wishlist')) !!}
+        let quantity = document.getElementById('quantity').value;
+
+        if(user_id){
+            $.ajax({
+                url: action,
+                method: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    user_id: user_id,
+                    product_id: product_id,
+                    quantity: quantity
+                },
+                success: function(response) {
+                    if (response.success) {
+                        showFlashMessage('success',response.message)
+                    }else {
+                        showFlashMessage('error',response.message)
+                    }
+                },
+                error: function(xhr, status, error) {
+                    showFlashMessage('error','An error occurred while adding to cart.')
+                }
+            });
+        }else{
+            window.location.href =  {!! json_encode(route('catalog.user-login')) !!}
+        }
+        
+    })
+
+    // increase quantity
+    function increaseQunatity() {
+        let current_quantity = parseInt(document.getElementById('quantity').value);
+        let total_quantity = document.getElementById('quantity').value = current_quantity +  1;
+    }
+
+    // increase quantity
+    function decreaseQunatity() {
+        let current_quantity = parseInt(document.getElementById('quantity').value);
+        if(current_quantity > 1){
+            let total_quantity = document.getElementById('quantity').value = current_quantity -  1;
+        }
+    }
+ </script>
 
 @endif
 

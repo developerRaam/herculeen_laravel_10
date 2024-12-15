@@ -69,7 +69,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Kolkata',
 
     /*
     |--------------------------------------------------------------------------
@@ -196,7 +196,7 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         // custom service provider
-        App\Providers\SettingProvider::class,
+        App\Providers\CustomProvider::class,
 
     ],
 

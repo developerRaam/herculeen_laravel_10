@@ -2,30 +2,29 @@
 
 namespace App\Http\Controllers\Admin\Storefront;
 
-use App\Http\Controllers\Admin\Common\Pagination;
-use App\Http\Controllers\Controller;
-use App\Models\Admin\Storefront\Category\Category;
-use App\Models\Admin\Storefront\Color\Color;
-use App\Models\Admin\Storefront\Product\Product;
-use App\Models\Admin\Storefront\Product\ProductCategory;
-use App\Models\Admin\Storefront\Product\ProductDiscount;
-use App\Models\Admin\Storefront\Product\ProductDownload;
-use App\Models\Admin\Storefront\Product\ProductFilter;
-use App\Models\Admin\Storefront\Product\ProductImage;
-use App\Models\Admin\Storefront\Product\ProductOtherLink;
-use App\Models\Admin\Storefront\Product\ProductPrice;
-use App\Models\Admin\Storefront\Product\ProductReward;
-use App\Models\Admin\Storefront\Product\ProductSpecial;
-use App\Models\Admin\Storefront\Product\ProductVariation;
-use App\Models\Admin\Storefront\Size\Size;
 use Exception;
+use App\Models\Size;
+use App\Models\Color;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Str;
+use App\Http\Controllers\Controller;
+use Intervention\Image\ImageManager;
+use App\Models\Admin\Storefront\Product\Product;
+use App\Http\Controllers\Admin\Common\Pagination;
+use App\Models\Admin\Storefront\Category\Category;
+use App\Models\Admin\Storefront\Product\ProductImage;
+use App\Models\Admin\Storefront\Product\ProductPrice;
+use App\Models\Admin\Storefront\Product\ProductFilter;
+use App\Models\Admin\Storefront\Product\ProductReward;
+use App\Models\Admin\Storefront\Product\ProductSpecial;
+use App\Models\Admin\Storefront\Product\ProductCategory;
 
 // create new manager instance with desired driver
-use Intervention\Image\ImageManager;
+use App\Models\Admin\Storefront\Product\ProductDiscount;
+use App\Models\Admin\Storefront\Product\ProductDownload;
+use App\Models\Admin\Storefront\Product\ProductOtherLink;
 
 class AdminProductController extends Controller
 {
@@ -109,12 +108,6 @@ class AdminProductController extends Controller
             'meta_description' => 'nullable|string',
             'meta_keyword' => 'nullable|string|max:255',
             'model' => 'required|nullable|string|max:255',
-            'sku' => 'nullable|string|max:20',
-            'upc' => 'nullable|string|max:20',
-            'ean' => 'nullable|string|max:20',
-            'jan' => 'nullable|string|max:20',
-            'isbn' => 'nullable|string|max:20',
-            'mpn' => 'nullable|string|max:20',
             'quantity' => 'required|integer',
             'minimum' => 'nullable|integer',
             'subtract' => 'nullable|integer',
@@ -145,12 +138,6 @@ class AdminProductController extends Controller
                 $product->meta_description = $data->get('meta_description') ?? '';
                 $product->meta_keyword = $data->get('meta_tag_keyword') ?? '';
                 $product->model = $data->get('model') ?? '';
-                $product->sku = $data->get('sku') ?? '';
-                $product->upc = $data->get('upc') ?? '';
-                $product->ean = $data->get('ean') ?? '';
-                $product->jan = $data->get('jan') ?? '';
-                $product->isbn = $data->get('isbn') ?? '';
-                $product->mpn = $data->get('mpn') ?? '';
                 $product->quantity = (int)$data->get('quantity') ?? '';
                 $product->minimum = (int)$data->get('minimum') ?? '';
                 $product->subtract = (int)$data->get('subtract') ?? '';
@@ -395,12 +382,6 @@ class AdminProductController extends Controller
             'meta_description' => 'nullable|string',
             'meta_keyword' => 'nullable|string|max:255',
             'model' => 'required|nullable|string|max:255',
-            'sku' => 'nullable|string|max:20',
-            'upc' => 'nullable|string|max:20',
-            'ean' => 'nullable|string|max:20',
-            'jan' => 'nullable|string|max:20',
-            'isbn' => 'nullable|string|max:20',
-            'mpn' => 'nullable|string|max:20',
             'quantity' => 'required|integer',
             'minimum' => 'nullable|integer',
             'subtract' => 'nullable|integer',
@@ -484,12 +465,6 @@ class AdminProductController extends Controller
                     $product->meta_description = $data->get('meta_description') ?? '';
                     $product->meta_keyword = $data->get('meta_tag_keyword') ?? '';
                     $product->model = $data->get('model') ?? '';
-                    $product->sku = $data->get('sku') ?? '';
-                    $product->upc = $data->get('upc') ?? '';
-                    $product->ean = $data->get('ean') ?? '';
-                    $product->jan = $data->get('jan') ?? '';
-                    $product->isbn = $data->get('isbn') ?? '';
-                    $product->mpn = $data->get('mpn') ?? '';
                     $product->quantity = (int)$data->get('quantity') ?? '';
                     $product->minimum = (int)$data->get('minimum') ?? '';
                     $product->subtract = (int)$data->get('subtract') ?? '';
@@ -680,56 +655,6 @@ class AdminProductController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
             dd($e->getMessage());
-        }
-    }
-
-    public function addVariation(Request $request){
-        // Add variations
-        $product_id = $request->request->get('product_id');
-        if($request->input('color_id') && $request->input('size_id') && $request->input('combinations')){
-
-            $colorIds = $request->input('color_id');
-            $sizeIds = $request->input('size_id');
-            $combinations = $request->input('combinations');
-            $quantities = $request->input('variation_qty');
-            $prices = $request->input('variation_price');
-
-            $variationtData = [];
-
-            for ($i = 0; $i < count($colorIds); $i++) {
-                $variationtData['variation_data'][] = [
-                    'color_id' => $colorIds[$i],
-                    'size_id' => $sizeIds[$i],
-                    'combination' => $combinations[$i],
-                    'price' => $prices[$i] ?? null, 
-                    'quantity' => $quantities[$i] ?? null,
-                ];
-            }
-            $variationtData = array_merge($variationtData, ['product_id' => $product_id]);
-
-            try{
-                ProductVariation::addVariation($variationtData);
-                return redirect('admin/storefront/product')->with('success', 'Product variation added successfully.');
-            }catch(Exception $e){
-                dd($e->getMessage());
-            }
-        }else{
-            ProductVariation::addVariation(['product_id' => $product_id]);
-            return redirect('admin/storefront/product')->with('success', 'Product variation added successfully.');
-            return redirect('admin/storefront/product')->with('error', 'Variation Data Not Found.');
-        }
-    }
-
-    public function getVariation($product_id){
-        $variationtData = ProductVariation::getVariation($product_id);
-        if ($variationtData) {
-            $data = [
-                'success' => true,
-                'variationData' => $variationtData
-            ];
-            return response()->json($data);
-        } else {
-            return response()->json(['error' => 'Not found any product variation']);
         }
     }
 

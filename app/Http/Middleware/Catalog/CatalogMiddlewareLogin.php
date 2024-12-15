@@ -16,7 +16,7 @@ class CatalogMiddlewareLogin
      */
     public function handle(Request $request, Closure $next)
     {
-        if ($request->session()->has('isCustomer')) {
+        if ($request->session()->has('isUser')) {
             return $next($request);
         }
         return redirect()->route('catalog.user-login');

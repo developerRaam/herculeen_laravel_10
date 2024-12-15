@@ -30,7 +30,7 @@ class LoginController extends Controller
             $hashedPassword = Hash::check($password, $customer->password);
             if($hashedPassword){
                 if ($customer->status) {
-                    $request->session()->put('isCustomer', $customer->id);
+                    $request->session()->put('isUser', $customer->id);
                     $request->session()->put('customer_name',$customer->name);
                     return redirect()->route('catalog.front-user-account');
                 } else {
@@ -177,7 +177,7 @@ class LoginController extends Controller
     }
 
     public function logout(){
-        session()->forget('isCustomer');
+        session()->forget('isUser');
         session()->forget('customer_name');
         return redirect()->route('catalog.user-login')->with('success', 'Logout');
     }

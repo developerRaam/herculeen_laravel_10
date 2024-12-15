@@ -3,12 +3,14 @@
 namespace App\Providers;
 
 use App\Models\Admin\Setting\Setting;
+use App\Models\Cart;
+use App\Models\Wishlist;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 
-class SettingProvider extends ServiceProvider
+class CustomProvider extends ServiceProvider
 {
     /**
      * Register services.
@@ -46,6 +48,9 @@ class SettingProvider extends ServiceProvider
             $service_categories = $categories->map(function ($category) {
                 return $this->getCategoryWithChildren($category);
             });
+
+            $view->with('getCart', Cart::where('user_id', session('isUser'))->count());
+            $view->with('getWishlist', Wishlist::where('user_id', session('isUser'))->count());
 
             // Make categories available to all views
             $view->with('service_categories', $service_categories);

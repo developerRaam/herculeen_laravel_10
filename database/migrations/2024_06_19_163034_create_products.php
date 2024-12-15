@@ -20,12 +20,6 @@ return new class extends Migration
             $table->text('meta_description')->nullable();
             $table->string('meta_keyword', 255)->nullable();
             $table->string('model', 255)->nullable();
-            $table->string('sku', 20)->nullable();
-            $table->string('upc', 20)->nullable();
-            $table->string('ean', 20)->nullable();
-            $table->string('jan', 20)->nullable();
-            $table->string('isbn', 20)->nullable();
-            $table->string('mpn', 20)->nullable();
             $table->integer('quantity');
             $table->integer('minimum')->nullable();
             $table->integer('subtract')->nullable();

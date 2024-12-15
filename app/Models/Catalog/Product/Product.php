@@ -2,6 +2,7 @@
 
 namespace App\Models\Catalog\Product;
 
+use App\Models\StockStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -18,6 +19,8 @@ class Product extends Model
                     ->leftJoin('product_prices', 'products.id', '=', 'product_prices.product_id')
                     ->select('products.*', 'product_prices.price','product_prices.mrp')
                     ->where('products.id', $product_id)->first();
+
+        $product->stock_status = StockStatus::find($product->stock_status_id)->name ?? "";
 
         $images = DB::table('product_images')->where('product_id', $product_id)->get();
 
