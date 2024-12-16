@@ -76,7 +76,7 @@
 
             <div class="col-6 col-sm-2 col-md-3">
                 <div class="card shadow-lg rounded-3" style="background-color: #f8f9fa;">
-                    <a href="#">
+                    <a href="{{ $route_address }}">
                         <div class="card-body text-center">
                             <h2 class="text-secondary" style="font-size: 6rem; margin-bottom: 20px;">
                                 <i class="fa-solid fa-address-book"></i>

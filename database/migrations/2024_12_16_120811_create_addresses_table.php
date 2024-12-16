@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('address', function (Blueprint $table) {
+        Schema::create('addresses', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
             $table->string('name')->nullable();
@@ -22,9 +22,8 @@ return new class extends Migration
             $table->integer('pincode');
             $table->integer('state_id');
             $table->integer('country_id');
-            $table->integer('default');
+            $table->boolean('default')->default(false);
             $table->timestamps();
-            
         });
     }
 
@@ -33,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('address');
+        Schema::dropIfExists('addresses');
     }
 };

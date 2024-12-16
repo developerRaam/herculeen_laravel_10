@@ -31,7 +31,7 @@ class LoginController extends Controller
             if($hashedPassword){
                 if ($customer->status) {
                     $request->session()->put('isUser', $customer->id);
-                    $request->session()->put('customer_name',$customer->name);
+                    $request->session()->put('user_name',$customer->name);
                     return redirect()->route('catalog.front-user-account');
                 } else {
                     return redirect()->route('catalog.user-login')->with('error', 'Account disabled. Please contact Admin.');
@@ -178,7 +178,7 @@ class LoginController extends Controller
 
     public function logout(){
         session()->forget('isUser');
-        session()->forget('customer_name');
+        session()->forget('user_name');
         return redirect()->route('catalog.user-login')->with('success', 'Logout');
     }
 

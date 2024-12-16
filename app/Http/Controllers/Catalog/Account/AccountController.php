@@ -15,6 +15,7 @@ class AccountController extends Controller
         $data['route_profile'] = route('catalog.profile');
         $data['route_change_password'] = route('catalog.viewChangePassword');
         $data['route_cart'] = route('catalog.cart');
+        $data['route_address'] = route('catalog.address');
         return view('catalog.account.account', $data);
     }
 

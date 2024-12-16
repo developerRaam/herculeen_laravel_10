@@ -28,6 +28,7 @@ use App\Http\Controllers\Admin\Storefront\AdminProductController;
 use App\Http\Controllers\Admin\Storefront\AdminCategoryController;
 use App\Http\Controllers\Catalog\Information\InformationController;
 use App\Http\Controllers\Admin\Storefront\ProductVariationController;
+use App\Http\Controllers\Catalog\Account\AddressController;
 
 // Catalog
 Route::name('catalog.')->group(function () {
@@ -65,6 +66,7 @@ Route::name('catalog.')->group(function () {
             Route::post('/change-password', [AccountController::class, 'changePassword'])->name('changePassword');
             Route::get('/order', [AccountController::class, 'order'])->name('order');
             Route::resource('/wishlist', WishlistController::class)->name('index','wishlist')->only('index', 'store', 'destroy');
+            Route::resource('/address', AddressController::class)->name('index', 'address');
         });
 
         Route::prefix('checkout')->group(function (){

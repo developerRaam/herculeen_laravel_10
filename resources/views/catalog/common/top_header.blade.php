@@ -45,7 +45,7 @@
                 <li class="dropdown mx-2">
                     <a href="#" class="text-decoration-none text-white " data-bs-toggle="dropdown" aria-expanded="false">
                         @if (session('isUser'))
-                            <span class="rounded-circle px-3 py-2 fs-4 fw-bold text-uppercase" style="background-color: #000; transition: background-color 0.3s;">{{ substr(session('customer_name'), 0, 1) }}</span>
+                            <span class="rounded-circle px-3 py-2 fs-4 fw-bold text-uppercase" style="background-color: #000; transition: background-color 0.3s;">{{ substr(session('user_name'), 0, 1) }}</span>
                         @else
                             <i class="fa-solid fa-user p-3 rounded-circle" style="background-color: #000; transition: background-color 0.3s;"></i>
                         @endif
@@ -59,7 +59,7 @@
                             <li class="mb-0"><a class="dropdown-item" href="{{ route('catalog.cart') }}"><i class="fa-solid fa-cart-shopping"></i> Cart</a></li>
                             <li class="mb-0"><a class="dropdown-item" href="{{ route('catalog.wishlist') }}"><i class="fa-solid fa-heart"></i> Wishlist</a></li>
                             <li class="mb-0"><a class="dropdown-item" href="#"><i class="fa-solid fa-clock-rotate-left"></i> Order History</a></li>
-                            <li class="mb-0"><a class="dropdown-item" href="#"><i class="fa-solid fa-address-book"></i> Address</a></li>
+                            <li class="mb-0"><a class="dropdown-item" href="{{ route('catalog.address') }}"><i class="fa-solid fa-address-book"></i> Address</a></li>
                             <li class="mb-0"><a class="dropdown-item" href="{{ route('catalog.viewChangePassword') }}"><i class="fa-solid fa-lock"></i> Change Password</a></li>
                             <li class="mb-0"><a class="dropdown-item" href="{{ route('catalog.logout') }}"><i class="fa-solid fa-power-off text-danger"></i> Logout</a></li>
                         @else

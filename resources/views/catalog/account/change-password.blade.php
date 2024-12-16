@@ -18,8 +18,8 @@
                     @csrf
                     <!-- password Input -->
                     <div class="mb-4">
-                        <label for="password" class="form-label"><strong>Password</strong></label>
-                        <input type="password" class="form-control p-3 bg-light" id="password" name="password" placeholder="Password">
+                        <label for="password" class="form-label"><strong>New Password</strong></label>
+                        <input type="password" class="form-control p-3 bg-light" id="password" name="password" placeholder="New Password">
                         <div class="errors">
                             <span class="text-danger">
                                 @error('password')
